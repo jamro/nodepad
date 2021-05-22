@@ -1,0 +1,40 @@
+{
+  "name": "nodepad",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "commit": "cz",
+    "start": "node ./bin/www",
+    "watch": "nodemon ./bin/www",
+    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --ignore-pattern tmp --ignore-pattern projects/ --fix",
+    "test": "mocha --recursive test",
+    "test:watch": "mocha -w --recursive --watch-ignore tmp test",
+    "all": "npm run lint && npm run test"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-openapi": "^9.0.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "node-http-proxy": "^0.1.5",
+    "pm2": "^4.5.6",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.27.0",
+    "mocha": "^8.4.0",
+    "nodemon": "^2.0.7",
+    "sinon": "^10.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
