@@ -10,6 +10,7 @@ const pm2 = require('pm2');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const ProjectService = require('./services/ProjectService');
+const ProxyService = require('./services/ProxyService');
 
 const PROJECTS_PATH = path.resolve(__dirname, 'projects');
 
@@ -25,13 +26,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+const services = {};
+
+services.projectService = new ProjectService(PROJECTS_PATH, pm2);
+services.proxyService = new ProxyService(services.projectService);
+
 expressOpenApi.initialize({
   app,
   apiDoc: require('./api/api-doc'),
   paths: './api/paths',
-  dependencies: {
-    projectService: new ProjectService(PROJECTS_PATH, pm2)
-  }
+  dependencies: services
 });
 
 app.use(
@@ -43,6 +48,7 @@ app.use(
     },
   })
 );
+app.use('/', services.proxyService.getProxy());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
