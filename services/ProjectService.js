@@ -213,6 +213,18 @@ class ProjectService {
        
   }
 
+  async reload(projectId) {
+    await this.find(projectId);
+
+    await this.pm2connect();
+    try {
+      await this.pm2reload(projectId);
+    } finally {
+      this.pm2disconnect();
+    }
+       
+  }
+
 }
 
 module.exports = ProjectService;

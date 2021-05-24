@@ -26,6 +26,14 @@ const apiDoc = {
       },
       required: ['id'],
     },
+    Deployment: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'string'
+        }
+      }
+    }
   },
   paths: {},
 };

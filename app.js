@@ -11,6 +11,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const ProjectService = require('./services/ProjectService');
 const ProxyService = require('./services/ProxyService');
+const DeployService = require('./services/DeployService');
 
 const PROJECTS_PATH = path.resolve(__dirname, 'projects');
 
@@ -26,11 +27,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 const services = {};
 
 services.projectService = new ProjectService(PROJECTS_PATH, pm2);
 services.proxyService = new ProxyService(services.projectService);
+services.deployService = new DeployService(PROJECTS_PATH);
 
 expressOpenApi.initialize({
   app,
