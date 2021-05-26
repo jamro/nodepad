@@ -116,8 +116,11 @@ describe('ProjectService', function() { // -------------------------------------
     await projectService.create('app97832', 8373);
 
     const script = path.join(workspace, 'app97832.8373', 'bin', 'index.js');
+    const logfile = path.join(workspace, 'app97832.8373', 'log-app97832.log');
 
     expect(fs.existsSync(script)).to.be.true;
+    expect(fs.existsSync(logfile)).to.be.true;
+    expect(fs.readFileSync(logfile, 'utf8')).to.be.match(/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}.*project.* created/i);
   });
 
   it('should throw on creation of invalid project name', async function() {

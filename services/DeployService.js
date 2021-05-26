@@ -1,12 +1,14 @@
 const fs = require('fs');
 const DeploymentJob = require('./DeployService/DeploymentJob');
 const path = require('path');
+const ProjectLogger = require('./common/ProjectLogger');
 
 class DeployService {
 
   constructor(basePath) {
     this.basePath = basePath;
     this.debug = true;
+    this.logger = new ProjectLogger(basePath);
     this.jobMap = {};
   }
 
@@ -24,6 +26,7 @@ class DeployService {
   }
 
   async deploy(projectId, req) {
+    this.logger.log(projectId, `Uploading new content to '${projectId}'`);
     const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
@@ -43,6 +46,7 @@ class DeployService {
     this.jobMap[projectId] = new DeploymentJob(workspace);
     this.jobMap[projectId].debug = this.debug;
     await this.jobMap[projectId].upload(req);
+    this.logger.log(projectId, `Upload of '${projectId}' completed`);
   }
 
 }

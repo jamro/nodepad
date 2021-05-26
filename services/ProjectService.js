@@ -1,6 +1,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const ProjectLogger = require('./common/ProjectLogger');
 
 class ProjectService {
   
@@ -8,6 +9,7 @@ class ProjectService {
     this.basePath = basePath;
     this.pm2 = pm2;
     this.debug = true;
+    this.logger = new ProjectLogger(basePath);
   }
 
   log(...args) {
@@ -142,6 +144,8 @@ class ProjectService {
     const projectPath = path.join(this.basePath, projectId + '.' + projectPort);
     fs.mkdirSync(projectPath);
     fs.mkdirSync(path.join(projectPath, 'bin'));
+    fs.openSync(path.join(projectPath, `log-${projectId}.log`), 'w');
+    this.logger.log(projectId, `Project ${projectId} created`);
     fs.writeFileSync(
       path.join(projectPath, 'bin', 'index.js'),
       `#!/usr/bin/env node
@@ -150,6 +154,7 @@ class ProjectService {
       console.log('Starting project ${projectId} (port: ${projectPort})...');
 
       http.createServer(function (request, response) {
+        console.log(\`Request \${request.method} \${request.url}\`);
         response.end('Hello from ${projectId}!', 'utf-8');
       }).listen(${projectPort});`
     );
@@ -186,11 +191,15 @@ class ProjectService {
   async start(projectId) {
     let proj;
     proj = await this.find(projectId);
+    this.logger.log(projectId, `Strting project '${projectId}'...`);
     const options = {
       script: path.join(this.basePath, `${proj.id}.${proj.port}`, 'bin', 'index.js'),
       name: proj.id,
       cwd: path.join(this.basePath, `${proj.id}.${proj.port}`, 'bin'),
-      autorestart: true
+      autorestart: true,
+      output: path.join(this.basePath, `${proj.id}.${proj.port}`, `log-${proj.id}.log`),
+      error: path.join(this.basePath, `${proj.id}.${proj.port}`, `log-${proj.id}.log`),
+      logDateFormat: 'YYYY-MM-DD HH:mm:ss.SSS Z'
     };
     await this.pm2connect();
     try {
@@ -203,6 +212,7 @@ class ProjectService {
 
   async stop(projectId) {
     await this.find(projectId);
+    this.logger.log(projectId, `Stopping project '${projectId}'...`);
 
     await this.pm2connect();
     try {
@@ -215,6 +225,7 @@ class ProjectService {
 
   async reload(projectId) {
     await this.find(projectId);
+    this.logger.log(projectId, `Reloading project '${projectId}'...`);
 
     await this.pm2connect();
     try {
