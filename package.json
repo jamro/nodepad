@@ -30,6 +30,7 @@
     "morgan": "~1.9.1",
     "node-http-proxy": "^0.2.4",
     "pm2": "^4.5.6",
+    "read-last-lines": "^1.8.0",
     "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {

@@ -307,5 +307,17 @@ describe('ProjectService', function() { // -------------------------------------
     expect(pm2.delete.callCount).to.be.equal(1);
     expect(pm2.disconnect.callCount).to.be.equal(4);
   });
+
+  it('should retreive project logs', async function() {
+    const pm2 = new PM2Mock();
+    const projectService = new ProjectService(workspace, pm2);
+    projectService.create('my-proj-8324', 7110);
+    projectService.logger.log('my-proj-8324', 'message #1 32452');
+    projectService.logger.log('my-proj-8324', 'message #2 09231');
+    const logs = await projectService.getLogs('my-proj-8324', 2);
+    expect(logs).to.have.lengthOf(2);
+    expect(logs[0]).to.be.match(/message #1 32452/);
+    expect(logs[1]).to.be.match(/message #2 09231/);
+  });
   
 });

@@ -236,6 +236,10 @@ class ProjectService {
        
   }
 
+  async getLogs(projectId, lines) {
+    return await this.logger.read(projectId, lines);
+  }
+
 }
 
 module.exports = ProjectService;
