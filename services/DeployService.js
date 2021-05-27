@@ -25,7 +25,7 @@ class DeployService {
     };
   }
 
-  async deploy(projectId, req) {
+  async upload(projectId, req) {
     this.logger.log(projectId, `Uploading new content to '${projectId}'`);
     const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
@@ -46,9 +46,28 @@ class DeployService {
     this.jobMap[projectId] = new DeploymentJob(workspace);
     this.jobMap[projectId].debug = this.debug;
     await this.jobMap[projectId].upload(req);
-    this.logger.log(projectId, `Upload of '${projectId}' completed`);
+    this.logger.log(projectId, `Uploading of '${projectId}' completed`);
   }
 
+  async extract(projectId) {
+    if(!this.jobMap[projectId]) {
+      throw new Error(`No deployment jobs for project '${projectId}'`);
+    }
+
+    this.logger.log(projectId, `Extracting '${projectId}'...`);
+    await this.jobMap[projectId].extract();
+    this.logger.log(projectId, `Content of '${projectId}' extracted`);
+  }
+
+  async install(projectId) {
+    if(!this.jobMap[projectId]) {
+      throw new Error(`No deployment jobs for project '${projectId}'`);
+    }
+
+    this.logger.log(projectId, `Installing '${projectId}'...`);
+    await this.jobMap[projectId].install();
+    this.logger.log(projectId, `Content of '${projectId}' installed`);
+  }
 }
 
 module.exports = DeployService;

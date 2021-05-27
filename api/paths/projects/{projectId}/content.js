@@ -42,12 +42,14 @@ module.exports = function (projectService, deployService) {
       return;
     }
 
-    await deployService.deploy(projectId, req);
+    await deployService.upload(projectId, req);
 
     res.status(200).send();
 
     try {
+      await deployService.extract(projectId);
       await projectService.stop(projectId);
+      await deployService.install(projectId);
     } catch(err) {
       console.log(err)
     }
