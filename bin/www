@@ -4,16 +4,20 @@
  * Module dependencies.
  */
 
-const app = require('../app');
+const appCreate = require('../app').create;
 const debug = require('debug')('nodepad:server');
 const http = require('http');
-const config = require('../config.js');
+const path = require('path');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || config.port);
+const externalConfig = (process.argv && process.argv[2]) ? path.resolve(process.argv[2]) : null;
+
+const config = require(externalConfig || '../config.js');
+const app = appCreate(config);
+var port = normalizePort(process.env.PORT || config.port || 3000);
 app.set('port', port);
 
 /**
