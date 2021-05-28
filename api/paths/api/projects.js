@@ -1,8 +1,9 @@
 module.exports = function (projectService) {
 
-  function POST(req, res) {
+  async function POST(req, res) {
     console.log(`creating project: ${JSON.stringify(req.body)}`);
     const projectId = String(req.body.id);
+    const projectStatus = String(req.body.status);
     const projectPort = Number(req.body.port);
 
     try {
@@ -46,6 +47,11 @@ module.exports = function (projectService) {
 
     projectService.create(projectId, projectPort);
     console.log(`Project '${projectId}' created`);
+
+    if(projectStatus === 'online') {
+      await projectService.start(projectId);
+    }
+
     res.status(201).send();
     return;
   }
@@ -91,7 +97,7 @@ module.exports = function (projectService) {
   }
 
   GET.apiDoc = {
-    summary: 'Fetch projects.',
+    summary: 'Fetch all projects',
     operationId: 'getProjects',
     responses: {
       200: {
