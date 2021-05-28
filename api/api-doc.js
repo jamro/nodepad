@@ -15,18 +15,17 @@ function create(config) {
         properties: {
           id: {
             type: 'string',
-            default: 'webapp'
+            example: 'webapp'
           },
           port: {
             type: 'number',
-            default: 3001
+            example: 3001
           },
           status: {
             type: 'string',
             enum: ['online', 'offline']
           }
         },
-        required: ['id'],
       },
       Deployment: {
         type: 'object',
