@@ -1,4 +1,5 @@
 const packageInfo = require('../package.json');
+const config = require('../config.js');
 
 const apiDoc = {
   swagger: '2.0',
@@ -37,5 +38,18 @@ const apiDoc = {
   },
   paths: {},
 };
+
+if(config.auth) {
+  apiDoc.securityDefinitions = {
+    basicAuth: {
+      type: 'basic'
+    }
+  };
+  apiDoc.security = [
+    {
+      basicAuth: []
+    }
+  ];
+}
 
 module.exports = apiDoc;

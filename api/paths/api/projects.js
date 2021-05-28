@@ -73,6 +73,9 @@ module.exports = function (projectService) {
       400: {
         description: 'Incorrect input',
       },
+      401: {
+        description: 'Unauthorized',
+      }
     },
   };
 
@@ -102,6 +105,9 @@ module.exports = function (projectService) {
       },
       500: {
         description: 'Process manager error',
+      },
+      401: {
+        description: 'Unauthorized',
       },
     },
   };

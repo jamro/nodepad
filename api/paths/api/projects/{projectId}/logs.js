@@ -34,6 +34,9 @@ module.exports = function (projectService, deployService) {
       404: {
         description: 'Project not found',
       },
+      401: {
+        description: 'Unauthorized',
+      }
     },
   };
 
