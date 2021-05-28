@@ -29,7 +29,6 @@ module.exports = function (projectService) {
         throw new Error('Error: Project port must be in range of 1024 - 49151');
       }
 
-      
     } catch(err) {
       res.status(400).send(err.message);
       return;

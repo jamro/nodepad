@@ -19,9 +19,28 @@ class DeployService {
   }
 
   getDeployment(projectId) {
-    let job = this.jobMap[projectId] || null;
+    const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
+      .filter(dir => dir.isDirectory())
+      .map(dir => {
+        let projData = dir.name.split('.');
+        let proj = {
+          id: projData[0],
+          port: Number(projData[1])
+        };
+        return proj;
+      })
+      .find(p => p.id === projectId);
+    
+    if(!proj) {
+      throw new Error('Project ' + projectId + ' not found');
+    }
+
+
+    const job = this.jobMap[projectId] || null;
+    const stats = fs.statSync(path.resolve(this.basePath, proj.id + '.' + proj.port, 'bin'));
     return  {
-      status: job ? job.status : 'done'
+      status: job ? job.status : 'deployed',
+      lastUpdate: new Date(stats.mtime).toISOString()
     };
   }
 

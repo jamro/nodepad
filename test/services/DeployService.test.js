@@ -112,7 +112,7 @@ describe('DeployService', function() { // --------------------------------------
     deployService.install(PROJECT_ID);
     expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'installing');
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'done');
+    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'deployed');
   });
 
   it('should set upload error status', async function() {
@@ -222,5 +222,18 @@ describe('DeployService', function() { // --------------------------------------
       .filter(f => f.match(/tmp-[0-9a-z]+/));
 
     expect(tmpList).to.be.empty;
+  });
+
+  it('should fetch last update time', async function() {
+    const deployService = new DeployService(deployWorkspace);
+    deployService.debug = false;
+    const req = createUploadRequest('file-342.zip');
+    req.progressUpload();
+    req.completeUpload();
+    await deployService.upload(PROJECT_ID, req);
+    await deployService.extract(PROJECT_ID);
+    await deployService.install(PROJECT_ID);
+    expect(deployService.getDeployment(PROJECT_ID)).to.have.property('lastUpdate');
+    expect(deployService.getDeployment(PROJECT_ID).lastUpdate).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/);
   });
 });

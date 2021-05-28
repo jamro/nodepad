@@ -1,7 +1,7 @@
 const packageInfo = require('../package.json');
 
 function create(config) {
-  const appConfig = config || {}
+  const appConfig = config || {};
   const apiDoc = {
     swagger: '2.0',
     basePath: '/',
@@ -32,6 +32,9 @@ function create(config) {
         type: 'object',
         properties: {
           status: {
+            type: 'string'
+          },
+          lastUpdate: {
             type: 'string'
           }
         }

@@ -164,7 +164,7 @@ class DeploymentJob {
       this.status = 'install error';
       return;
     }
-    this.status = 'done';
+    this.status = 'deployed';
   }
   
 }

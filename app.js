@@ -15,7 +15,7 @@ const DeployService = require('./services/DeployService');
 
 
 function create(config) {
-  const appConfig = config || {}
+  const appConfig = config || {};
   const app = express();
 
   // view engine setup
@@ -44,26 +44,26 @@ function create(config) {
   };
   if(appConfig.auth) {
     openApiConfig.securityHandlers = {
-      basicAuth: function(req, scopes, definition) {
+      basicAuth: function(req) {
         return new Promise((resolve, reject) => {
           const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
           const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
           if (login && password && login === appConfig.auth.user && password === appConfig.auth.pass) {
-            return resolve(true)
+            return resolve(true);
           }
           const res = {
             status: 401,
             toString: () => '401 Unauthorized'
-          }
+          };
           if(req.url === '/api/auth') {
             res.headers = {
               'WWW-Authenticate': 'Basic realm="401"'
-            }
+            };
           }
-          reject(res)
-        }) 
+          reject(res);
+        }); 
       }
-    }
+    };
   }
   expressOpenApi.initialize(openApiConfig);
   

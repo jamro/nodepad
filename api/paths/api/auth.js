@@ -1,5 +1,5 @@
 
-module.exports = function (projectService, deployService) {
+module.exports = function () {
 
   async function GET(req, res) {
     res.status(200).json({status: 'ok'});
