@@ -1,6 +1,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const { 
+  ValidationError, 
+  EntityNotFoundError, 
+  ProcessManagerError 
+} = require('./common/errors');
 const ProjectLogger = require('./common/ProjectLogger');
 
 class ProjectService {
@@ -22,7 +27,7 @@ class ProjectService {
     return new Promise((resolve, reject) => {
       this.pm2.connect((err) => {
         if (err) {
-          return reject('PM2: ' + String(err));
+          return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
         resolve();
       });
@@ -37,7 +42,7 @@ class ProjectService {
     return new Promise((resolve, reject) => {
       this.pm2.start(options, (err) => {
         if (err) {
-          return reject('PM2: ' + String(err));
+          return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
         resolve();
       });
@@ -48,7 +53,7 @@ class ProjectService {
     return new Promise((resolve, reject) => {
       this.pm2.delete(projectId, (err) => {
         if (err) {
-          return reject('PM2: ' + String(err));
+          return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
         resolve();
       });
@@ -59,7 +64,7 @@ class ProjectService {
     return new Promise((resolve, reject) => {
       this.pm2.list((err, list) => {
         if (err) {
-          return reject('PM2: ' + String(err));
+          return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
         resolve(list);
       });
@@ -82,13 +87,13 @@ class ProjectService {
       this.pm2.connect((err) => {
         if (err) {
           this.log(err);
-          return reject('PM2: ' + String(err));
+          return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
         this.pm2.list((err, list) => {
           this.pm2.disconnect();
           if (err) {
             this.log(err);
-            return reject('PM2: ' + String(err));
+            return reject(new ProcessManagerError('PM2: ' + String(err)));
           }
           const processData = list
             .map(p => ({
@@ -114,32 +119,32 @@ class ProjectService {
 
   create(projectId, projectPort) {
     if(!projectId) {
-      throw new Error('Error: Project ID is required');
+      throw new ValidationError('Project ID is required');
     }
     if(typeof(projectId) !== 'string') {
-      throw new Error('Error: Project ID must be a string');
+      throw new ValidationError('Project ID must be a string');
     }
     if(projectId.length < 3 || projectId.length > 32 ) {
-      throw new Error('Error: Invalid Project ID. It must be 3 - 32 characters long');
+      throw new ValidationError('Invalid Project ID. It must be 3 - 32 characters long');
     }
     if(!(/^[A-Za-z0-9_-]+$/).test(projectId)) {
-      throw new Error('Error: Invalid Project ID. Allowed characters are A-Z, a-z, 0-9, _, -');
+      throw new ValidationError('Invalid Project ID. Allowed characters are A-Z, a-z, 0-9, _, -');
     }
     if(!projectPort) {
-      throw new Error('Error: Project Port is required');
+      throw new ValidationError('Project Port is required');
     }
     if(typeof(projectPort) !== 'number' || !Number.isInteger(projectPort)) {
-      throw new Error('Error: Project port must be a integer');
+      throw new ValidationError('Project port must be a integer');
     }
     if(projectPort < 1024 || projectPort > 49151) {
-      throw new Error('Error: Project port must be in range of 1024 - 49151');
+      throw new ValidationError('Project port must be in range of 1024 - 49151');
     }
 
     if(this.exist(projectId)) {
-      throw new Error(`Project '${projectId}' already exist`);
+      throw new ValidationError(`Project '${projectId}' already exist`);
     }
     if(this.isPortBound(projectPort)) {
-      throw new Error(`Port '${projectPort}' already bound`);
+      throw new ValidationError(`Port '${projectPort}' already bound`);
     }
     const projectPath = path.join(this.basePath, projectId + '.' + projectPort);
     fs.mkdirSync(projectPath);
@@ -182,7 +187,7 @@ class ProjectService {
 
   async find(projectId) {
     if(!this.exist(projectId)) {
-      throw new Error(`Project '${projectId}' not found`);
+      throw new EntityNotFoundError(`Project '${projectId}' not found`);
     }
 
     return (await this.read()).find(p => p.id === projectId);

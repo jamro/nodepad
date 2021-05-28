@@ -2,6 +2,7 @@ const fs = require('fs');
 const DeploymentJob = require('./DeployService/DeploymentJob');
 const path = require('path');
 const ProjectLogger = require('./common/ProjectLogger');
+const { ValidationError, EntityNotFoundError } = require('./common/errors');
 
 class DeployService {
 
@@ -32,12 +33,17 @@ class DeployService {
       .find(p => p.id === projectId);
     
     if(!proj) {
-      throw new Error('Project ' + projectId + ' not found');
+      throw new EntityNotFoundError('Project ' + projectId + ' not found');
     }
 
+    const binPath =  path.resolve(this.basePath, proj.id + '.' + proj.port, 'bin');
+
+    if(!fs.existsSync(binPath)) {
+      throw new EntityNotFoundError('Project content not found');
+    }
 
     const job = this.jobMap[projectId] || null;
-    const stats = fs.statSync(path.resolve(this.basePath, proj.id + '.' + proj.port, 'bin'));
+    const stats = fs.statSync(binPath);
     return  {
       status: job ? job.status : 'deployed',
       lastUpdate: new Date(stats.mtime).toISOString()
@@ -70,7 +76,7 @@ class DeployService {
 
   async extract(projectId) {
     if(!this.jobMap[projectId]) {
-      throw new Error(`No deployment jobs for project '${projectId}'`);
+      throw new ValidationError(`No deployment jobs for project '${projectId}'`);
     }
 
     this.logger.log(projectId, `Extracting '${projectId}'...`);
@@ -80,7 +86,7 @@ class DeployService {
 
   async install(projectId) {
     if(!this.jobMap[projectId]) {
-      throw new Error(`No deployment jobs for project '${projectId}'`);
+      throw new ValidationError(`No deployment jobs for project '${projectId}'`);
     }
 
     this.logger.log(projectId, `Installing '${projectId}'...`);

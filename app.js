@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const ProjectService = require('./services/ProjectService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
+const { AuthError } = require('./services/common/errors');
 
 
 function create(config) {
@@ -40,7 +41,24 @@ function create(config) {
     app,
     apiDoc: apiDocCreate(appConfig),
     paths: './api/paths',
-    dependencies: services
+    dependencies: services,
+    errorMiddleware: function(err, req, res, next) { // eslint-disable-line no-unused-vars
+      switch(err.name) {
+      case 'ValidationError':
+        return res.status(400).json({error: err.message});
+      case 'EntityNotFoundError':
+        return res.status(404).json({error: err.message});
+      case 'AuthError':
+        return res.status(401).json({error: err.message});
+      case 'ProcessManagerError':
+        console.log(err);
+        return res.status(500).json({error: 'Internal Process Manager error'});
+      default:
+        console.log(err);
+        return res.status(500).json({error: 'Internal NodePad error'});
+      }
+    },
+    promiseMode: true
   };
   if(appConfig.auth) {
     openApiConfig.securityHandlers = {
@@ -51,10 +69,7 @@ function create(config) {
           if (login && password && login === appConfig.auth.user && password === appConfig.auth.pass) {
             return resolve(true);
           }
-          const res = {
-            status: 401,
-            toString: () => '401 Unauthorized'
-          };
+          const res = new AuthError('Unauthorized');
           if(req.url === '/api/auth') {
             res.headers = {
               'WWW-Authenticate': 'Basic realm="401"'

@@ -3,10 +3,6 @@ module.exports = function (projectService, deployService) {
 
   async function GET(req, res) {
     let projectId = req.params.projectId;
-    if(!projectService.exist(projectId)) {
-      res.status(404).send('Project not found');
-      return;
-    }
     res.status(200).json(await projectService.getLogs(projectId));
   }
 
@@ -27,15 +23,27 @@ module.exports = function (projectService, deployService) {
         schema: {
           type: 'array',
           items: {
-            type: 'string'
-          }
+            type: 'string',
+          },
+          example: [
+            "2021-05-28 09:46:22.660 [NODEPAD] Project webapp created",
+            "2021-05-28 10:25:17.667 [NODEPAD] Strting project 'webapp'..."
+          ]
         }
       },
       404: {
         description: 'Project not found',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       401: {
         description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       }
     },
   };

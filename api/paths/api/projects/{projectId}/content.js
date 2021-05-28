@@ -1,13 +1,8 @@
 
 module.exports = function (projectService, deployService) {
 
-
   async function GET(req, res) {
     let projectId = req.params.projectId;
-    if(!projectService.exist(projectId)) {
-      res.status(404).send('Project not found');
-      return;
-    }
     res.status(200).json(deployService.getDeployment(projectId));
   }
 
@@ -31,23 +26,29 @@ module.exports = function (projectService, deployService) {
       },
       404: {
         description: 'Project not found',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       401: {
         description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       }
     },
   };
 
   async function POST(req, res) {
     let projectId = req.params.projectId;
-    if(!projectService.exist(projectId)) {
-      res.status(404).send('Project not found');
-      return;
-    }
 
     await deployService.upload(projectId, req);
 
-    res.status(200).send();
+    setTimeout(() => {
+      res.status(201).json(deployService.getDeployment(projectId));
+    }, 500)
 
     try {
       await deployService.extract(projectId);
@@ -55,8 +56,10 @@ module.exports = function (projectService, deployService) {
       await deployService.install(projectId);
     } catch(err) {
       console.log(err)
+    } finally {
+      await projectService.start(projectId);
     }
-    await projectService.start(projectId);
+    
   }
 
   POST.apiDoc = {
@@ -77,14 +80,25 @@ module.exports = function (projectService, deployService) {
       },
     ],
     responses: {
-      200: {
+      201: {
         description: "Content uploaded",
+        schema: {
+          $ref: '#/definitions/Deployment',
+        },
       },
       404: {
         description: "Project not found",
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       401: {
         description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       }
     },
   };

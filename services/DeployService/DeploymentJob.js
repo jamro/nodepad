@@ -4,6 +4,7 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 
 const AdmZip = require('adm-zip');
+const { EntityNotFoundError } = require('../common/errors');
 
 const UPLOAD_ERROR = 'upload error';
 
@@ -113,7 +114,7 @@ class DeploymentJob {
 
   async extract() {
     if(!fs.existsSync(this.uploadFilePath)) {
-      throw new Error('nothing to extract');
+      throw new EntityNotFoundError('nothing to extract');
     }
     this.status = 'extracting';
     if(fs.existsSync(this.tmpPath)) {
@@ -148,7 +149,7 @@ class DeploymentJob {
 
   async install() { 
     if(!fs.existsSync(this.tmpPath)) {
-      throw new Error('nothing to install');
+      throw new EntityNotFoundError('nothing to install');
     }
     const binTmpPath = path.resolve(this.workspace, 'tmp-bin' + Math.round(Math.random()*0xffffff).toString(16));
     const binPath = path.resolve(this.workspace, 'bin');

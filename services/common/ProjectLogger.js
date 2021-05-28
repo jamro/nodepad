@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { dirname } = require('path');
+const { EntityNotFoundError } = require('./errors.js');
 const readLastLines = require('read-last-lines');
 const path = require('path');
 
@@ -14,8 +14,8 @@ class ProjectLogger {
       .map(dir => dir.name)
       .find(dirname => dirname.startsWith(projectId));
 
-    if(!dirname) {
-      return null;
+    if(!projectDir) {
+      throw new EntityNotFoundError(`Logs for project '${projectId}' not found`);
     }
     
     const logfile = path.join(this.basePath, projectDir, `log-${projectId}.log`);
@@ -34,7 +34,7 @@ class ProjectLogger {
 
   async read(projectId, lines) {
     const logfile = this.getLogfile(projectId);
-    if(!logfile) {
+    if(!fs.existsSync(logfile)) {
       return [];
     }
     const logs = await readLastLines.read(logfile, lines || 100);

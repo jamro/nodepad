@@ -23,6 +23,10 @@ module.exports = function () {
       },
       401: {
         description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       }
     },
   };

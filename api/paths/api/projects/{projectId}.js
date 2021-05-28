@@ -4,29 +4,16 @@ module.exports = function (projectService) {
 
   async function PUT(req, res) {
     let projectId = req.params.projectId;
-    if(!projectService.exist(projectId)) {
-      res.status(404).send('Project not found');
-      return;
+    const proj = await projectService.find(projectId);
+    const newStatus = req.body.status;
+  
+    if(newStatus === 'online') {
+      await projectService.start(projectId);
+    } else if(proj.status !== newStatus && newStatus === 'offline') {
+      await projectService.stop(projectId);
     }
-    const status = req.body.status;
-    
-    try {
-      switch(status) {
-        case 'online': 
-          await projectService.start(projectId);
-          res.status(200).send();
-          break;
-        case 'offline': 
-          await projectService.stop(projectId);
-          res.status(200).send();
-          break;
-        default:
-          res.status(400).send('Unknown status "' + status + '" requested');
-      }
-    } catch (err) {
-      console.log(err)
-      return res.status(500).send(String(err))
-    }
+
+    res.status(200).json(await projectService.find(projectId));
   }
 
   PUT.apiDoc = {
@@ -51,18 +38,37 @@ module.exports = function (projectService) {
     responses: {
       200: {
         description: "Request ok",
+        schema: {
+          $ref: "#/definitions/Project",
+        },
       },
       400: {
-        description: "Unsupported status requested",
+        description: "Bad request",
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       404: {
         description: "Project not found",
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       500: {
         description: "Process manager error",
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       },
       401: {
         description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
       }
     },
   };

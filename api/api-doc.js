@@ -38,6 +38,15 @@ function create(config) {
             type: 'string'
           }
         }
+      },
+      Error: {
+        type: 'object',
+        properties: {
+          error: {
+            type: 'string',
+            example: 'An error message'
+          }
+        }
       }
     },
     paths: {},
