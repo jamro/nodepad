@@ -10,7 +10,7 @@ const expressWinston = require('express-winston');
 const apiDocCreate = require('./api/api-doc').create;
 
 const indexRouter = require('./routes/index');
-const ProjectService = require('./services/ProjectService');
+const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
 const { AuthError } = require('./services/common/errors');
@@ -52,12 +52,12 @@ function create(config) {
   
   app.logger.debug('Create services');
   const services = {};
-  const projectPath = appConfig.projectPath || path.resolve(__dirname, 'projects');
-  services.projectService = new ProjectService(projectPath, pm2);
-  services.projectService.logger = app.logger.child({ service: 'projectService' });
-  services.proxyService = new ProxyService(services.projectService);
+  const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
+  services.appService = new AppService(appRepoPath, pm2);
+  services.appService.logger = app.logger.child({ service: 'appService' });
+  services.proxyService = new ProxyService(services.appService);
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
-  services.deployService = new DeployService(projectPath);
+  services.deployService = new DeployService(appRepoPath);
   services.deployService.logger = app.logger.child({ service: 'deployService' });
   services.logger = app.logger.child({ service: 'api' });
 
@@ -114,7 +114,7 @@ function create(config) {
   
   app.logger.debug('Configure Swagger UI');
   app.use(
-    '/api',
+    '/nodepad/api',
     swaggerUi.serve,
     swaggerUi.setup(null, {
       swaggerOptions: {

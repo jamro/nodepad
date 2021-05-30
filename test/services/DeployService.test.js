@@ -9,17 +9,17 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
-const PROJECT_ID = 'proj-test-009861';
-const PROJECT_PORT = 4091;
-const PROJECT_DIR = PROJECT_ID + '.' + PROJECT_PORT;
+const APP_ID = 'app-test-009861';
+const APP_PORT = 4091;
+const APP_DIR = APP_ID + '.' + APP_PORT;
 const BIN_DATA = fs.readFileSync(path.resolve(__dirname, '..', 'content.zip'));
 
 function createWorkspace() {
   const workspaceName = (new Date().getTime() * 1000 + Math.floor(Math.random()*1000)).toString(16);
   const workspacePath = path.resolve(__dirname, '..', '..', 'tmp', workspaceName);
   fs.mkdirSync(workspacePath);
-  fs.mkdirSync(path.join(workspacePath, PROJECT_DIR));
-  fs.mkdirSync(path.join(workspacePath, PROJECT_DIR, 'bin'));
+  fs.mkdirSync(path.join(workspacePath, APP_DIR));
+  fs.mkdirSync(path.join(workspacePath, APP_DIR, 'bin'));
   return workspacePath;
 }
 
@@ -31,7 +31,7 @@ function createUploadRequest(filename) {
   
   const req = new MockReq({
     method: 'POST',
-    url: '/projects/' + PROJECT_ID + '/content',
+    url: '/apps/' + APP_ID + '/content/zip',
     headers: {
       'content-type': 'multipart/form-data; boundary=' + BOUNDARY
     }
@@ -71,14 +71,14 @@ describe('DeployService', function() { // --------------------------------------
     req.progressUpload();
     req.completeUpload();
     
-    await deployService.upload(PROJECT_ID, req);
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'uploaded');
+    await deployService.upload(APP_ID, req);
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'uploaded');
 
     const contentList = fs
-      .readdirSync(path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT))
+      .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
       .filter(f => f.match(/content-[0-9a-z]+\.zip/));
 
-    const uploadedFilePath = path.resolve(deployWorkspace, PROJECT_DIR, contentList[0]);
+    const uploadedFilePath = path.resolve(deployWorkspace, APP_DIR, contentList[0]);
     expect(fs.existsSync(uploadedFilePath)).to.be.true;
 
     const fileStats = fs.statSync(uploadedFilePath);
@@ -89,38 +89,38 @@ describe('DeployService', function() { // --------------------------------------
     const deployService = new DeployService(deployWorkspace);
 
     const req = createUploadRequest('test-file-234.zip');
-    deployService.upload(PROJECT_ID, req);
+    deployService.upload(APP_ID, req);
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'started');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'started');
 
     req.progressUpload();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status');
-    expect(deployService.getDeployment(PROJECT_ID).status).to.match(/uploading/);
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status');
+    expect(deployService.getDeployment(APP_ID).status).to.match(/uploading/);
 
     req.completeUpload();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'uploaded');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'uploaded');
 
-    deployService.extract(PROJECT_ID);
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'extracting');
+    deployService.extract(APP_ID);
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extracting');
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'extracted');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extracted');
 
-    deployService.install(PROJECT_ID);
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'installing');
+    deployService.install(APP_ID);
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'installing');
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'deployed');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'deployed');
   });
 
   it('should set upload error status', async function() {
     const deployService = new DeployService(deployWorkspace);
 
     const req2 = createUploadRequest('test-file-234.zip');
-    deployService.upload(PROJECT_ID, req2);
+    deployService.upload(APP_ID, req2);
     req2.end();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'upload error');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'upload error');
 
   });
 
@@ -130,9 +130,9 @@ describe('DeployService', function() { // --------------------------------------
     const req3 = createUploadRequest('test-file-995.zip');
     req3.write('\r\nsome non zip data');
     req3.completeUpload();
-    await deployService.upload(PROJECT_ID, req3);
-    await expect(deployService.extract(PROJECT_ID)).to.be.rejected;
-    expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'extract error');
+    await deployService.upload(APP_ID, req3);
+    await expect(deployService.extract(APP_ID)).to.be.rejected;
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extract error');
 
   });
 
@@ -145,10 +145,10 @@ describe('DeployService', function() { // --------------------------------------
     req1.progressUpload();
     req2.progressUpload();
     
-    deployService.upload(PROJECT_ID, req1);
+    deployService.upload(APP_ID, req1);
     await new Promise(resolve => setTimeout(resolve, 50));
 
-    deployService.upload(PROJECT_ID, req2);
+    deployService.upload(APP_ID, req2);
     await new Promise(resolve => setTimeout(resolve, 50));
 
     req1.progressUpload();
@@ -160,7 +160,7 @@ describe('DeployService', function() { // --------------------------------------
     await new Promise(resolve => setTimeout(resolve, 50));
 
     const contentList = fs
-      .readdirSync(path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT))
+      .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
       .filter(f => f.match(/content-[0-9a-z]+\.zip/));
 
     expect(contentList).to.have.lengthOf(1);
@@ -172,16 +172,16 @@ describe('DeployService', function() { // --------------------------------------
     const req = createUploadRequest('file-0038.zip');
     req.progressUpload();
     req.completeUpload();
-    await deployService.upload(PROJECT_ID, req);
-    await deployService.extract(PROJECT_ID);
+    await deployService.upload(APP_ID, req);
+    await deployService.extract(APP_ID);
 
     const tmpDir = fs
-      .readdirSync(path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT))
+      .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
       .find(f => f.match(/tmp-[0-9a-z]+/));
 
     expect(tmpDir).to.be.not.null;
 
-    const tmpPath = path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT, tmpDir);
+    const tmpPath = path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT, tmpDir);
     expect(fs.existsSync(path.resolve(tmpPath, 'index.js')));
     expect(fs.existsSync(path.resolve(tmpPath, 'readme.txt')));
 
@@ -192,7 +192,7 @@ describe('DeployService', function() { // --------------------------------------
     expect(fileStats2.size).to.be.greaterThan(0);
 
     const uploadList = fs
-      .readdirSync(path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT))
+      .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
       .filter(f => f.match(/content-[0-9a-z]+\.zip/));
 
     expect(uploadList).to.be.empty;
@@ -203,15 +203,15 @@ describe('DeployService', function() { // --------------------------------------
     const req = createUploadRequest('file-9982.zip');
     req.progressUpload();
     req.completeUpload();
-    await deployService.upload(PROJECT_ID, req);
-    await deployService.extract(PROJECT_ID);
-    await deployService.install(PROJECT_ID);
+    await deployService.upload(APP_ID, req);
+    await deployService.extract(APP_ID);
+    await deployService.install(APP_ID);
 
-    const readmePath = path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT, 'bin', 'readme.txt');
+    const readmePath = path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT, 'bin', 'readme.txt');
     expect(fs.existsSync(readmePath)).to.be.true;
 
     const tmpList = fs
-      .readdirSync(path.resolve(deployWorkspace, PROJECT_ID + '.' + PROJECT_PORT))
+      .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
       .filter(f => f.match(/tmp-[0-9a-z]+/));
 
     expect(tmpList).to.be.empty;
@@ -222,10 +222,10 @@ describe('DeployService', function() { // --------------------------------------
     const req = createUploadRequest('file-342.zip');
     req.progressUpload();
     req.completeUpload();
-    await deployService.upload(PROJECT_ID, req);
-    await deployService.extract(PROJECT_ID);
-    await deployService.install(PROJECT_ID);
-    expect(deployService.getDeployment(PROJECT_ID)).to.have.property('lastUpdate');
-    expect(deployService.getDeployment(PROJECT_ID).lastUpdate).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/);
+    await deployService.upload(APP_ID, req);
+    await deployService.extract(APP_ID);
+    await deployService.install(APP_ID);
+    expect(deployService.getDeployment(APP_ID)).to.have.property('lastUpdate');
+    expect(deployService.getDeployment(APP_ID).lastUpdate).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/);
   });
 });

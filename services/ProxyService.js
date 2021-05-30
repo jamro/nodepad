@@ -4,9 +4,9 @@ const AbstractService = require('./common/AbstractService');
 
 class ProxyService extends AbstractService {
 
-  constructor(projectService, cacheTimeout) {
+  constructor(appService, cacheTimeout) {
     super();
-    this.projectService = projectService;
+    this.appService = appService;
     this.loop = null;
     this.cache = [];
     this.cacheTime = 0;
@@ -14,45 +14,45 @@ class ProxyService extends AbstractService {
   }
 
 
-  getTargetProjectId(req) {
+  getTargetAppId(req) {
     const host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.hostname;
-    let projectId = host.split('.');
-    if(projectId[0] === 'www') {
-      projectId.shift();
+    let appId = host.split('.');
+    if(appId[0] === 'www') {
+      appId.shift();
     }
-    projectId = projectId[0];
-    return projectId;
+    appId = appId[0];
+    return appId;
   }
 
-  getTargetHost(projectId) {
+  getTargetHost(appId) {
     const now = new Date().getTime();
     if(now - this.cacheTime > this.cacheTimeout) {
-      this.logger.debug('Refreshing project cache');
-      this.cache = this.projectService.getProjectFolders();
+      this.logger.debug('Refreshing app cache');
+      this.cache = this.appService.getAppFolders();
       this.cacheTime = now;
     }
     
     const folders = this.cache;
-    const proj = folders.map(dir => dir.split('.'))
-      .find(dir => dir[0]  === projectId);
-    if(!proj) {
+    const app = folders.map(dir => dir.split('.'))
+      .find(dir => dir[0]  === appId);
+    if(!app) {
       return null;
     }
-    return 'localhost:' + proj[1];
+    return 'localhost:' + app[1];
   }
   
   getProxy() {
     return proxy(
       (req) => {
-        let projectId = this.getTargetProjectId(req);
-        const targetHost = this.getTargetHost(projectId);
-        this.logger.info(`Redirecting '${req.url} to project '${projectId}' at '${targetHost}'`);
+        let appId = this.getTargetAppId(req);
+        const targetHost = this.getTargetHost(appId);
+        this.logger.info(`Redirecting '${req.url} to app '${appId}' at '${targetHost}'`);
         return targetHost;
       }, 
       { 
         filter: (req) => {
-          let projectId = this.getTargetProjectId(req);
-          const targetHost = this.getTargetHost(projectId);
+          let appId = this.getTargetAppId(req);
+          const targetHost = this.getTargetHost(appId);
           return !!targetHost;
         },
         proxyErrorHandler: (err, res) => {

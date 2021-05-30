@@ -1,38 +1,38 @@
 
-module.exports = function (projectService, deployService) {
+module.exports = function (appService) {
 
   async function GET(req, res) {
-    let projectId = req.params.projectId;
-    res.status(200).json(await projectService.getLogs(projectId));
+    let appId = req.params.appId;
+    res.status(200).json(await appService.getLogs(appId));
   }
 
   GET.apiDoc = {
-    summary: 'Fetch project logs',
+    summary: 'List application logs',
     operationId: 'getLogs',
     parameters: [
       {
         in: 'path',
-        name: 'projectId',
+        name: 'appId',
         required: true,
         type: 'string'
       }
     ],
     responses: {
       200: {
-        description: 'Project logs',
+        description: 'Application logs',
         schema: {
           type: 'array',
           items: {
             type: 'string',
           },
           example: [
-            "2021-05-28 09:46:22.660 [NODEPAD] Project webapp created",
-            "2021-05-28 10:25:17.667 [NODEPAD] Strting project 'webapp'..."
+            '2021-05-28 09:46:22.660 [NODEPAD] Application \'webapp\' created',
+            '2021-05-28 10:25:17.667 [NODEPAD] Starting application \'webapp\'...'
           ]
         }
       },
       404: {
-        description: 'Project not found',
+        description: 'Application not found',
         schema: {
           type: 'object',
           $ref: '#/definitions/Error',

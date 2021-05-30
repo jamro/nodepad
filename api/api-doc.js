@@ -10,7 +10,7 @@ function create(config) {
       version: packageInfo.version,
     },
     definitions: {
-      Project: {
+      App: {
         type: 'object',
         properties: {
           id: {

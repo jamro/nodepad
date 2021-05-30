@@ -1,43 +1,43 @@
-module.exports = function (projectService, logger) {
+module.exports = function (appService, logger) {
 
   async function POST(req, res) {
-    logger.info(`creating project: ${JSON.stringify(req.body)}`);
-    const projectId = String(req.body.id);
-    const projectStatus = String(req.body.status);
-    const projectPort = Number(req.body.port);
+    logger.info(`creating application: ${JSON.stringify(req.body)}`);
+    const appId = String(req.body.id);
+    const appStatus = String(req.body.status);
+    const appPort = Number(req.body.port);
   
-    projectService.create(projectId, projectPort);
+    appService.create(appId, appPort);
 
-    if(projectStatus === 'online') {
-      await projectService.start(projectId);
+    if(appStatus === 'online') {
+      await appService.start(appId);
     }
 
     res.status(201).json({
-      id: projectId,
-      port: projectPort,
-      status: projectStatus || 'offline'
+      id: appId,
+      port: appPort,
+      status: appStatus || 'offline'
     });
   }
   
   POST.apiDoc = {
-    summary: 'Create new project',
-    operationId: 'createProject',
+    summary: 'Create new application to be hosted',
+    operationId: 'createApp',
     consumes: ['application/json'],
     parameters: [
       {
         in: 'body',
-        name: 'project',
+        name: 'app',
         schema: {
-          $ref: '#/definitions/Project',
+          $ref: '#/definitions/App',
         },
       },
     ],
     responses: {
       201: {
-        description: 'Project created',
+        description: 'Application created',
         schema: {
           type: 'object',
-          $ref: '#/definitions/Project',
+          $ref: '#/definitions/App',
         },
       },
       400: {
@@ -58,16 +58,16 @@ module.exports = function (projectService, logger) {
   };
 
   async function GET(req, res) {
-    let data = await projectService.read();
+    let data = await appService.read();
     res.status(200).json(data);
   }
 
   GET.apiDoc = {
-    summary: 'Fetch all projects',
-    operationId: 'getProjects',
+    summary: 'List all hosted application',
+    operationId: 'getApps',
     responses: {
       200: {
-        description: 'List of Projects.',
+        description: 'List of applications.',
         schema: {
           type: 'object',
           $ref: '#/definitions/Error',

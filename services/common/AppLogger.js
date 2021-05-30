@@ -3,37 +3,37 @@ const { EntityNotFoundError } = require('./errors.js');
 const readLastLines = require('read-last-lines');
 const path = require('path');
 
-class ProjectLogger {
+class AppLogger {
   constructor(basePath) {
     this.basePath = basePath;
   }
 
-  getLogfile(projectId) {
-    const projectDir = fs.readdirSync(this.basePath, { withFileTypes: true })
+  getLogfile(appId) {
+    const appDir = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => dir.name)
-      .find(dirname => dirname.startsWith(projectId));
+      .find(dirname => dirname.startsWith(appId));
 
-    if(!projectDir) {
-      throw new EntityNotFoundError(`Logs for project '${projectId}' not found`);
+    if(!appDir) {
+      throw new EntityNotFoundError(`Logs for application '${appId}' not found`);
     }
     
-    const logfile = path.join(this.basePath, projectDir, `log-${projectId}.log`);
+    const logfile = path.join(this.basePath, appDir, `log-${appId}.log`);
     return logfile;
   }
 
-  log(projectId, message) {
-    const logfile = this.getLogfile(projectId);
+  log(appId, message) {
+    const logfile = this.getLogfile(appId);
     if(!logfile) {
-      console.log('Error: Unable to log to ' + projectId + ' project. Log message: ' + message);
+      console.log('Error: Unable to log to ' + appId + ' app. Log message: ' + message);
       return;
     }
     const time = new Date().toISOString().replace('T', ' ').replace('Z', '');
     fs.appendFileSync(logfile, `${time} [NODEPAD] ${message}\n`);
   }
 
-  async read(projectId, lines) {
-    const logfile = this.getLogfile(projectId);
+  async read(appId, lines) {
+    const logfile = this.getLogfile(appId);
     if(!fs.existsSync(logfile)) {
       return [];
     }
@@ -42,4 +42,4 @@ class ProjectLogger {
   }
 }
 
-module.exports = ProjectLogger;
+module.exports = AppLogger;

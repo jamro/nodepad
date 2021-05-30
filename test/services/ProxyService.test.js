@@ -6,23 +6,23 @@ const sinon = require('sinon');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-class ProjectServiceMock {
+class AppServiceMock {
   constructor() {
-    this.getProjectFolders = sinon.stub().callsFake(() => []);
+    this.getAppFolders = sinon.stub().callsFake(() => []);
   }
 }
 
 describe('ProxyService', function() { // ------------------------------------------------
 
-  it('should get target project id', async function() {
-    const projectService = new ProjectServiceMock();
-    const proxyService = new ProxyService(projectService, -1);
-    expect(proxyService.getTargetProjectId({ headers: {}, hostname: 'myapp'})).to.be.equal('myapp');
-    expect(proxyService.getTargetProjectId({ headers: {}, hostname: 'myapp.example.com'})).to.be.equal('myapp');
-    expect(proxyService.getTargetProjectId({ headers: {}, hostname: 'www.myapp.example.com'})).to.be.equal('myapp');
-    expect(proxyService.getTargetProjectId({ headers: {}, hostname: 'www.myapp.sub.example.com'})).to.be.equal('myapp');
+  it('should get target app id', async function() {
+    const appService = new AppServiceMock();
+    const proxyService = new ProxyService(appService, -1);
+    expect(proxyService.getTargetAppId({ headers: {}, hostname: 'myapp'})).to.be.equal('myapp');
+    expect(proxyService.getTargetAppId({ headers: {}, hostname: 'myapp.example.com'})).to.be.equal('myapp');
+    expect(proxyService.getTargetAppId({ headers: {}, hostname: 'www.myapp.example.com'})).to.be.equal('myapp');
+    expect(proxyService.getTargetAppId({ headers: {}, hostname: 'www.myapp.sub.example.com'})).to.be.equal('myapp');
 
-    expect(proxyService.getTargetProjectId(
+    expect(proxyService.getTargetAppId(
       {
         headers: {
           'x-forwarded-host': 'www.myapp.sub.example.com'
@@ -33,13 +33,13 @@ describe('ProxyService', function() { // ---------------------------------------
     
   });
 
-  it('should route to project', async function() {
-    const projectService = new ProjectServiceMock();
-    projectService.getProjectFolders = sinon.stub().callsFake(() => [
+  it('should route to hosted application', async function() {
+    const appService = new AppServiceMock();
+    appService.getAppFolders = sinon.stub().callsFake(() => [
       'app-392.3911',
       'app-111.3912',
     ]);
-    const proxyService = new ProxyService(projectService, -1);
+    const proxyService = new ProxyService(appService, -1);
 
     expect(proxyService.getTargetHost('app-392')).to.be.equal('localhost:3911');
     expect(proxyService.getTargetHost('app-111')).to.be.equal('localhost:3912');

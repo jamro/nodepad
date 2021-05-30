@@ -1,7 +1,7 @@
 const fs = require('fs');
 const DeploymentJob = require('./DeployService/DeploymentJob');
 const path = require('path');
-const ProjectLogger = require('./common/ProjectLogger');
+const AppLogger = require('./common/AppLogger');
 const { ValidationError, EntityNotFoundError } = require('./common/errors');
 const AbstractService = require('./common/AbstractService');
 
@@ -11,30 +11,29 @@ class DeployService extends AbstractService {
     super();
     this.basePath = basePath;
     this.debug = true;
-    this.projectLogger = new ProjectLogger(basePath);
+    this.appLogger = new AppLogger(basePath);
     this.jobMap = {};
   }
 
-  getDeployment(projectId) {
-    const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
+  getDeployment(appId) {
+    const app = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
-        let projData = dir.name.split('.');
-        let proj = {
-          id: projData[0],
-          port: Number(projData[1])
+        let appData = dir.name.split('.');
+        return {
+          id: appData[0],
+          port: Number(appData[1])
         };
-        return proj;
       })
-      .find(p => p.id === projectId);
+      .find(p => p.id === appId);
     
-    if(!proj) {
-      throw new EntityNotFoundError('Project ' + projectId + ' not found');
+    if(!app) {
+      throw new EntityNotFoundError('Project ' + appId + ' not found');
     }
 
-    const binPath =  path.resolve(this.basePath, proj.id + '.' + proj.port, 'bin');
+    const binPath =  path.resolve(this.basePath, app.id + '.' + app.port, 'bin');
 
-    const job = this.jobMap[projectId] || null;
+    const job = this.jobMap[appId] || null;
     let stats;
     try {
       stats = fs.statSync(binPath);
@@ -49,53 +48,52 @@ class DeployService extends AbstractService {
     };
   }
 
-  async upload(projectId, req) {
-    this.logger.info(`Uploading new content to '${projectId}'`);
-    this.projectLogger.log(projectId, `Uploading new content to '${projectId}'`);
-    const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
+  async upload(appId, req) {
+    this.logger.info(`Uploading new content to '${appId}'`);
+    this.appLogger.log(appId, `Uploading new content to '${appId}'`);
+    const app = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
-        let projData = dir.name.split('.');
-        let proj = {
-          id: projData[0],
-          port: Number(projData[1])
+        let appData = dir.name.split('.');
+        return {
+          id: appData[0],
+          port: Number(appData[1])
         };
-        return proj;
       })
-      .find(p => p.id === projectId);
+      .find(p => p.id === appId);
 
-    const workspace = path.resolve(this.basePath, proj.id + '.' + proj.port);
-    if(this.jobMap[projectId]) {
-      this.jobMap[projectId].stop();
+    const workspace = path.resolve(this.basePath, app.id + '.' + app.port);
+    if(this.jobMap[appId]) {
+      this.jobMap[appId].stop();
     }
-    this.jobMap[projectId] = new DeploymentJob(workspace);
-    this.jobMap[projectId].logger = this.logger.child({service: 'deploymmentJob', projectId: projectId});
-    await this.jobMap[projectId].upload(req);
-    this.projectLogger.log(projectId, `Uploading of '${projectId}' completed`);
-    this.logger.info(`Uploading of '${projectId}' completed`);
+    this.jobMap[appId] = new DeploymentJob(workspace);
+    this.jobMap[appId].logger = this.logger.child({service: 'deploymmentJob', appId: appId});
+    await this.jobMap[appId].upload(req);
+    this.appLogger.log(appId, `Uploading of '${appId}' completed`);
+    this.logger.info(`Uploading of '${appId}' completed`);
   }
 
-  async extract(projectId) {
-    this.logger.info(`Extracting '${projectId}'...`);
-    if(!this.jobMap[projectId]) {
-      throw new ValidationError(`No deployment jobs for project '${projectId}'`);
+  async extract(appId) {
+    this.logger.info(`Extracting '${appId}'...`);
+    if(!this.jobMap[appId]) {
+      throw new ValidationError(`No deployment jobs for application '${appId}'`);
     }
-    this.projectLogger.log(projectId, `Extracting '${projectId}'...`);
-    await this.jobMap[projectId].extract();
-    this.projectLogger.log(projectId, `Content of '${projectId}' extracted`);
-    this.logger.info(projectId, `Content of '${projectId}' extracted`);
+    this.appLogger.log(appId, `Extracting '${appId}'...`);
+    await this.jobMap[appId].extract();
+    this.appLogger.log(appId, `Content of '${appId}' extracted`);
+    this.logger.info(appId, `Content of '${appId}' extracted`);
   }
 
-  async install(projectId) {
-    this.logger.info(`Installing '${projectId}'...`);
-    if(!this.jobMap[projectId]) {
-      throw new ValidationError(`No deployment jobs for project '${projectId}'`);
+  async install(appId) {
+    this.logger.info(`Installing '${appId}'...`);
+    if(!this.jobMap[appId]) {
+      throw new ValidationError(`No deployment jobs for application '${appId}'`);
     }
 
-    this.projectLogger.log(projectId, `Installing '${projectId}'...`);
-    await this.jobMap[projectId].install();
-    this.projectLogger.log(projectId, `Content of '${projectId}' installed`);
-    this.logger.info(`Content of '${projectId}' installed`);
+    this.appLogger.log(appId, `Installing '${appId}'...`);
+    await this.jobMap[appId].install();
+    this.appLogger.log(appId, `Content of '${appId}' installed`);
+    this.logger.info(`Content of '${appId}' installed`);
   }
 }
 
