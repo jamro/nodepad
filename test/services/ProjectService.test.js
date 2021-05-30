@@ -92,6 +92,21 @@ describe('ProjectService', function() { // -------------------------------------
     expect(list[1]).to.have.property('status', 'online');
   });
 
+  it('should list project folders', async function() {
+    const pm2 = new PM2Mock();
+    const projectService = new ProjectService(workspace, pm2);
+
+    await projectService.create('p-xlkaj', 1107);
+    await projectService.create('p-aespf', 1108);
+
+    const list = projectService.getProjectFolders();
+
+    expect(list).to.have.lengthOf(2);
+
+    expect(list).to.contain('p-xlkaj.1107');
+    expect(list).to.contain('p-aespf.1108');
+  });
+
   it('should throw on PM2 connect error when listing', async function() {
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 982');

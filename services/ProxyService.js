@@ -7,25 +7,12 @@ class ProxyService extends AbstractService {
   constructor(projectService, cacheTimeout) {
     super();
     this.projectService = projectService;
-    this.cache = [];
     this.loop = null;
-
-    if(cacheTimeout !== -1) {
-      this.loop = setInterval(async () => await this.refreshCache(), cacheTimeout || 5000);
-    }
-    this.refreshCache();
+    this.cache = [];
+    this.cacheTime = 0;
+    this.cacheTimeout = cacheTimeout || 5000;
   }
 
-  destroy() {
-    if(this.loop) {
-      clearInterval(this.loop);
-    }
-  }
-
-  async refreshCache() {
-    this.logger.debug('Refreshing project cache');
-    this.cache = await this.projectService.read();
-  }
 
   getTargetProjectId(req) {
     const host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.hostname;
@@ -38,11 +25,20 @@ class ProxyService extends AbstractService {
   }
 
   getTargetHost(projectId) {
-    const proj = this.cache.find(p => p.id === projectId);
+    const now = new Date().getTime();
+    if(now - this.cacheTime > this.cacheTimeout) {
+      this.logger.debug('Refreshing project cache');
+      this.cache = this.projectService.getProjectFolders();
+      this.cacheTime = now;
+    }
+    
+    const folders = this.cache;
+    const proj = folders.map(dir => dir.split('.'))
+      .find(dir => dir[0]  === projectId);
     if(!proj) {
       return null;
     }
-    return 'localhost:' + proj.port;
+    return 'localhost:' + proj[1];
   }
   
   getProxy() {
@@ -56,8 +52,8 @@ class ProxyService extends AbstractService {
       { 
         filter: (req) => {
           let projectId = this.getTargetProjectId(req);
-          const proj = this.cache.find(p => p.id === projectId);
-          return !!proj;
+          const targetHost = this.getTargetHost(projectId);
+          return !!targetHost;
         },
         proxyErrorHandler: (err, res) => {
           this.logger.error(err);

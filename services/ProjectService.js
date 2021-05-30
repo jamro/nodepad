@@ -79,12 +79,17 @@ class ProjectService extends AbstractService {
     });
   }
 
+  getProjectFolders() {
+    return fs.readdirSync(this.basePath, { withFileTypes: true })
+      .filter(dir => dir.isDirectory())
+      .map(dir => dir.name);
+  }
+
   async read() {
     this.logger.debug('Reading project files structure');
-    const data = fs.readdirSync(this.basePath, { withFileTypes: true })
-      .filter(dir => dir.isDirectory())
+    const data = this.getProjectFolders()
       .map(dir => {
-        let projData = dir.name.split('.');
+        let projData = dir.split('.');
         let proj = {
           id: projData[0],
           port: Number(projData[1])
@@ -189,20 +194,18 @@ class ProjectService extends AbstractService {
   }
 
   exist(projectId) {
-    return !!fs.readdirSync(this.basePath, { withFileTypes: true })
-      .filter(dir => dir.isDirectory())
+    return !!this.getProjectFolders()
       .map(dir => {
-        let projData = dir.name.split('.');
+        let projData = dir.split('.');
         return projData[0];
       })
       .find(id => id === projectId);
   }
 
   isPortBound(port) {
-    return !!fs.readdirSync(this.basePath, { withFileTypes: true })
-      .filter(dir => dir.isDirectory())
+    return !!this.getProjectFolders()
       .map(dir => {
-        let projData = dir.name.split('.');
+        let projData = dir.split('.');
         return Number(projData[1]);
       })
       .find(p => p === port);

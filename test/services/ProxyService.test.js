@@ -8,7 +8,7 @@ const expect = chai.expect;
 
 class ProjectServiceMock {
   constructor() {
-    this.read = sinon.stub().callsFake(() => []);
+    this.getProjectFolders = sinon.stub().callsFake(() => []);
   }
 }
 
@@ -35,20 +35,11 @@ describe('ProxyService', function() { // ---------------------------------------
 
   it('should route to project', async function() {
     const projectService = new ProjectServiceMock();
-    projectService.read = sinon.stub().callsFake(() => [
-      {
-        id: 'app-392',
-        status: 'online',
-        port: 3911
-      },
-      {
-        id: 'app-111',
-        status: 'offline',
-        port: 3912
-      }
+    projectService.getProjectFolders = sinon.stub().callsFake(() => [
+      'app-392.3911',
+      'app-111.3912',
     ]);
     const proxyService = new ProxyService(projectService, -1);
-    await proxyService.refreshCache();
 
     expect(proxyService.getTargetHost('app-392')).to.be.equal('localhost:3911');
     expect(proxyService.getTargetHost('app-111')).to.be.equal('localhost:3912');
