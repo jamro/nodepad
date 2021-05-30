@@ -1,13 +1,13 @@
 const path = require('path')
 const { ValidationError } = require('../../../../services/common/errors')
-module.exports = function (projectService) {
+module.exports = function (projectService, logger) {
 
   async function PUT(req, res) {
     let projectId = req.params.projectId;
+    logger.info(`updating project '${projectId}': ${JSON.stringify(req.body)}`);
     const proj = await projectService.find(projectId);
     const newStatus = req.body.status;
 
-    console.log(req.body.id)
     if(req.body.id && req.body.id !== proj.id) {
       throw new ValidationError('Modification of project ID is not allowed');
     }

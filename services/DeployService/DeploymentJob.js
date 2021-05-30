@@ -1,4 +1,5 @@
 const path = require('path');
+const winston = require('winston');
 const Busboy = require('busboy');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
@@ -27,33 +28,34 @@ class DeploymentJob {
     this.tmpPath = path.resolve(this.workspace, 'tmp-' + Math.round(Math.random()*0xffffff).toString(16));
     this.uploadedBytes = 0;
     this.debug = true;
-  }
 
-  log(...args) {
-    if(this.debug) {
-      console.log(...args);
-    }
+    this.logger = winston.createLogger({
+      transports: [
+        new winston.transports.Console({silent: true})
+      ]
+    });
   }
 
   onUploadError(err) {
-    this.log('ERR', err);
+    this.logger.error(err);
     this.status = UPLOAD_ERROR;
     this.stop();
   }
 
   stop() {
+    this.logger.debug('Stopping depoyment job');
     if(this.req) {
       try {
         this.req.pause();
       } catch(err) {
-        this.log(err);
+        this.logger.error(err);
       }
     }
     if(this.file) {
       try {
         this.file.pause();
       } catch(err) {
-        this.log(err);
+        this.logger.error(err);
       }
     }
     fs.readdirSync(this.workspace)
@@ -70,6 +72,7 @@ class DeploymentJob {
 
   upload(req) {
     return new Promise((resolve, reject) => {
+      this.logger.debug('uploading');
       this.busboy = new Busboy({ 
         headers: req.headers,
         highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
@@ -78,7 +81,7 @@ class DeploymentJob {
       
       
       this.busboy.on('file', (fieldname, file) => {
-        this.log('Writing uploaded file to ' + this.uploadFileDir);
+        this.logger.info('Writing uploaded file to ' + this.uploadFilePath);
         this.file = file;
         file.on('data', (data) => {
           if(this.status === UPLOAD_ERROR) {
@@ -99,7 +102,7 @@ class DeploymentJob {
         if(this.status === UPLOAD_ERROR) {
           return;
         }
-        this.log('Upload completed');
+        this.logger.info('Upload completed');
         this.status = 'uploaded';
         setTimeout(resolve, 100);
       });
@@ -113,6 +116,7 @@ class DeploymentJob {
   }
 
   async extract() {
+    this.logger.debug('extracting');
     if(!fs.existsSync(this.uploadFilePath)) {
       throw new EntityNotFoundError('nothing to extract');
     }
@@ -131,10 +135,8 @@ class DeploymentJob {
     await new Promise((resolve, reject) => {
       zip.extractAllToAsync(this.tmpPath, true, (err) => {
         if(err) {
-          console.log(err);
-          this.log(err);
+          this.logger.error(err);
           this.status = 'extract error';
-          console.log({s: this.status});
           return reject(err);
         }
         this.status = 'extracted';
@@ -148,6 +150,7 @@ class DeploymentJob {
   }
 
   async install() { 
+    this.logger.debug('installing');
     if(!fs.existsSync(this.tmpPath)) {
       throw new EntityNotFoundError('nothing to install');
     }
@@ -161,7 +164,7 @@ class DeploymentJob {
       await fsPromises.rmdir(binTmpPath, { recursive: true });
       this.stop();
     } catch(err) {
-      this.log(err);
+      this.logger.error(err);
       this.status = 'install error';
       return;
     }

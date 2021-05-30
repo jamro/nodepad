@@ -1,6 +1,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const AbstractService = require('./common/AbstractService');
 const { 
   ValidationError, 
   EntityNotFoundError, 
@@ -8,42 +9,43 @@ const {
 } = require('./common/errors');
 const ProjectLogger = require('./common/ProjectLogger');
 
-class ProjectService {
+class ProjectService extends AbstractService {
   
   constructor(basePath, pm2) {
+    super();
     this.basePath = basePath;
     this.pm2 = pm2;
-    this.debug = true;
-    this.logger = new ProjectLogger(basePath);
-  }
-
-  log(...args) {
-    if(this.debug) {
-      console.log(...args);
-    }
+    this.projectLogger = new ProjectLogger(basePath);
   }
 
   pm2connect() {
     return new Promise((resolve, reject) => {
+      this.logger.debug('Connecting to PM2');
       this.pm2.connect((err) => {
         if (err) {
+          this.logger.error('Error: Unable to connect PM2: ' + String(err));
           return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
+        this.logger.debug('Connected to PM2');
         resolve();
       });
     });
   }
 
   pm2disconnect() {
+    this.logger.debug('Disconnect PM2');
     this.pm2.disconnect();
   }
 
   pm2start(options) {
     return new Promise((resolve, reject) => {
+      this.logger.debug({message: 'Starting PM2 process', meta: options});
       this.pm2.start(options, (err) => {
         if (err) {
+          this.logger.error({message: 'Error: Unable to start PM2 process', meta: options});
           return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
+        this.logger.debug({message: 'PM2 process started', meta: options});
         resolve();
       });
     });
@@ -51,10 +53,13 @@ class ProjectService {
 
   pm2delete(projectId) {
     return new Promise((resolve, reject) => {
+      this.logger.debug({message: 'Deleting PM2 process ' + projectId});
       this.pm2.delete(projectId, (err) => {
         if (err) {
+          this.logger.error('Error: Unable to delete PM2 process ' + projectId + ': ' + String(err));
           return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
+        this.logger.debug({message: 'PM2 process ' + projectId + ' deleted'});
         resolve();
       });
     });
@@ -62,16 +67,20 @@ class ProjectService {
 
   pm2list() {
     return new Promise((resolve, reject) => {
+      this.logger.debug('Listing PM2 processes');
       this.pm2.list((err, list) => {
         if (err) {
+          this.logger.error('Error: Unable to list PM2 processes: ' + String(err));
           return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
+        this.logger.debug('Listing of PM2 processes received');
         resolve(list);
       });
     });
   }
 
   async read() {
+    this.logger.debug('Reading project files structure');
     const data = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
@@ -83,18 +92,24 @@ class ProjectService {
         return proj;
       });
 
+    this.logger.debug('Fetching PM2 process status');
     return await new Promise((resolve, reject) => {
       this.pm2.connect((err) => {
+        this.logger.debug('Connecting to PM2');
         if (err) {
-          this.log(err);
+          this.logger.debug('Error: Unable to connect PM2: ' + String(err));
+          this.logger.error(err);
           return reject(new ProcessManagerError('PM2: ' + String(err)));
         }
+        this.logger.debug('Connected to PM2');
+        this.logger.debug('Fetching list of PM2 processes');
         this.pm2.list((err, list) => {
           this.pm2.disconnect();
           if (err) {
-            this.log(err);
+            this.logger.error(err);
             return reject(new ProcessManagerError('PM2: ' + String(err)));
           }
+          this.logger.debug('List of PM2 processes received');
           const processData = list
             .map(p => ({
               name: p.name,
@@ -109,7 +124,10 @@ class ProjectService {
             }, {});
 
           resolve(data.map(proj => {
-            proj.status = processData[proj.id] ? processData[proj.id].status : 'offline';
+            proj.status = 'offline';
+            if(processData[proj.id] && processData[proj.id].status === 'online') {
+              proj.status = 'online';
+            }
             return proj;
           }));
         });
@@ -118,6 +136,7 @@ class ProjectService {
   }
 
   create(projectId, projectPort) {
+    this.logger.info(`Creating project '${projectId}' at port ${projectPort}`);
     if(!projectId) {
       throw new ValidationError('Project ID is required');
     }
@@ -147,10 +166,14 @@ class ProjectService {
       throw new ValidationError(`Port '${projectPort}' already bound`);
     }
     const projectPath = path.join(this.basePath, projectId + '.' + projectPort);
+    this.logger.debug(`Creating ${projectPath}`);
     fs.mkdirSync(projectPath);
+    this.logger.debug(`Creating ${path.join(projectPath, 'bin')}`);
     fs.mkdirSync(path.join(projectPath, 'bin'));
+    this.logger.debug(`Creating ${path.join(projectPath, `log-${projectId}.log`)}`);
     fs.openSync(path.join(projectPath, `log-${projectId}.log`), 'w');
-    this.logger.log(projectId, `Project ${projectId} created`);
+    this.projectLogger.log(projectId, `Project ${projectId} created`);
+    this.logger.debug(`Creating ${path.join(projectPath, 'bin', 'index.js')}`);
     fs.writeFileSync(
       path.join(projectPath, 'bin', 'index.js'),
       `#!/usr/bin/env node
@@ -194,9 +217,10 @@ class ProjectService {
   }
 
   async start(projectId) {
+    this.logger.info(`Starting project ${projectId}`);
     let proj;
     proj = await this.find(projectId);
-    this.logger.log(projectId, `Strting project '${projectId}'...`);
+    this.projectLogger.log(projectId, `Strting project '${projectId}'...`);
     const options = {
       script: path.join(this.basePath, `${proj.id}.${proj.port}`, 'bin', 'index.js'),
       name: proj.id,
@@ -213,11 +237,13 @@ class ProjectService {
       this.pm2disconnect();
     }
 
+    this.logger.info(`Project ${projectId} started`);
   }
 
   async stop(projectId) {
+    this.logger.info(`Stopping project ${projectId}`);
     await this.find(projectId);
-    this.logger.log(projectId, `Stopping project '${projectId}'...`);
+    this.projectLogger.log(projectId, `Stopping project '${projectId}'...`);
 
     await this.pm2connect();
     try {
@@ -225,12 +251,15 @@ class ProjectService {
     } finally {
       this.pm2disconnect();
     }
+
+    this.logger.info(`Project ${projectId} stopped`);
        
   }
 
   async reload(projectId) {
+    this.logger.info(`Reloading project ${projectId}`);
     await this.find(projectId);
-    this.logger.log(projectId, `Reloading project '${projectId}'...`);
+    this.projectLogger.log(projectId, `Reloading project '${projectId}'...`);
 
     await this.pm2connect();
     try {
@@ -238,11 +267,12 @@ class ProjectService {
     } finally {
       this.pm2disconnect();
     }
-       
+    this.logger.info(`Project ${projectId} reloaded`);
   }
 
   async getLogs(projectId, lines) {
-    return await this.logger.read(projectId, lines);
+    this.logger.debug(`Reading ${lines + ' ' || ''}log lines of '${projectId}'`);
+    return await this.projectLogger.read(projectId, lines);
   }
 
 }

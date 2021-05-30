@@ -1,19 +1,29 @@
 const proxy = require('express-http-proxy');
+const AbstractService = require('./common/AbstractService');
 
 
-class ProxyService {
+class ProxyService extends AbstractService {
 
   constructor(projectService, cacheTimeout) {
+    super();
     this.projectService = projectService;
     this.cache = [];
+    this.loop = null;
 
     if(cacheTimeout !== -1) {
-      setInterval(async () => await this.refreshCache(), cacheTimeout || 5000);
+      this.loop = setInterval(async () => await this.refreshCache(), cacheTimeout || 5000);
     }
     this.refreshCache();
   }
 
+  destroy() {
+    if(this.loop) {
+      clearInterval(this.loop);
+    }
+  }
+
   async refreshCache() {
+    this.logger.debug('Refreshing project cache');
     this.cache = await this.projectService.read();
   }
 
@@ -40,7 +50,7 @@ class ProxyService {
       (req) => {
         let projectId = this.getTargetProjectId(req);
         const targetHost = this.getTargetHost(projectId);
-        console.log({projectId, targetHost});
+        this.logger.info(`Redirecting '${req.url} to project '${projectId}' at '${targetHost}'`);
         return targetHost;
       }, 
       { 
@@ -50,7 +60,7 @@ class ProxyService {
           return !!proj;
         },
         proxyErrorHandler: (err, res) => {
-          console.log(err);
+          this.logger.error(err);
           res.status(502).send('502 Bad Gateway');
         }
       }

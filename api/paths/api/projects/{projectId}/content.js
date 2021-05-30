@@ -1,5 +1,5 @@
 
-module.exports = function (projectService, deployService) {
+module.exports = function (projectService, deployService, logger) {
 
   async function GET(req, res) {
     let projectId = req.params.projectId;
@@ -44,6 +44,8 @@ module.exports = function (projectService, deployService) {
   async function POST(req, res) {
     let projectId = req.params.projectId;
 
+    logger.info(`deploying new content of '${projectId}'`)
+
     await deployService.upload(projectId, req);
 
     setTimeout(() => {
@@ -55,7 +57,7 @@ module.exports = function (projectService, deployService) {
       await projectService.stop(projectId);
       await deployService.install(projectId);
     } catch(err) {
-      console.log(err)
+      logger.error(err)
     } finally {
       await projectService.start(projectId);
     }

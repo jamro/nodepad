@@ -12,7 +12,7 @@ const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
 const PROJECT_ID = 'proj-test-009861';
 const PROJECT_PORT = 4091;
 const PROJECT_DIR = PROJECT_ID + '.' + PROJECT_PORT;
-const BIN_DATA = fs.readFileSync(path.resolve(__dirname, 'content.zip'));
+const BIN_DATA = fs.readFileSync(path.resolve(__dirname, '..', 'content.zip'));
 
 function createWorkspace() {
   const workspaceName = (new Date().getTime() * 1000 + Math.floor(Math.random()*1000)).toString(16);
@@ -67,7 +67,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should deploy a file', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
     const req = createUploadRequest('test-file-234.zip');
     req.progressUpload();
     req.completeUpload();
@@ -88,7 +87,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should update status of deployment', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
 
     const req = createUploadRequest('test-file-234.zip');
     deployService.upload(PROJECT_ID, req);
@@ -106,7 +104,7 @@ describe('DeployService', function() { // --------------------------------------
 
     deployService.extract(PROJECT_ID);
     expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'extracting');
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
     expect(deployService.getDeployment(PROJECT_ID)).to.be.have.property('status', 'extracted');
 
     deployService.install(PROJECT_ID);
@@ -117,7 +115,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should set upload error status', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
 
     const req2 = createUploadRequest('test-file-234.zip');
     deployService.upload(PROJECT_ID, req2);
@@ -129,7 +126,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should set extract error status', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
 
     const req3 = createUploadRequest('test-file-995.zip');
     req3.write('\r\nsome non zip data');
@@ -142,7 +138,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should stop running deployment when a new one has started', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
 
     const req1 = createUploadRequest('test-file-885-A.zip');
     const req2 = createUploadRequest('test-file-885-B.zip');
@@ -174,7 +169,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should extract content to temporary location', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
     const req = createUploadRequest('file-0038.zip');
     req.progressUpload();
     req.completeUpload();
@@ -206,7 +200,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should install content to bin', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
     const req = createUploadRequest('file-9982.zip');
     req.progressUpload();
     req.completeUpload();
@@ -226,7 +219,6 @@ describe('DeployService', function() { // --------------------------------------
 
   it('should fetch last update time', async function() {
     const deployService = new DeployService(deployWorkspace);
-    deployService.debug = false;
     const req = createUploadRequest('file-342.zip');
     req.progressUpload();
     req.completeUpload();

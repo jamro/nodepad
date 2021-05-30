@@ -5,7 +5,6 @@
  */
 
 const appCreate = require('../app').create;
-const debug = require('debug')('nodepad:server');
 const http = require('http');
 const path = require('path');
 
@@ -23,7 +22,7 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
+app.logger.info('Starting web server...')
 var server = http.createServer(app);
 
 /**
@@ -70,11 +69,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      app.logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      app.logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -91,5 +90,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  app.logger.info('NodePad listening on ' + bind);
 }

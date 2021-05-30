@@ -2,10 +2,11 @@ const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const expressOpenApi = require('express-openapi');
 const swaggerUi = require('swagger-ui-express');
 const pm2 = require('pm2');
+const winston = require('winston');
+const expressWinston = require('express-winston');
 const apiDocCreate = require('./api/api-doc').create;
 
 const indexRouter = require('./routes/index');
@@ -19,30 +20,57 @@ function create(config) {
   const appConfig = config || {};
   const app = express();
 
+  app.logger = winston.createLogger({
+    level: config.logLevel || 'info',
+    transports: [
+      new winston.transports.Console()
+    ],
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.errors(),
+      winston.format.simple(),
+    )
+  }).child({service: 'core'});
+  app.use(expressWinston.logger({
+    winstonInstance: app.logger.child({service: 'web'}),
+    meta: false,
+    msg: 'HTTP  {{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}',
+    expressFormat: true,
+  }));
+  app.logger.info('Configuring NodePad...');
+
   // view engine setup
+  app.logger.debug('Setting views');
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
   
-  app.use(logger('dev'));
+  app.logger.debug('Configure ExpressJS middleware');
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, 'public')));
   
+  app.logger.debug('Create services');
   const services = {};
-
   const projectPath = appConfig.projectPath || path.resolve(__dirname, 'projects');
-  
   services.projectService = new ProjectService(projectPath, pm2);
+  services.projectService.logger = app.logger.child({ service: 'projectService' });
   services.proxyService = new ProxyService(services.projectService);
+  services.proxyService.logger = app.logger.child({ service: 'proxyService' });
   services.deployService = new DeployService(projectPath);
+  services.deployService.logger = app.logger.child({ service: 'deployService' });
+  services.logger = app.logger.child({ service: 'api' });
+
   
+  app.logger.debug('Setting up OpenApi');
   const openApiConfig = {
     app,
     apiDoc: apiDocCreate(appConfig),
     paths: './api/paths',
     dependencies: services,
     errorMiddleware: function(err, req, res, next) { // eslint-disable-line no-unused-vars
+      
+      app.logger.error(`${err.name}: ${err.message}`);
       switch(err.name) {
       case 'ValidationError':
         return res.status(400).json({error: err.message});
@@ -51,16 +79,18 @@ function create(config) {
       case 'AuthError':
         return res.status(401).json({error: err.message});
       case 'ProcessManagerError':
-        console.log(err);
+        app.logger.debug(err);
         return res.status(500).json({error: 'Internal Process Manager error'});
       default:
-        console.log(err);
+        app.logger.debug(err);
         return res.status(500).json({error: 'Internal NodePad error'});
       }
     },
     promiseMode: true
   };
   if(appConfig.auth) {
+    app.logger.info('Authorization enabled');
+    app.logger.debug('Configure Authorization');
     openApiConfig.securityHandlers = {
       basicAuth: function(req) {
         return new Promise((resolve, reject) => {
@@ -82,6 +112,7 @@ function create(config) {
   }
   expressOpenApi.initialize(openApiConfig);
   
+  app.logger.debug('Configure Swagger UI');
   app.use(
     '/api',
     swaggerUi.serve,
@@ -91,9 +122,11 @@ function create(config) {
       },
     })
   );
+  app.logger.debug('Configure Routing');
   app.use('/', services.proxyService.getProxy());
   app.use('/', indexRouter);
   
+  app.logger.debug('Attach error handlers');
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
     next(createError(404));
@@ -104,11 +137,22 @@ function create(config) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    app.logger.error(err);
   
     // render the error page
     res.status(err.status || 500);
     res.render('error');
   });
+
+  app.destroy = () => {
+    const names = Object.keys(services);
+    names.forEach(serviceName => {
+      if(services[serviceName].destroy) {
+        services[serviceName].destroy();
+      }
+    });
+  };
   return app;
 }
 

@@ -3,20 +3,16 @@ const DeploymentJob = require('./DeployService/DeploymentJob');
 const path = require('path');
 const ProjectLogger = require('./common/ProjectLogger');
 const { ValidationError, EntityNotFoundError } = require('./common/errors');
+const AbstractService = require('./common/AbstractService');
 
-class DeployService {
+class DeployService extends AbstractService {
 
   constructor(basePath) {
+    super();
     this.basePath = basePath;
     this.debug = true;
-    this.logger = new ProjectLogger(basePath);
+    this.projectLogger = new ProjectLogger(basePath);
     this.jobMap = {};
-  }
-
-  log(...args) {
-    if(this.debug) {
-      console.log(...args);
-    }
   }
 
   getDeployment(projectId) {
@@ -38,20 +34,24 @@ class DeployService {
 
     const binPath =  path.resolve(this.basePath, proj.id + '.' + proj.port, 'bin');
 
-    if(!fs.existsSync(binPath)) {
-      throw new EntityNotFoundError('Project content not found');
-    }
-
     const job = this.jobMap[projectId] || null;
-    const stats = fs.statSync(binPath);
+    let stats;
+    try {
+      stats = fs.statSync(binPath);
+    } catch(err) {
+      this.logger.debug(err);
+      stats = {};
+    }
+    
     return  {
       status: job ? job.status : 'deployed',
-      lastUpdate: new Date(stats.mtime).toISOString()
+      lastUpdate: stats.mtime ? new Date(stats.mtime).toISOString() : null
     };
   }
 
   async upload(projectId, req) {
-    this.logger.log(projectId, `Uploading new content to '${projectId}'`);
+    this.logger.info(`Uploading new content to '${projectId}'`);
+    this.projectLogger.log(projectId, `Uploading new content to '${projectId}'`);
     const proj = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
@@ -69,29 +69,33 @@ class DeployService {
       this.jobMap[projectId].stop();
     }
     this.jobMap[projectId] = new DeploymentJob(workspace);
-    this.jobMap[projectId].debug = this.debug;
+    this.jobMap[projectId].logger = this.logger.child({service: 'deploymmentJob', projectId: projectId});
     await this.jobMap[projectId].upload(req);
-    this.logger.log(projectId, `Uploading of '${projectId}' completed`);
+    this.projectLogger.log(projectId, `Uploading of '${projectId}' completed`);
+    this.logger.info(`Uploading of '${projectId}' completed`);
   }
 
   async extract(projectId) {
+    this.logger.info(`Extracting '${projectId}'...`);
     if(!this.jobMap[projectId]) {
       throw new ValidationError(`No deployment jobs for project '${projectId}'`);
     }
-
-    this.logger.log(projectId, `Extracting '${projectId}'...`);
+    this.projectLogger.log(projectId, `Extracting '${projectId}'...`);
     await this.jobMap[projectId].extract();
-    this.logger.log(projectId, `Content of '${projectId}' extracted`);
+    this.projectLogger.log(projectId, `Content of '${projectId}' extracted`);
+    this.logger.info(projectId, `Content of '${projectId}' extracted`);
   }
 
   async install(projectId) {
+    this.logger.info(`Installing '${projectId}'...`);
     if(!this.jobMap[projectId]) {
       throw new ValidationError(`No deployment jobs for project '${projectId}'`);
     }
 
-    this.logger.log(projectId, `Installing '${projectId}'...`);
+    this.projectLogger.log(projectId, `Installing '${projectId}'...`);
     await this.jobMap[projectId].install();
-    this.logger.log(projectId, `Content of '${projectId}' installed`);
+    this.projectLogger.log(projectId, `Content of '${projectId}' installed`);
+    this.logger.info(`Content of '${projectId}' installed`);
   }
 }
 

@@ -96,7 +96,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 982');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     await expect(projectService.read()).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
   });
@@ -105,7 +104,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.listError = new Error('oops 238');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     await expect(projectService.read()).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(1);
   });
@@ -126,7 +124,6 @@ describe('ProjectService', function() { // -------------------------------------
   it('should throw on creation of invalid project name', async function() {
     const pm2 = new PM2Mock();
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
 
     expect(() => projectService.create('', 12341)).to.throw();
     expect(() => projectService.create('x', 12342)).to.throw();
@@ -151,7 +148,6 @@ describe('ProjectService', function() { // -------------------------------------
   it('should throw on creation of invalid project port', async function() {
     const pm2 = new PM2Mock();
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
 
     expect(() => projectService.create('valid8763-1', -2000)).to.throw();
     expect(() => projectService.create('valid8763-2', 1023)).to.throw();
@@ -175,7 +171,6 @@ describe('ProjectService', function() { // -------------------------------------
   it('should throw on creation of duplicated project', async function() {
     const pm2 = new PM2Mock();
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
 
     projectService.create('valid9821-1', 4000);
 
@@ -185,7 +180,6 @@ describe('ProjectService', function() { // -------------------------------------
   it('should throw on creation of project with used port', async function() {
     const pm2 = new PM2Mock();
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
 
     projectService.create('valid9821-1', 5959);
 
@@ -252,7 +246,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 390223');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     projectService.create('test-883773', 7281);
     await expect(projectService.start('test-883773')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
@@ -262,7 +255,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 133322');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     projectService.create('test-223910', 1231);
     await expect(projectService.stop('test-223910')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
@@ -273,7 +265,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.startError = new Error('oops 293');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     projectService.create('test-883773', 7281);
     await expect(projectService.start('test-883773')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(2);
@@ -283,7 +274,6 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     pm2.deleteError = new Error('oops 029');
     const projectService = new ProjectService(workspace, pm2);
-    projectService.debug = false;
     projectService.create('test-223910', 1231);
     await expect(projectService.stop('test-223910')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(2);
@@ -312,8 +302,8 @@ describe('ProjectService', function() { // -------------------------------------
     const pm2 = new PM2Mock();
     const projectService = new ProjectService(workspace, pm2);
     projectService.create('my-proj-8324', 7110);
-    projectService.logger.log('my-proj-8324', 'message #1 32452');
-    projectService.logger.log('my-proj-8324', 'message #2 09231');
+    projectService.projectLogger.log('my-proj-8324', 'message #1 32452');
+    projectService.projectLogger.log('my-proj-8324', 'message #2 09231');
     const logs = await projectService.getLogs('my-proj-8324', 2);
     expect(logs).to.have.lengthOf(2);
     expect(logs[0]).to.be.match(/message #1 32452/);

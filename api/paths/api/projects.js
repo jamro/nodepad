@@ -1,13 +1,12 @@
-module.exports = function (projectService) {
+module.exports = function (projectService, logger) {
 
   async function POST(req, res) {
-    console.log(`creating project: ${JSON.stringify(req.body)}`);
+    logger.info(`creating project: ${JSON.stringify(req.body)}`);
     const projectId = String(req.body.id);
     const projectStatus = String(req.body.status);
     const projectPort = Number(req.body.port);
   
     projectService.create(projectId, projectPort);
-    console.log(`Project '${projectId}' created`);
 
     if(projectStatus === 'online') {
       await projectService.start(projectId);
