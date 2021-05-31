@@ -133,6 +133,13 @@ class AppService extends AbstractService {
             if(processData[app.id] && processData[app.id].status === 'online') {
               app.status = 'online';
             }
+            if(processData[app.id] && processData[app.id].monit) {
+              app.memory = processData[app.id].monit.memory || 0;
+              app.cpu = processData[app.id].monit.cpu || 0;
+            } else {
+              app.memory = 0;
+              app.cpu = 0;
+            }
             return app;
           }));
         });

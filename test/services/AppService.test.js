@@ -86,10 +86,14 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[0]).to.have.property('id', 'app-name-623');
     expect(list[0]).to.have.property('port', 2373);
     expect(list[0]).to.have.property('status', 'offline');
+    expect(list[0]).to.have.property('memory');
+    expect(list[0]).to.have.property('cpu');
 
     expect(list[1]).to.have.property('id', 'app-name-773');
     expect(list[1]).to.have.property('port', 2374);
     expect(list[1]).to.have.property('status', 'online');
+    expect(list[1]).to.have.property('memory');
+    expect(list[1]).to.have.property('cpu');
   });
 
   it('should list apps folders', async function() {

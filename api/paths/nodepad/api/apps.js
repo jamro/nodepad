@@ -15,7 +15,9 @@ module.exports = function (appService, logger) {
     res.status(201).json({
       id: appId,
       port: appPort,
-      status: appStatus || 'offline'
+      status: appStatus || 'offline',
+      memory: 0,
+      cpu: 0
     });
   }
   

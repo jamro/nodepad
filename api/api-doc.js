@@ -24,7 +24,15 @@ function create(config) {
           status: {
             type: 'string',
             enum: ['online', 'offline']
-          }
+          },
+          memory: {
+            type: 'number',
+            example: 9699328
+          },
+          cpu: {
+            type: 'number',
+            example: 47
+          },
         },
       },
       Deployment: {
