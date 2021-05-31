@@ -4,9 +4,10 @@ const AbstractService = require('./common/AbstractService');
 
 class ProxyService extends AbstractService {
 
-  constructor(appService, cacheTimeout) {
+  constructor(appService, defaultApp, cacheTimeout) {
     super();
     this.appService = appService;
+    this.defaultApp = defaultApp || null;
     this.loop = null;
     this.cache = [];
     this.cacheTime = 0;
@@ -33,10 +34,12 @@ class ProxyService extends AbstractService {
     }
     
     const folders = this.cache;
-    const app = folders.map(dir => dir.split('.'))
+    let app = folders.map(dir => dir.split('.'))
       .find(dir => dir[0]  === appId);
     if(!app) {
-      return null;
+      app = folders.map(dir => dir.split('.'))
+        .find(dir => dir[0]  === this.defaultApp);
+      return app ? 'localhost:' + app[1] : null;
     }
     return 'localhost:' + app[1];
   }

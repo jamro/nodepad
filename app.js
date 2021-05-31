@@ -1,5 +1,4 @@
 const express = require('express');
-const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const expressOpenApi = require('express-openapi');
@@ -55,7 +54,7 @@ function create(config) {
   const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
   services.appService = new AppService(appRepoPath, pm2);
   services.appService.logger = app.logger.child({ service: 'appService' });
-  services.proxyService = new ProxyService(services.appService);
+  services.proxyService = new ProxyService(services.appService, config.defaultApp);
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
   services.deployService = new DeployService(appRepoPath);
   services.deployService.logger = app.logger.child({ service: 'deployService' });
@@ -94,6 +93,9 @@ function create(config) {
     openApiConfig.securityHandlers = {
       basicAuth: function(req) {
         return new Promise((resolve, reject) => {
+          if(!req.headers.authorization) {
+            app.logger.debug('Auth data not provided');
+          }
           const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
           const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
           if (login && password && login === appConfig.auth.user && password === appConfig.auth.pass) {
@@ -123,13 +125,13 @@ function create(config) {
     })
   );
   app.logger.debug('Configure Routing');
+  app.use('/nodepad', indexRouter);
   app.use('/', services.proxyService.getProxy());
-  app.use('/', indexRouter);
   
   app.logger.debug('Attach error handlers');
   // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    next(createError(404));
+  app.use(function(req, res) {
+    return res.status(404).send('<h1>404 Not Found</h1>');
   });
   
   // error handler
