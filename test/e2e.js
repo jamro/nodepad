@@ -11,6 +11,10 @@ const FormData = require('form-data');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
+function basicAuth(user, pass) {
+  return 'Basic ' + Buffer.from(user + ':' + pass).toString('base64');
+}
+
 function createWorkspace() {
   const workspaceName = (new Date().getTime() * 1000 + Math.floor(Math.random()*1000)).toString(16);
   const workspacePath = path.resolve(__dirname, '..', 'tmp', workspaceName);
@@ -275,7 +279,22 @@ describe('API End-to-end', function() { // -------------------------------------
         expect(response3).to.not.be.equal(500);
       });
     });
-    
 
+    it('should require auth to open home page', async function() {
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`, {validateStatus: () => true});
+      expect(response).to.have.property('status', 401);
+      expect(response.headers).to.have.property('www-authenticate');
+    });
+
+    it('should require login to home page', async function() {
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`, {
+        validateStatus: () => true,
+        headers: {
+          authorization: basicAuth('admin731', 'secret731')
+        }
+      });
+      expect(response).to.have.property('status', 200);
+    });
+    
   });
 });

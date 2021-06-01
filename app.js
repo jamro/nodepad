@@ -11,7 +11,9 @@ const apiDocCreate = require('./api/api-doc').create;
 const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
+const AuthService = require('./services/AuthService');
 const { AuthError } = require('./services/common/errors');
+
 
 
 function create(config) {
@@ -56,8 +58,9 @@ function create(config) {
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
   services.deployService = new DeployService(appRepoPath);
   services.deployService.logger = app.logger.child({ service: 'deployService' });
+  services.authService = new AuthService(config.auth);
+  services.authService.logger = app.logger.child({ service: 'authService' });
   services.logger = app.logger.child({ service: 'api' });
-
   
   app.logger.debug('Setting up OpenApi');
   const openApiConfig = {
@@ -94,17 +97,12 @@ function create(config) {
           if(!req.headers.authorization) {
             app.logger.debug('Auth data not provided');
           }
-          const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
-          const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
-          if (login && password && login === appConfig.auth.user && password === appConfig.auth.pass) {
+          const isAuth = services.authService.authBasic(req.headers.authorization);
+          
+          if (isAuth) {
             return resolve(true);
           }
           const res = new AuthError('Unauthorized');
-          if(req.url === '/api/auth') {
-            res.headers = {
-              'WWW-Authenticate': 'Basic realm="401"'
-            };
-          }
           reject(res);
         }); 
       }
@@ -122,8 +120,22 @@ function create(config) {
       },
     })
   );
+
   app.logger.debug('Configure Routing');
-  app.use('/nodepad', express.static(path.join(__dirname, 'public')));
+  function authMiddleware(req, res, next) {
+    if(req.url !== '/') {
+      return next();
+    }
+    const isAuth = services.authService.authBasic(req.headers.authorization);
+    if(isAuth) {
+      return next();
+    }
+    res
+      .set('WWW-Authenticate', 'Basic realm="401"')
+      .status(401)
+      .send('auth needed');
+  }
+  app.use('/nodepad', [authMiddleware, express.static(path.join(__dirname, 'public'))]);
   app.use('/', services.proxyService.getProxy());
   
   app.logger.debug('Attach error handlers');

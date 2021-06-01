@@ -1,6 +1,7 @@
 {
   "verbose": true,
   "watch": [
+    "api/*",
     "services/*",
     "app.js",
     "config.js"
