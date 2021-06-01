@@ -4,7 +4,7 @@ module.exports = {
   port: 3000,
   logLevel: 'debug',
   appRepoPath: path.resolve(__dirname, 'repo'),
-  defaultApp: 'default',
+  defaultApp: 'webapp',
 
   /* uncommment to enable basic auth
   auth: {

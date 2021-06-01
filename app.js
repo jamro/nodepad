@@ -8,7 +8,6 @@ const winston = require('winston');
 const expressWinston = require('express-winston');
 const apiDocCreate = require('./api/api-doc').create;
 
-const indexRouter = require('./routes/index');
 const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
@@ -47,7 +46,6 @@ function create(config) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, 'public')));
   
   app.logger.debug('Create services');
   const services = {};
@@ -125,7 +123,7 @@ function create(config) {
     })
   );
   app.logger.debug('Configure Routing');
-  app.use('/nodepad', indexRouter);
+  app.use('/nodepad', express.static(path.join(__dirname, 'public')));
   app.use('/', services.proxyService.getProxy());
   
   app.logger.debug('Attach error handlers');

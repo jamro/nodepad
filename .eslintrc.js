@@ -7,9 +7,21 @@ module.exports = {
       'Buffer': true
     }
   },
-  'extends': 'eslint:recommended',
+  'ignorePatterns': [
+    'public/*'
+  ],
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended'
+  ],
   'parserOptions': {
-    'ecmaVersion': 12
+    'ecmaVersion': 12,
+    'sourceType': 'module'
+  },
+  'settings': {
+    'react': {
+      'version': 'detect'
+    }
   },
   'globals': {
     '__dirname': 'readonly',

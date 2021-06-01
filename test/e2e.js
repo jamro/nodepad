@@ -84,7 +84,7 @@ describe('API End-to-end', function() { // -------------------------------------
       const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
-      expect(response.data).to.match(/Welcome to NodePad/);
+      expect(response.data).to.match(/NodePad Dashboard/);
     });
 
     it('should open swagger UI', async function() {
