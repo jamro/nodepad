@@ -1,9 +1,6 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 const AppService = require('../../services/AppService.js');
 const path = require('path');
 const fs = require('fs');
-const sinon = require('sinon');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

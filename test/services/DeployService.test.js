@@ -1,12 +1,7 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 const DeployService = require('../../services/DeployService.js');
 const fs = require('fs');
 const path = require('path');
 var MockReq = require('mock-req');
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
 const APP_ID = 'app-test-009861';

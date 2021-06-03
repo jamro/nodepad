@@ -1,10 +1,4 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 const AuthService = require('../../services/AuthService.js');
-
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 function basicAuth(user, pass) {
   return 'Basic ' + Buffer.from(user + ':' + pass).toString('base64');

@@ -8,7 +8,8 @@ module.exports = {
     }
   },
   'ignorePatterns': [
-    'public/*'
+    'public/*',
+    'test/*'
   ],
   'extends': [
     'eslint:recommended',

@@ -1,10 +1,4 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 const ProxyService = require('../../services/ProxyService.js');
-const sinon = require('sinon');
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 class AppServiceMock {
   constructor() {
