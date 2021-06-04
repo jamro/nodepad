@@ -2,6 +2,13 @@ import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+function bytesToSize(bytes) {
+  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes == 0) return '0 Byte';
+  var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
 const AppList = (props) => {
   const {apps} = props;
   const rows = apps.map(app => (
@@ -9,7 +16,7 @@ const AppList = (props) => {
       <Table.Cell>{app.id}</Table.Cell>
       <Table.Cell>{app.port}</Table.Cell>
       <Table.Cell><Icon name={app.status === 'online' ? 'check circle' : 'circle outline'} /> {app.status}</Table.Cell>
-      <Table.Cell>{app.memory.toLocaleString()}B</Table.Cell>
+      <Table.Cell>{bytesToSize(app.memory)}</Table.Cell>
       <Table.Cell>{app.cpu}%</Table.Cell>
     </Table.Row>)
   );

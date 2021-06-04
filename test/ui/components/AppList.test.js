@@ -94,11 +94,11 @@ describe('AppList', function() { // --------------------------------------------
         id: 'app-122',
         port: 4201,
         status: 'online',
-        memory: 2099123,
+        memory: 12099123,
         cpu: 18
       }
     ]}/>);
-    expect(wrapper.find('TableRow').at(1).find('TableCell').at(3).html()).to.match(new RegExp((2099123).toLocaleString()));
+    expect(wrapper.find('TableRow').at(1).find('TableCell').at(3).html()).to.match(/12 MB/);
   });
 
 });
