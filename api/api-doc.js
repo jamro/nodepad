@@ -23,7 +23,7 @@ function create(config) {
           },
           status: {
             type: 'string',
-            enum: ['online', 'offline']
+            example: 'online'
           },
           memory: {
             type: 'number',
@@ -33,6 +33,15 @@ function create(config) {
             type: 'number',
             example: 47
           },
+        },
+      },
+      AppStatus: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'string',
+            example: 'online'
+          }
         },
       },
       Deployment: {

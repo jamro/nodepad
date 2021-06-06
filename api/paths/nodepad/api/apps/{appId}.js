@@ -1,4 +1,3 @@
-const { ValidationError } = require('../../../../../services/common/errors');
 module.exports = function (appService, logger) {
 
   async function PUT(req, res) {
@@ -6,14 +5,6 @@ module.exports = function (appService, logger) {
     logger.info(`updating app '${appId}': ${JSON.stringify(req.body)}`);
     const app = await appService.find(appId);
     const newStatus = req.body.status;
-
-    if(req.body.id && req.body.id !== app.id) {
-      throw new ValidationError('Modification of app ID is not allowed');
-    }
-
-    if(req.body.port && req.body.port !== app.port) {
-      throw new ValidationError('Modification of app port is not allowed');
-    }
   
     if(newStatus === 'online') {
       await appService.start(appId);
@@ -39,7 +30,7 @@ module.exports = function (appService, logger) {
         name: 'app',
         required: true,
         schema: {
-          $ref: '#/definitions/App',
+          $ref: '#/definitions/AppStatus',
           example: {
             status: 'online'
           }

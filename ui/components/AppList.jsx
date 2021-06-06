@@ -1,23 +1,30 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import StatusToggle from './StatusToggle.jsx';
 
 function bytesToSize(bytes) {
-  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes == 0) return '0 Byte';
+  var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes == 0) return '0';
   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
 const AppList = (props) => {
-  const {apps} = props;
+  const {apps, onToggleOnline} = props;
   const rows = apps.map(app => (
     <Table.Row key={app.id}>
-      <Table.Cell>{app.id}</Table.Cell>
-      <Table.Cell>{app.port}</Table.Cell>
-      <Table.Cell><Icon name={app.status === 'online' ? 'check circle' : 'circle outline'} /> {app.status}</Table.Cell>
-      <Table.Cell>{bytesToSize(app.memory)}</Table.Cell>
-      <Table.Cell>{app.cpu}%</Table.Cell>
+      <Table.Cell width={4}>{app.id}</Table.Cell>
+      <Table.Cell width={3}>{app.port}</Table.Cell>
+      <Table.Cell width={3}>
+        <StatusToggle 
+          isOnline={app.status === 'online'} 
+          isLoading={app.isLoading} 
+          onToggle={(requestedOnline) => onToggleOnline(app.id, requestedOnline)}
+          />
+      </Table.Cell>
+      <Table.Cell width={3}>{bytesToSize(app.memory)}</Table.Cell>
+      <Table.Cell width={3}>{app.cpu}%</Table.Cell>
     </Table.Row>)
   );
   if(rows.length === 0) {
@@ -50,11 +57,13 @@ AppList.propTypes = {
     status: PropTypes.string,
     memory: PropTypes.number,
     cpu: PropTypes.number,
-  }))
+  })),
+  onToggleOnline:  PropTypes.func
 }
 
 AppList.defaultProps = {
-  apps: []
+  apps: [],
+  onToggleOnline: () => {}
 }
 
 export default AppList;

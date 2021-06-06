@@ -57,8 +57,7 @@ describe('AppList', function() { // --------------------------------------------
         cpu: 5
       }
     ]}/>);
-    expect(wrapper.find('TableRow').at(1).find('TableCell').at(2).html()).to.match(/offline/);
-    expect(wrapper.find('TableRow').at(1).find('TableCell').at(2).find('Icon').prop('name')).to.be.equal('circle outline');
+    expect(wrapper.find('TableRow').at(1).find('StatusToggle').prop('isOnline')).to.be.equal(false);
   });
 
   it('should display online apps', async function() {
@@ -71,8 +70,7 @@ describe('AppList', function() { // --------------------------------------------
         cpu: 5
       }
     ]}/>);
-    expect(wrapper.find('TableRow').at(1).find('TableCell').at(2).html()).to.match(/online/);
-    expect(wrapper.find('TableRow').at(1).find('TableCell').at(2).find('Icon').prop('name')).to.be.equal('check circle');
+    expect(wrapper.find('TableRow').at(1).find('StatusToggle').prop('isOnline')).to.be.equal(true);
   });
 
   it('should display CPU usage', async function() {
