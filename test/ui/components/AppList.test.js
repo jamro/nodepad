@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { Table, TableHeader } from 'semantic-ui-react';
 import AppList from '../../../ui/components/AppList.jsx';
+import DeployButton from '../../../ui/components/DeployButton.jsx';
+import StatusToggle from '../../../ui/components/StatusToggle.jsx';
 
 describe('AppList', function() { // ------------------------------------------------
 
@@ -97,6 +99,80 @@ describe('AppList', function() { // --------------------------------------------
       }
     ]}/>);
     expect(wrapper.find('TableRow').at(1).find('TableCell').at(3).html()).to.match(/12 MB/);
+  });
+
+  it('should notify about turn online', async function() {
+    const onToggleOnline = sinon.spy();
+    const wrapper = shallow((
+      <AppList 
+        apps={[
+          {
+            id: 'app-094',
+            port: 1192,
+            status: 'offline',
+            memory: 33223,
+            cpu: 0.3
+          }
+        ]}
+        onToggleOnline={onToggleOnline}
+      />
+    ));
+    wrapper.find(StatusToggle).prop('onToggle')(true)
+    expect(onToggleOnline.calledWith('app-094', true)).to.be.true;
+  });
+
+  it('should notify about turn offline', async function() {
+    const onToggleOnline = sinon.spy();
+    const wrapper = shallow((
+      <AppList 
+        apps={[
+          {
+            id: 'app-093',
+            port: 1192,
+            status: 'online',
+            memory: 33223,
+            cpu: 0.3
+          },
+          {
+            id: 'app-201',
+            port: 223,
+            status: 'offline',
+            memory: 43,
+            cpu: 0.3
+          },
+        ]}
+        onToggleOnline={onToggleOnline}
+      />
+    ));
+    wrapper.find(StatusToggle).at(0).prop('onToggle')(false)
+    expect(onToggleOnline.calledWith('app-093', false)).to.be.true;
+  });
+
+  it('should notify about upload', async function() {
+    const onUpload = sinon.spy();
+    const wrapper = shallow((
+      <AppList 
+        apps={[
+          {
+            id: 'app-1219',
+            port: 1192,
+            status: 'online',
+            memory: 33223,
+            cpu: 0.3
+          },
+          {
+            id: 'app-201',
+            port: 223,
+            status: 'online',
+            memory: 43,
+            cpu: 0.3
+          },
+        ]}
+        onUpload={onUpload}
+      />
+    ));
+    wrapper.find(DeployButton).at(0).prop('onUpload')('file-098873')
+    expect(onUpload.calledWith('app-1219', 'file-098873')).to.be.true;
   });
 
 });

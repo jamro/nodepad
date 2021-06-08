@@ -5,17 +5,9 @@ import PropTypes from 'prop-types';
 const StatusToggle = (props) => {
   const { isOnline, isLoading, onToggle } = props
   if(isLoading) {
-    return <div>
-      <Button basic fluid color='black' disabled>
-        <Icon loading name='asterisk' /> Loading...
-      </Button>
-    </div>
+    return <Button circular disabled icon='asterisk' loading />
   }
-  return <div>
-    <Button basic color='black' fluid onClick={() => onToggle(!isOnline)}>
-      <Icon name={isOnline ? 'toggle on' : 'toggle off'} /> {isOnline ? 'online' : 'offline'}
-    </Button>
-  </div>
+  return <Button circular primary={!isOnline} icon={isOnline ? 'pause' : 'play'} onClick={() => onToggle(!isOnline)} />
 };
 
 StatusToggle.propTypes = {

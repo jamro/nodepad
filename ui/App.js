@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Message } from 'semantic-ui-react';
 import AppList from './components/AppList.jsx';
 
 const App = () => {
 
   const [apps, setApps] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  function setApp(appId, props) {
+  const setApp = (appId, props) => {
     const newApps = [...apps].map(app => {
       if(app.id === appId) {
         return {
@@ -18,9 +19,9 @@ const App = () => {
       return app;
     });
     setApps(newApps);
-  }
+  };
 
-  async function toggleOnline(appId, requestedOnline) {
+  const toggleOnline = async (appId, requestedOnline) => {
     setApp(appId, {isLoading: true});
     const response = await fetch(`./api/apps/${appId}`, {
       method: 'PUT',
@@ -31,19 +32,48 @@ const App = () => {
         status: requestedOnline ? 'online' : 'offline' 
       })
     });
+    if(!response.ok) {
+      setErrorMessage('Unable to change application state');
+      setApp(appId, {isLoading: false});
+    }
     const app = await response.json();
     setApp(appId, {...app, isLoading: false});
-  }
+  };
+
+  const upload = async (appId, file) => {
+    const formData = new FormData();
+    formData.append('File', file);
+    const response = await fetch(
+      `./api/apps/${appId}/content/zip`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+    if(!response.ok) {
+      setErrorMessage('Unable to upload new content');
+    }
+  };
 
   useEffect(async () => {
     setLoading(true);
     const response = await fetch('./api/apps');
+    if(!response.ok) {
+      setErrorMessage('Unable to load application list');
+      setLoading(false);
+    }
     setApps(await response.json());
     setLoading(false);
   }, []);
 
+  const errorWindow = <Message negative>
+    <Message.Header>Oops, something went wrong :(</Message.Header>
+    <p>{errorMessage}</p>
+  </Message>;
+
   if(loading) {
     return <div style={{margin: '1em'}}>
+      {errorMessage ? errorWindow : null}
       <p><Icon loading name='asterisk' /> Loading...</p>
     </div>;
   }
@@ -52,9 +82,11 @@ const App = () => {
     <h1>NodePad Dashboard</h1>
     <p>Welcome to NodePad</p>
     <p><a href="./api">API  documentation</a></p>
+    {errorMessage ? errorWindow : null}
     <AppList 
       apps={apps}
       onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}
+      onUpload={upload}
     />
   </div>;
 };

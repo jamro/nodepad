@@ -222,3 +222,719 @@
 2021-06-04 16:08:04.814 [NODEPAD] Strting application 'webapp'...
 2021-06-04 18:08:05.453 +02:00: Starting application webapp (port: 3001)...
 2021-06-04 16:08:06.940 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:43:58.182 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:43:58.394 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:43:59.103 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:43:59.755 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:43:59.920 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:00.373 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:44:01.044 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:44:01.208 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:02.756 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:44:03.449 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:44:03.628 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:04.789 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:44:05.511 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:44:05.673 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:18.062 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:44:18.781 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:44:18.946 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:19.540 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:44:58.825 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:44:58.979 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:44:59.645 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:45:28.190 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:45:28.349 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:45:29.135 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:45:29.857 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:45:30.017 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:45:30.492 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:45:31.154 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:45:31.322 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:45:31.757 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:45:32.503 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:45:32.687 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:45:33.073 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:45:40.698 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:45:40.855 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:45:52.046 +02:00: Request GET /favicon.ico
+2021-06-06 13:45:52.660 +02:00: Request GET /favicon.ico
+2021-06-06 11:45:55.202 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:47:19.299 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:47:19.474 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:47:36.011 +02:00: Request GET /favicon.ico
+2021-06-06 13:47:43.127 +02:00: Request GET /favicon.ico
+2021-06-06 13:48:08.042 +02:00: Request GET /favicon.ico
+2021-06-06 13:48:08.942 +02:00: Request GET /favicon.ico
+2021-06-06 13:48:37.589 +02:00: Request GET /favicon.ico
+2021-06-06 11:48:38.244 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:48:44.125 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:48:44.293 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:48:50.146 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:48:52.145 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:48:52.329 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:48:56.234 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:48:57.940 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:48:58.122 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:49:02.672 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:49:04.159 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:49:04.349 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:49:05.663 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:49:07.721 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:49:07.893 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:49:09.204 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:49:11.304 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:49:11.479 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:49:24.765 +02:00: Request GET /favicon.ico
+2021-06-06 13:49:42.968 +02:00: Request GET /favicon.ico
+2021-06-06 13:49:49.314 +02:00: Request GET /favicon.ico
+2021-06-06 13:49:49.927 +02:00: Request GET /favicon.ico
+2021-06-06 13:49:57.188 +02:00: Request GET /favicon.ico
+2021-06-06 13:50:12.036 +02:00: Request GET /favicon.ico
+2021-06-06 13:51:01.955 +02:00: Request GET /favicon.ico
+2021-06-06 11:51:04.294 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:51:06.422 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:51:06.608 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:51:08.820 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:51:10.636 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:51:10.807 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:51:12.187 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:51:14.324 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:51:14.485 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:51:15.669 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:54:09.171 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:54:09.546 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:54:10.662 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:54:13.683 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:54:14.055 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:54:18.483 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:54:20.656 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:54:21.021 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:54:23.004 +02:00: Request GET /favicon.ico
+2021-06-06 13:54:25.966 +02:00: Request GET /favicon.ico
+2021-06-06 11:54:27.123 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:54:31.458 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:54:31.834 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:54:34.039 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 11:54:36.037 [NODEPAD] Strting application 'webapp'...
+2021-06-06 13:54:36.371 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 11:54:38.791 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 13:57:22.165 [NODEPAD] Strting application 'webapp'...
+2021-06-06 15:57:22.524 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:57:23.600 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 13:57:25.007 [NODEPAD] Strting application 'webapp'...
+2021-06-06 15:57:25.170 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 13:58:57.252 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 19:51:11.490 [NODEPAD] Strting application 'webapp'...
+2021-06-06 21:51:11.653 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 19:51:14.699 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 19:51:16.072 [NODEPAD] Strting application 'webapp'...
+2021-06-06 21:51:16.226 +02:00: Starting application webapp (port: 3001)...
+2021-06-06 21:51:25.807 +02:00: Request GET /favicon.ico
+2021-06-06 21:51:49.812 +02:00: Request GET /favicon.ico
+2021-06-06 21:51:51.002 +02:00: Request GET /favicon.ico
+2021-06-06 21:51:56.913 +02:00: Request GET /favicon.ico
+2021-06-06 21:51:59.931 +02:00: Request GET /favicon.ico
+2021-06-06 21:52:06.482 +02:00: Request GET /favicon.ico
+2021-06-06 21:53:21.470 +02:00: Request GET /favicon.ico
+2021-06-06 21:55:47.190 +02:00: Request GET /favicon.ico
+2021-06-06 21:56:45.062 +02:00: Request GET /favicon.ico
+2021-06-06 21:57:56.133 +02:00: Request GET /favicon.ico
+2021-06-06 21:58:24.521 +02:00: Request GET /favicon.ico
+2021-06-06 21:58:34.657 +02:00: Request GET /favicon.ico
+2021-06-06 21:58:43.623 +02:00: Request GET /favicon.ico
+2021-06-06 21:58:53.797 +02:00: Request GET /favicon.ico
+2021-06-06 22:01:29.545 +02:00: Request GET /favicon.ico
+2021-06-06 22:20:11.978 +02:00: Request GET /favicon.ico
+2021-06-06 23:50:22.761 +02:00: Request GET /favicon.ico
+2021-06-06 23:50:24.133 +02:00: Request GET /favicon.ico
+2021-06-06 23:50:37.081 +02:00: Request GET /favicon.ico
+2021-06-06 23:51:05.120 +02:00: Request GET /favicon.ico
+2021-06-06 23:51:33.353 +02:00: Request GET /favicon.ico
+2021-06-06 23:53:30.159 +02:00: Request GET /favicon.ico
+2021-06-06 23:54:01.296 +02:00: Request GET /favicon.ico
+2021-06-06 21:54:05.800 [NODEPAD] Uploading new content to 'webapp'
+2021-06-06 21:54:05.914 [NODEPAD] Uploading of 'webapp' completed
+2021-06-06 21:54:05.915 [NODEPAD] Extracting 'webapp'...
+2021-06-06 21:54:05.923 [NODEPAD] Content of 'webapp' extracted
+2021-06-06 21:54:05.939 [NODEPAD] Stopping application 'webapp'...
+2021-06-06 21:54:06.080 [NODEPAD] Installing 'webapp'...
+2021-06-06 21:54:06.136 [NODEPAD] Content of 'webapp' installed
+2021-06-06 21:54:06.150 [NODEPAD] Strting application 'webapp'...
+2021-06-06 23:54:06.587 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:06.592 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:06.592 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:06.592 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:06.592 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:06.592 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:06.592 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:06.592 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:06.592 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:06.592 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:06.592 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:06.592 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:06.592 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:06.592 +02:00:   errno: -48,
+2021-06-06 23:54:06.592 +02:00:   syscall: 'listen',
+2021-06-06 23:54:06.592 +02:00:   address: '::',
+2021-06-06 23:54:06.592 +02:00:   port: 3002
+2021-06-06 23:54:06.592 +02:00: }
+2021-06-06 23:54:06.742 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:06.745 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:06.745 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:06.745 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:06.745 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:06.745 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:06.745 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:06.745 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:06.745 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:06.746 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:06.746 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:06.746 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:06.746 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:06.746 +02:00:   errno: -48,
+2021-06-06 23:54:06.746 +02:00:   syscall: 'listen',
+2021-06-06 23:54:06.746 +02:00:   address: '::',
+2021-06-06 23:54:06.746 +02:00:   port: 3002
+2021-06-06 23:54:06.746 +02:00: }
+2021-06-06 23:54:06.897 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:06.900 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:06.900 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:06.900 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:06.900 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:06.900 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:06.900 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:06.900 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:06.900 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:06.900 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:06.900 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:06.900 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:06.900 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:06.900 +02:00:   errno: -48,
+2021-06-06 23:54:06.900 +02:00:   syscall: 'listen',
+2021-06-06 23:54:06.900 +02:00:   address: '::',
+2021-06-06 23:54:06.900 +02:00:   port: 3002
+2021-06-06 23:54:06.900 +02:00: }
+2021-06-06 23:54:07.048 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.052 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.052 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.052 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.052 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.052 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.052 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.052 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.052 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.052 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.052 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.052 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.052 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.052 +02:00:   errno: -48,
+2021-06-06 23:54:07.052 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.052 +02:00:   address: '::',
+2021-06-06 23:54:07.052 +02:00:   port: 3002
+2021-06-06 23:54:07.052 +02:00: }
+2021-06-06 23:54:07.197 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.201 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.201 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.201 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.201 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.201 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.201 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.201 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.201 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.201 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.201 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.201 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.201 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.201 +02:00:   errno: -48,
+2021-06-06 23:54:07.201 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.201 +02:00:   address: '::',
+2021-06-06 23:54:07.201 +02:00:   port: 3002
+2021-06-06 23:54:07.201 +02:00: }
+2021-06-06 23:54:07.344 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.348 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.348 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.348 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.348 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.348 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.348 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.348 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.348 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.348 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.348 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.348 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.348 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.348 +02:00:   errno: -48,
+2021-06-06 23:54:07.348 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.348 +02:00:   address: '::',
+2021-06-06 23:54:07.348 +02:00:   port: 3002
+2021-06-06 23:54:07.348 +02:00: }
+2021-06-06 23:54:07.508 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.512 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.512 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.512 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.512 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.513 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.513 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.513 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.513 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.513 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.513 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.513 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.513 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.513 +02:00:   errno: -48,
+2021-06-06 23:54:07.513 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.513 +02:00:   address: '::',
+2021-06-06 23:54:07.513 +02:00:   port: 3002
+2021-06-06 23:54:07.513 +02:00: }
+2021-06-06 23:54:07.668 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.672 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.672 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.672 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.672 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.672 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.672 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.672 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.672 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.672 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.672 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.672 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.672 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.672 +02:00:   errno: -48,
+2021-06-06 23:54:07.672 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.672 +02:00:   address: '::',
+2021-06-06 23:54:07.672 +02:00:   port: 3002
+2021-06-06 23:54:07.672 +02:00: }
+2021-06-06 23:54:07.822 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.826 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.826 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.826 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.826 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.826 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.826 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.826 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.826 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.826 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.826 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.826 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.826 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.826 +02:00:   errno: -48,
+2021-06-06 23:54:07.826 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.826 +02:00:   address: '::',
+2021-06-06 23:54:07.826 +02:00:   port: 3002
+2021-06-06 23:54:07.826 +02:00: }
+2021-06-06 23:54:07.980 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:07.985 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:07.985 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:07.985 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:07.985 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:07.985 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:07.985 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:07.985 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:07.985 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:07.985 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:07.985 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:07.985 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:07.985 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:07.985 +02:00:   errno: -48,
+2021-06-06 23:54:07.985 +02:00:   syscall: 'listen',
+2021-06-06 23:54:07.985 +02:00:   address: '::',
+2021-06-06 23:54:07.985 +02:00:   port: 3002
+2021-06-06 23:54:07.985 +02:00: }
+2021-06-06 23:54:08.168 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.172 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.172 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.172 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.172 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.172 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.172 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.172 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.172 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.172 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.172 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.172 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.172 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.172 +02:00:   errno: -48,
+2021-06-06 23:54:08.172 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.172 +02:00:   address: '::',
+2021-06-06 23:54:08.172 +02:00:   port: 3002
+2021-06-06 23:54:08.172 +02:00: }
+2021-06-06 23:54:08.324 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.327 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.327 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.327 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.327 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.327 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.327 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.327 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.327 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.327 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.327 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.327 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.327 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.328 +02:00:   errno: -48,
+2021-06-06 23:54:08.328 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.328 +02:00:   address: '::',
+2021-06-06 23:54:08.328 +02:00:   port: 3002
+2021-06-06 23:54:08.328 +02:00: }
+2021-06-06 23:54:08.473 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.478 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.478 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.478 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.478 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.478 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.478 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.478 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.478 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.478 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.478 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.478 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.478 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.478 +02:00:   errno: -48,
+2021-06-06 23:54:08.478 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.478 +02:00:   address: '::',
+2021-06-06 23:54:08.478 +02:00:   port: 3002
+2021-06-06 23:54:08.478 +02:00: }
+2021-06-06 23:54:08.623 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.627 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.627 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.627 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.627 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.627 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.627 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.627 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.627 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.627 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.627 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.627 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.627 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.627 +02:00:   errno: -48,
+2021-06-06 23:54:08.627 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.627 +02:00:   address: '::',
+2021-06-06 23:54:08.627 +02:00:   port: 3002
+2021-06-06 23:54:08.627 +02:00: }
+2021-06-06 23:54:08.772 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.775 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.776 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.776 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.776 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.776 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.776 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.776 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.776 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.776 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.776 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.776 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.776 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.776 +02:00:   errno: -48,
+2021-06-06 23:54:08.776 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.776 +02:00:   address: '::',
+2021-06-06 23:54:08.776 +02:00:   port: 3002
+2021-06-06 23:54:08.776 +02:00: }
+2021-06-06 23:54:08.922 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-06 23:54:08.926 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-06 23:54:08.926 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-06 23:54:08.926 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-06 23:54:08.926 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-06 23:54:08.926 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-06 23:54:08.926 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-06 23:54:08.926 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-06 23:54:08.926 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-06 23:54:08.926 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-06 23:54:08.926 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-06 23:54:08.926 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-06 23:54:08.926 +02:00:   code: 'EADDRINUSE',
+2021-06-06 23:54:08.926 +02:00:   errno: -48,
+2021-06-06 23:54:08.926 +02:00:   syscall: 'listen',
+2021-06-06 23:54:08.926 +02:00:   address: '::',
+2021-06-06 23:54:08.926 +02:00:   port: 3002
+2021-06-06 23:54:08.926 +02:00: }
+2021-06-06 22:05:22.815 [NODEPAD] Strting application 'webapp'...
+2021-06-07 00:05:22.976 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:22.979 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:22.979 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:22.979 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:22.979 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:22.979 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:22.979 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:22.979 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:22.979 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:22.979 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:22.979 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:22.979 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:22.979 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:22.980 +02:00:   errno: -48,
+2021-06-07 00:05:22.980 +02:00:   syscall: 'listen',
+2021-06-07 00:05:22.980 +02:00:   address: '::',
+2021-06-07 00:05:22.980 +02:00:   port: 3002
+2021-06-07 00:05:22.980 +02:00: }
+2021-06-07 00:05:23.120 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.123 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.123 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.123 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.123 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.123 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.123 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.123 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.123 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.123 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.123 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.123 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.123 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.123 +02:00:   errno: -48,
+2021-06-07 00:05:23.123 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.123 +02:00:   address: '::',
+2021-06-07 00:05:23.123 +02:00:   port: 3002
+2021-06-07 00:05:23.123 +02:00: }
+2021-06-07 00:05:23.270 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.274 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.274 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.274 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.274 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.274 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.274 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.274 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.274 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.274 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.274 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.274 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.274 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.274 +02:00:   errno: -48,
+2021-06-07 00:05:23.274 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.274 +02:00:   address: '::',
+2021-06-07 00:05:23.274 +02:00:   port: 3002
+2021-06-07 00:05:23.274 +02:00: }
+2021-06-07 00:05:23.428 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.432 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.432 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.432 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.432 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.432 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.432 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.432 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.432 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.432 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.432 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.432 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.432 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.432 +02:00:   errno: -48,
+2021-06-07 00:05:23.432 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.432 +02:00:   address: '::',
+2021-06-07 00:05:23.432 +02:00:   port: 3002
+2021-06-07 00:05:23.432 +02:00: }
+2021-06-07 00:05:23.574 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.578 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.578 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.578 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.578 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.578 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.578 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.578 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.578 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.578 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.578 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.578 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.578 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.578 +02:00:   errno: -48,
+2021-06-07 00:05:23.578 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.578 +02:00:   address: '::',
+2021-06-07 00:05:23.578 +02:00:   port: 3002
+2021-06-07 00:05:23.578 +02:00: }
+2021-06-07 00:05:23.717 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.720 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.720 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.720 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.721 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.721 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.721 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.721 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.721 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.721 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.721 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.721 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.721 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.721 +02:00:   errno: -48,
+2021-06-07 00:05:23.721 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.721 +02:00:   address: '::',
+2021-06-07 00:05:23.721 +02:00:   port: 3002
+2021-06-07 00:05:23.721 +02:00: }
+2021-06-07 00:05:23.857 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:23.861 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:23.861 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:23.861 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:23.861 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:23.861 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:23.861 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:23.861 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:23.861 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:23.861 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:23.861 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:23.861 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:23.861 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:23.861 +02:00:   errno: -48,
+2021-06-07 00:05:23.861 +02:00:   syscall: 'listen',
+2021-06-07 00:05:23.861 +02:00:   address: '::',
+2021-06-07 00:05:23.861 +02:00:   port: 3002
+2021-06-07 00:05:23.861 +02:00: }
+2021-06-07 00:05:23.998 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.001 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.002 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.002 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.002 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.002 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.002 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.002 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.002 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.002 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.002 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.002 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.002 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.002 +02:00:   errno: -48,
+2021-06-07 00:05:24.002 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.002 +02:00:   address: '::',
+2021-06-07 00:05:24.002 +02:00:   port: 3002
+2021-06-07 00:05:24.002 +02:00: }
+2021-06-07 00:05:24.143 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.147 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.147 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.147 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.147 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.147 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.147 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.147 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.147 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.147 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.147 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.147 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.147 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.147 +02:00:   errno: -48,
+2021-06-07 00:05:24.147 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.147 +02:00:   address: '::',
+2021-06-07 00:05:24.147 +02:00:   port: 3002
+2021-06-07 00:05:24.147 +02:00: }
+2021-06-07 00:05:24.291 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.294 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.294 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.294 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.294 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.294 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.294 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.294 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.294 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.294 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.294 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.294 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.294 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.294 +02:00:   errno: -48,
+2021-06-07 00:05:24.294 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.294 +02:00:   address: '::',
+2021-06-07 00:05:24.295 +02:00:   port: 3002
+2021-06-07 00:05:24.295 +02:00: }
+2021-06-07 00:05:24.443 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.447 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.447 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.447 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.447 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.447 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.447 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.447 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.447 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.447 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.447 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.447 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.447 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.447 +02:00:   errno: -48,
+2021-06-07 00:05:24.447 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.447 +02:00:   address: '::',
+2021-06-07 00:05:24.447 +02:00:   port: 3002
+2021-06-07 00:05:24.447 +02:00: }
+2021-06-07 00:05:24.601 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.606 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.606 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.606 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.606 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.606 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.606 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.606 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.606 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.606 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.606 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.606 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.606 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.606 +02:00:   errno: -48,
+2021-06-07 00:05:24.606 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.606 +02:00:   address: '::',
+2021-06-07 00:05:24.606 +02:00:   port: 3002
+2021-06-07 00:05:24.606 +02:00: }
+2021-06-07 00:05:24.755 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.759 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.759 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.759 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.759 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.759 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.759 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.759 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.759 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.759 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.759 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.759 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.759 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.759 +02:00:   errno: -48,
+2021-06-07 00:05:24.759 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.759 +02:00:   address: '::',
+2021-06-07 00:05:24.759 +02:00:   port: 3002
+2021-06-07 00:05:24.759 +02:00: }
+2021-06-07 00:05:24.896 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:24.899 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:24.900 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:24.900 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:24.900 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:24.900 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:24.900 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:24.900 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:24.900 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:24.900 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:24.900 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:24.900 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:24.900 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:24.900 +02:00:   errno: -48,
+2021-06-07 00:05:24.900 +02:00:   syscall: 'listen',
+2021-06-07 00:05:24.900 +02:00:   address: '::',
+2021-06-07 00:05:24.900 +02:00:   port: 3002
+2021-06-07 00:05:24.900 +02:00: }
+2021-06-07 00:05:25.036 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:25.040 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:25.040 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:25.040 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:25.040 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:25.040 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:25.040 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:25.040 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:25.040 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:25.040 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:25.040 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:25.040 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:25.040 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:25.040 +02:00:   errno: -48,
+2021-06-07 00:05:25.040 +02:00:   syscall: 'listen',
+2021-06-07 00:05:25.040 +02:00:   address: '::',
+2021-06-07 00:05:25.040 +02:00:   port: 3002
+2021-06-07 00:05:25.041 +02:00: }
+2021-06-07 00:05:25.177 +02:00: Starting application jmrlab (port: 3002)...
+2021-06-07 00:05:25.181 +02:00: Error: listen EADDRINUSE: address already in use :::3002
+2021-06-07 00:05:25.181 +02:00:     at Server.setupListenHandle [as _listen2] (net.js:1314:16)
+2021-06-07 00:05:25.181 +02:00:     at listenInCluster (net.js:1362:12)
+2021-06-07 00:05:25.181 +02:00:     at Server.listen (net.js:1448:7)
+2021-06-07 00:05:25.181 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/repo/webapp.3001/bin/index.js:9:4)
+2021-06-07 00:05:25.181 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+2021-06-07 00:05:25.181 +02:00:     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1196:10)
+2021-06-07 00:05:25.181 +02:00:     at Module.load (internal/modules/cjs/loader.js:1040:32)
+2021-06-07 00:05:25.181 +02:00:     at Function.Module._load (internal/modules/cjs/loader.js:929:14)
+2021-06-07 00:05:25.181 +02:00:     at Object.<anonymous> (/Users/kjamroz/Documents/dev/nodepad/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2021-06-07 00:05:25.181 +02:00:     at Module._compile (internal/modules/cjs/loader.js:1176:30) {
+2021-06-07 00:05:25.181 +02:00:   code: 'EADDRINUSE',
+2021-06-07 00:05:25.181 +02:00:   errno: -48,
+2021-06-07 00:05:25.181 +02:00:   syscall: 'listen',
+2021-06-07 00:05:25.181 +02:00:   address: '::',
+2021-06-07 00:05:25.181 +02:00:   port: 3002
+2021-06-07 00:05:25.181 +02:00: }

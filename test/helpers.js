@@ -24,7 +24,19 @@ global.requestAnimationFrame = function (callback) {
 global.cancelAnimationFrame = function (id) {
   clearTimeout(id);
 };
+
+const ignoreKeys = [
+  'localStorage',
+  'sessionStorage'
+]
+
+Object.keys(window).forEach(key => {
+  if(!global[key] && ignoreKeys.indexOf(key) === -1) {
+    global[key] = window[key]
+  } 
+})
 global.HTMLElement = window.HTMLElement;
+global.Element = window.Element;
 
 global.expect = chai.expect;
 global.chaiAsPromised = chaiAsPromised;

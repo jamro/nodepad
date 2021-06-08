@@ -7,25 +7,22 @@ describe('StatusToggle', function() { // ---------------------------------------
     const wrapper = shallow(<StatusToggle />);
 
     expect(wrapper.find('Button')).to.be.lengthOf(1)
-    expect(wrapper.find('Button').props()).to.not.have.property('disabled',  true);
-    expect(wrapper.find('Icon').prop('name')).to.be.equal('toggle off');
+    expect(wrapper.find('Button').props()).to.have.property('icon',  'play');
   });
 
   it('should display online', async function() {
     const wrapper = shallow(<StatusToggle isOnline={true} />);
-    expect(wrapper.find('Icon').prop('name')).to.be.equal('toggle on');
-    expect(wrapper.find('Button').props()).to.not.have.property('disabled',  true);
+    expect(wrapper.find('Button').props()).to.have.property('icon',  'pause');
   });
 
   it('should display offline', async function() {
     const wrapper = shallow(<StatusToggle isOnline={false} />);
-    expect(wrapper.find('Icon').prop('name')).to.be.equal('toggle off');
-    expect(wrapper.find('Button').props()).to.not.have.property('disabled',  true);
+    expect(wrapper.find('Button').props()).to.have.property('icon',  'play');
   });
 
   it('should display loadding', async function() {
     const wrapper = shallow(<StatusToggle isLoading={true} />);
-    expect(wrapper.find('Icon').prop('name')).to.be.equal('asterisk');
+    expect(wrapper.find('Button').props()).to.have.property('loading');
     expect(wrapper.find('Button').props()).to.have.property('disabled',  true);
   });
 

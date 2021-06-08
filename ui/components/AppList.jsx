@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import StatusToggle from './StatusToggle.jsx';
+import DeployButton from './DeployButton.jsx';
 
 function bytesToSize(bytes) {
   var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -11,20 +12,25 @@ function bytesToSize(bytes) {
 }
 
 const AppList = (props) => {
-  const {apps, onToggleOnline} = props;
+  const {apps, onToggleOnline, onUpload} = props;
   const rows = apps.map(app => (
     <Table.Row key={app.id}>
-      <Table.Cell width={4}>{app.id}</Table.Cell>
+      <Table.Cell width={3}>{app.id}</Table.Cell>
       <Table.Cell width={3}>{app.port}</Table.Cell>
+      <Table.Cell width={3}><Icon name={app.status === 'online' ? 'play' : 'pause'} />{app.status}</Table.Cell>
+      <Table.Cell width={2}>{bytesToSize(app.memory)}</Table.Cell>
+      <Table.Cell width={2}>{app.cpu}%</Table.Cell>
       <Table.Cell width={3}>
+        <DeployButton 
+          appId={app.id}
+          onUpload={(file) => onUpload(app.id, file)}
+        />
         <StatusToggle 
           isOnline={app.status === 'online'} 
           isLoading={app.isLoading} 
           onToggle={(requestedOnline) => onToggleOnline(app.id, requestedOnline)}
-          />
+        />
       </Table.Cell>
-      <Table.Cell width={3}>{bytesToSize(app.memory)}</Table.Cell>
-      <Table.Cell width={3}>{app.cpu}%</Table.Cell>
     </Table.Row>)
   );
   if(rows.length === 0) {
@@ -41,6 +47,7 @@ const AppList = (props) => {
           <Table.HeaderCell>Status</Table.HeaderCell>
           <Table.HeaderCell>Memory</Table.HeaderCell>
           <Table.HeaderCell>CPU</Table.HeaderCell>
+          <Table.HeaderCell>Actions</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -58,12 +65,14 @@ AppList.propTypes = {
     memory: PropTypes.number,
     cpu: PropTypes.number,
   })),
-  onToggleOnline:  PropTypes.func
+  onToggleOnline: PropTypes.func,
+  onUpload: PropTypes.func,
 }
 
 AppList.defaultProps = {
   apps: [],
-  onToggleOnline: () => {}
+  onToggleOnline: () => {},
+  onUpload: () => {},
 }
 
 export default AppList;

@@ -6,12 +6,12 @@
     "commit": "cz",
     "start": "node ./bin/www",
     "watch": "concurrently --kill-others 'npm:watch-server' 'npm:watch-ui'",
-    "watch-server": "nodemon --config nodemon.json ./bin/www",
+    "watch-server": "nodemon --config run.nodemon.json --exec \"npm run start\"",
     "watch-ui": "webpack --watch --progress --config webpack.config.js --mode=development",
     "build": "webpack --config webpack.config.js --mode=production",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --ignore-pattern tmp --ignore-pattern projects/ --fix",
     "test": "mocha --recursive --require @babel/register test",
-    "test-watch": "mocha -w --recursive --require @babel/register --watch-ignore tmp test",
+    "test-watch": "nodemon --config test.nodemon.json --exec \"npm run test\"",
     "all": "npm run lint && npm run build && npm run test"
   },
   "dependencies": {
@@ -46,6 +46,8 @@
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
     "@babel/preset-react": "^7.13.13",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/react-hooks": "^7.0.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
