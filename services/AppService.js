@@ -230,7 +230,7 @@ class AppService extends AbstractService {
     this.logger.info(`Starting application ${appId}`);
     let app;
     app = await this.find(appId);
-    this.appLogger.log(appId, `Strting application '${appId}'...`);
+    this.appLogger.log(appId, `Starting application '${appId}'...`);
     const options = {
       script: path.join(this.basePath, `${app.id}.${app.port}`, 'bin', 'index.js'),
       name: app.id,

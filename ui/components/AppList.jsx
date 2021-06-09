@@ -3,6 +3,7 @@ import { Icon, Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import StatusToggle from './StatusToggle.jsx';
 import DeployButton from './DeployButton.jsx';
+import LogsButton from './LogsButton.jsx';
 
 function bytesToSize(bytes) {
   var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -12,7 +13,7 @@ function bytesToSize(bytes) {
 }
 
 const AppList = (props) => {
-  const {apps, onToggleOnline, onUpload} = props;
+  const {apps, onToggleOnline, onUpload, onLogsRefresh} = props;
   const rows = apps.map(app => (
     <Table.Row key={app.id}>
       <Table.Cell width={3}>{app.id}</Table.Cell>
@@ -29,6 +30,10 @@ const AppList = (props) => {
           isOnline={app.status === 'online'} 
           isLoading={app.isLoading} 
           onToggle={(requestedOnline) => onToggleOnline(app.id, requestedOnline)}
+        />
+        <LogsButton 
+          logs={app.logs || []}
+          onRefresh={() => onLogsRefresh(app.id)}
         />
       </Table.Cell>
     </Table.Row>)
@@ -67,12 +72,14 @@ AppList.propTypes = {
   })),
   onToggleOnline: PropTypes.func,
   onUpload: PropTypes.func,
+  onLogsRefresh: PropTypes.func,
 }
 
 AppList.defaultProps = {
   apps: [],
   onToggleOnline: () => {},
   onUpload: () => {},
+  onLogsRefresh: () => {},
 }
 
 export default AppList;

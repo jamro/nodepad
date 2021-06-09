@@ -1,5 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -41,7 +42,15 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'NodePad',
-      template: 'ui/static/index.html'
+      template: 'ui/index.html'
+    }),
+    new CopyPlugin({
+      patterns: [
+        { 
+          from: path.resolve(__dirname, 'ui', 'static'), 
+          to: path.resolve(__dirname, 'public'), 
+        },
+      ],
     })
   ]
 };

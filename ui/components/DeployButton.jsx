@@ -8,7 +8,6 @@ const DeployButton = (props) => {
   const [selectedFile, setSelectedFile] = useState();
 	const [isSelected, setIsSelected] = useState(false);
 
-
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);
 		setIsSelected(true);
@@ -21,13 +20,15 @@ const DeployButton = (props) => {
 
   return <Modal
       closeIcon
+      size="tiny"
+      centered={false}
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       trigger={<Button circular primary icon='cloud upload'  />}
     >
       <Modal.Header>Upload Application Content</Modal.Header>
-      <Modal.Content image>
+      <Modal.Content>
         <input 
           id="bin-upload-file"
           type="file" 

@@ -7,7 +7,13 @@ const StatusToggle = (props) => {
   if(isLoading) {
     return <Button circular disabled icon='asterisk' loading />
   }
-  return <Button circular primary={!isOnline} icon={isOnline ? 'pause' : 'play'} onClick={() => onToggle(!isOnline)} />
+  return <Button 
+      circular 
+      primary={!isOnline} 
+      icon={isOnline ? 'pause' : 'play'} 
+      color={isOnline ? 'red' : undefined}
+      onClick={() => onToggle(!isOnline)} 
+    />
 };
 
 StatusToggle.propTypes = {

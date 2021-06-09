@@ -55,6 +55,15 @@ const App = () => {
     }
   };
 
+  const refreshLogs = async (appId) => {
+    const response = await fetch(`./api/apps/${appId}/logs`);
+    if(!response.ok) {
+      setErrorMessage('Unable to get application logs');
+    }
+    const logs = await response.json();
+    setApp(appId, {logs});
+  };
+
   useEffect(async () => {
     setLoading(true);
     const response = await fetch('./api/apps');
@@ -87,6 +96,7 @@ const App = () => {
       apps={apps}
       onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}
       onUpload={upload}
+      onLogsRefresh={(appId) => refreshLogs(appId)}
     />
   </div>;
 };
