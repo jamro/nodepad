@@ -10,3 +10,27 @@ NodePad is a simple tool to manage your NodeJs apps. It offers:
 - Basic app monitoring
 
 Under the hood, **NodePad** runs [PM2](https://www.npmjs.com/package/pm2) as a process manager.
+
+# Installation
+
+## Github
+
+Clone Git Repository
+```bash
+git clone https://github.com/jamro/nodepad.git
+cd nodepad
+```
+
+Install all node packages
+```bash
+npm install
+```
+
+Launch **NodePad**
+```bash
+npm start
+```
+
+Open **NodePad** in youur Browser:
+- User Interface: http://localhost:3000/nodepad/
+- REST API: http://localhost:3000/nodepad/api
