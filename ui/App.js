@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Message } from 'semantic-ui-react';
+import { Grid, Icon, Message } from 'semantic-ui-react';
 import AppList from './components/AppList.jsx';
+import CreateButton from './components/CreateButton.jsx';
 
 const App = () => {
 
@@ -64,7 +65,28 @@ const App = () => {
     setApp(appId, {logs});
   };
 
-  useEffect(async () => {
+  const createApp = async (id, port) => {
+    const response = await fetch(
+      './api/apps',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id,
+          port: Number(port),
+          status: 'online'
+        })
+      }
+    );
+    if(!response.ok) {
+      setErrorMessage('Unable to create new app');
+    }
+    await loadApps();
+  };
+
+  const loadApps = async () => {
     setLoading(true);
     const response = await fetch('./api/apps');
     if(!response.ok) {
@@ -73,6 +95,10 @@ const App = () => {
     }
     setApps(await response.json());
     setLoading(false);
+  };
+
+  useEffect(async () => {
+    await loadApps();
   }, []);
 
   const errorWindow = <Message negative>
@@ -92,6 +118,15 @@ const App = () => {
     <p>Welcome to NodePad</p>
     <p><a href="./api">API  documentation</a></p>
     {errorMessage ? errorWindow : null}
+    <Grid style={{marginBottom: '1em'}}>
+      <Grid.Row>
+        <Grid.Column className="right aligned">
+          <CreateButton 
+            onCreate={createApp}
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
     <AppList 
       apps={apps}
       onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}

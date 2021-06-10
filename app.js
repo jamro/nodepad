@@ -14,8 +14,6 @@ const DeployService = require('./services/DeployService');
 const AuthService = require('./services/AuthService');
 const { AuthError } = require('./services/common/errors');
 
-
-
 function create(config) {
   const appConfig = config || {};
   const app = express();
@@ -68,9 +66,25 @@ function create(config) {
     apiDoc: apiDocCreate(appConfig),
     paths: './api/paths',
     dependencies: services,
+    errorTransformer: function(err) {
+      return {
+        ...err,
+        text: `[${err.errorCode}] ${err.location}.${err.path} ${err.message}`
+      };
+    },
     errorMiddleware: function(err, req, res, next) { // eslint-disable-line no-unused-vars
+      if(err.name && err.message) {
+        app.logger.error(`${err.name}: ${err.message}`);
+      } else if(err.__proto__.constructor.name === 'Object') {
+        app.logger.error(JSON.stringify(err));
+      } else {
+        app.logger.error(err);
+      }
+
+      if(err.__proto__.constructor.name === 'Object' && err.status && err.errors) {
+        return res.status(err.status).json({error: 'API error. ' + err.errors[0].text});
+      }
       
-      app.logger.error(`${err.name}: ${err.message}`);
       switch(err.name) {
       case 'ValidationError':
         return res.status(400).json({error: err.message});

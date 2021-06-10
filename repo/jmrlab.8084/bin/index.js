@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const http = require('http');
 
-console.log('Starting application jmrlab (port: 3002)...');
+console.log('Starting application jmrlab (port: 8084)...');
 
 http.createServer(function (request, response) {
   console.log(`Request ${request.method} ${request.url}`);
-  response.end('<h1>Hello from jmrlab!</h1>New content is here', 'utf-8');
-}).listen(3002);
+  response.end('Hello from jmrlab!', 'utf-8');
+}).listen(8084);
