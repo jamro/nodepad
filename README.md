@@ -43,6 +43,6 @@ All features are available through REST API. See http://localhost:3000/nodepad/a
 ## Web User Interface
 The UI is available at http://localhost:3000/nodepad/ and it could be an alternative to the [REST API](#rest-api)
 
-![Applicatoin list user interface](./docs/nodepad_ui.jpg)
+![Applicatoin list user interface](./docs/nodepad_ui.png)
 
 
