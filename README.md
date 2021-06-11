@@ -1,8 +1,10 @@
 # NodePad
-NodePad is a simple tool to manage your NodeJs apps. Main Features
+NodePad is a simple tool to manage your NodeJs apps. 
+
+Main Features:
 - [REST API](#rest-api)
 - [Web User Interface](#web-user-interface)
-- Upload of application bundle to the server
+- [Application Upload](#application-upload)
 - Starting/stopping of node applications
 - Preview logs
 - Traffic routing based on domain names
@@ -45,4 +47,6 @@ The UI is available at http://localhost:3000/nodepad/ and it could be an alterna
 
 ![Applicatoin list user interface](./docs/nodepad_ui.png)
 
+## Application Upload
+You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. It has to contain `index.js` file that will act as a runner. After upload, NodePad will extract all files from the bundle, and will launch `/index.js` when starting the application.
 
