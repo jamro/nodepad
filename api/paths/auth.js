@@ -7,6 +7,7 @@ module.exports = function () {
 
   GET.apiDoc = {
     summary: 'Authenticate',
+    tags: ['Auth'],
     operationId: 'auth',
     responses: {
       200: {

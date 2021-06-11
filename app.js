@@ -7,7 +7,6 @@ const pm2 = require('pm2');
 const winston = require('winston');
 const expressWinston = require('express-winston');
 const apiDocCreate = require('./api/api-doc').create;
-
 const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
@@ -65,6 +64,7 @@ function create(config) {
     app,
     apiDoc: apiDocCreate(appConfig),
     paths: './api/paths',
+    docsPath: '/swagger.json',
     dependencies: services,
     errorTransformer: function(err) {
       return {
@@ -130,7 +130,7 @@ function create(config) {
     swaggerUi.serve,
     swaggerUi.setup(null, {
       swaggerOptions: {
-        url: '/api-docs',
+        url: '/nodepad/api/swagger.json',
       },
     })
   );

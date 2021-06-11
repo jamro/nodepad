@@ -8,6 +8,7 @@ module.exports = function (appService) {
 
   GET.apiDoc = {
     summary: 'List application logs',
+    tags: ['Application'],
     operationId: 'getLogs',
     parameters: [
       {

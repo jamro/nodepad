@@ -4,11 +4,15 @@ function create(config) {
   const appConfig = config || {};
   const apiDoc = {
     swagger: '2.0',
-    basePath: '/',
+    basePath: '/nodepad/api',
     info: {
       title: 'NodePad',
+      description: "NodePad is a simple tool to manage your NodeJs apps through REST API or UI",
       version: packageInfo.version,
     },
+    tags: [
+      { name: 'Application' }
+    ],
     definitions: {
       App: {
         type: 'object',

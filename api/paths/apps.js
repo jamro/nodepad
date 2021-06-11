@@ -23,6 +23,7 @@ module.exports = function (appService, logger) {
   
   POST.apiDoc = {
     summary: 'Create new application to be hosted',
+    tags: ['Application'],
     operationId: 'createApp',
     consumes: ['application/json'],
     parameters: [
@@ -66,6 +67,7 @@ module.exports = function (appService, logger) {
 
   GET.apiDoc = {
     summary: 'List all hosted application',
+    tags: ['Application'],
     operationId: 'getApps',
     responses: {
       200: {

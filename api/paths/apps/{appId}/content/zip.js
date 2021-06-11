@@ -26,6 +26,7 @@ module.exports = function (appService, deployService, logger) {
 
   POST.apiDoc = {
     summary: 'Deploy application as a ZIP file',
+    tags: ['Application'],
     operationId: 'updateContent',
     parameters: [
       {

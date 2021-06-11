@@ -17,6 +17,7 @@ module.exports = function (appService, logger) {
 
   PUT.apiDoc = {
     summary: 'Update hosted application',
+    tags: ['Application'],
     operationId: 'updatePoject',
     parameters: [
       {

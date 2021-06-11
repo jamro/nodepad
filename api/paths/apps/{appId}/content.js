@@ -8,6 +8,7 @@ module.exports = function (deployService) {
 
   GET.apiDoc = {
     summary: 'Fetch deployment details',
+    tags: ['Application'],
     operationId: 'getContent',
     parameters: [
       {
