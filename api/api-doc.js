@@ -7,7 +7,7 @@ function create(config) {
     basePath: '/nodepad/api',
     info: {
       title: 'NodePad',
-      description: "NodePad is a simple tool to manage your NodeJs apps through REST API or UI",
+      description: 'NodePad is a simple tool to manage your NodeJs apps through REST API or UI',
       version: packageInfo.version,
     },
     tags: [
@@ -36,6 +36,10 @@ function create(config) {
           cpu: {
             type: 'number',
             example: 47
+          },
+          url: {
+            type: 'string',
+            example: 'http://webapp.localhost:3000'
           },
         },
       },

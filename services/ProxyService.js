@@ -4,9 +4,10 @@ const AbstractService = require('./common/AbstractService');
 
 class ProxyService extends AbstractService {
 
-  constructor(appService, defaultApp, cacheTimeout) {
+  constructor(appService, rootDomain, defaultApp, cacheTimeout) {
     super();
     this.appService = appService;
+    this.rootDomain = rootDomain;
     this.defaultApp = defaultApp || null;
     this.loop = null;
     this.cache = [];
@@ -14,9 +15,11 @@ class ProxyService extends AbstractService {
     this.cacheTimeout = cacheTimeout || 5000;
   }
 
-
   getTargetAppId(req) {
     const host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.hostname;
+    if(!host.endsWith(this.rootDomain)) {
+      return null;
+    }
     let appId = host.split('.');
     if(appId[0] === 'www') {
       appId.shift();

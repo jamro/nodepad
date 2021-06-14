@@ -49,7 +49,9 @@ describe('API End-to-end', function() { // -------------------------------------
       app = appCreate({
         port: NODEPAD_PORT,
         appRepoPath: e2eWorkspace,
-        logLevel: 'silent'
+        logLevel: 'silent',
+        defaultSchema: 'http',
+        rootDomain: `localhost`
       });
 
       app.set('port', NODEPAD_PORT);
@@ -120,6 +122,7 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response.data[0]).to.have.property('id', APP_ID);
       expect(response.data[0]).to.have.property('port', APP_PORT);
       expect(response.data[0]).to.have.property('status', 'offline');
+      expect(response.data[0]).to.have.property('url', `http://${APP_ID}.localhost:${NODEPAD_PORT}`);
 
       // start app
       response = await axios.put(

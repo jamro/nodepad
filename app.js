@@ -49,9 +49,11 @@ function create(config) {
   app.logger.debug('Create services');
   const services = {};
   const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
-  services.appService = new AppService(appRepoPath, pm2);
+  const defaultSchema = appConfig.defaultSchema || 'http';
+  const rootDomain = appConfig.rootDomain || 'localhost:3000';
+  services.appService = new AppService(appRepoPath, defaultSchema, rootDomain, appConfig.port, pm2);
   services.appService.logger = app.logger.child({ service: 'appService' });
-  services.proxyService = new ProxyService(services.appService, config.defaultApp);
+  services.proxyService = new ProxyService(services.appService, rootDomain, config.defaultApp);
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
   services.deployService = new DeployService(appRepoPath);
   services.deployService.logger = app.logger.child({ service: 'deployService' });

@@ -11,8 +11,11 @@ const AppLogger = require('./common/AppLogger');
 
 class AppService extends AbstractService {
   
-  constructor(basePath, pm2) {
+  constructor(basePath, defaultSchema, rootDomain, defaultPort, pm2) {
     super();
+    this.defaultSchema = defaultSchema;
+    this.rootDomain = rootDomain;
+    this.defaultPort = defaultPort;
     this.basePath = basePath;
     this.pm2 = pm2;
     this.appLogger = new AppLogger(basePath);
@@ -92,7 +95,8 @@ class AppService extends AbstractService {
         let appData = dir.split('.');
         let app = {
           id: appData[0],
-          port: Number(appData[1])
+          port: Number(appData[1]),
+          url: this.getAppUrl(appData[0])
         };
         return app;
       });
@@ -283,6 +287,11 @@ class AppService extends AbstractService {
   async getLogs(appId, lines) {
     this.logger.debug(`Reading ${lines + ' ' || ''}log lines of '${appId}'`);
     return await this.appLogger.read(appId, lines);
+  }
+
+  getAppUrl(appId) {
+    const port = this.defaultPort !== 80 ? `:${this.defaultPort}` : '';
+    return `${this.defaultSchema}://${appId}.${this.rootDomain}${port}`;
   }
 
 }

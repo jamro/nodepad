@@ -16,7 +16,9 @@ const AppList = (props) => {
   const {apps, onToggleOnline, onUpload, onLogsRefresh} = props;
   const rows = apps.map(app => (
     <Table.Row key={app.id}>
-      <Table.Cell width={3}>{app.id}</Table.Cell>
+      <Table.Cell width={3}>
+        <a href={app.url} target="_blank">{app.id} <Icon name="external" /></a>
+      </Table.Cell>
       <Table.Cell width={3}>{app.port}</Table.Cell>
       <Table.Cell width={3}><Icon name={app.status === 'online' ? 'play' : 'pause'} />{app.status}</Table.Cell>
       <Table.Cell width={2}>{bytesToSize(app.memory)}</Table.Cell>

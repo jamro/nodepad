@@ -17,7 +17,8 @@ module.exports = function (appService, logger) {
       port: appPort,
       status: appStatus || 'offline',
       memory: 0,
-      cpu: 0
+      cpu: 0,
+      url: appService.getAppUrl(appId)
     });
   }
   

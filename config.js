@@ -5,6 +5,8 @@ module.exports = {
   logLevel: 'debug',
   appRepoPath: path.resolve(__dirname, 'repo'),
   defaultApp: 'webapp',
+  rootDomain: 'localhost',
+  defaultSchema: 'http'
   /* uncommment to enable basic auth
   auth: {
     user: 'nodepad',

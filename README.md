@@ -7,7 +7,7 @@ Main Features:
 - [Application Upload](#application-upload)
 - Starting/stopping of node applications
 - Preview logs
-- Traffic routing based on domain names
+- [Routing](#routing)
 - Authorization to NodePad API/UI
 - Basic app monitoring
 
@@ -50,3 +50,12 @@ The UI is available at http://localhost:3000/nodepad/ and it could be an alterna
 ## Application Upload
 You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. It has to contain `index.js` file that will act as a runner. After upload, NodePad will extract all files from the bundle, and will launch `/index.js` when starting the application.
 
+# Routing
+**NodePad** acts as a reverse proxy and route traffic to applications basing on domain names. It follows a pattern of `[appId].[rootDomain]`. For example, **NodePad** will redirect all requests to `webapp.example.com` to an application with ID `webapp`.
+
+To test routing locally, add proper entries to your `/etc/hosts`. For example
+```
+127.0.0.1 webapp.localhost
+```
+
+After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** on default port 3000)

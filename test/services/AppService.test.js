@@ -57,7 +57,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should have no apps by default', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     expect(await appService.read()).to.be.empty;
   });
 
@@ -71,7 +71,7 @@ describe('AppService', function() { // -----------------------------------------
         }
       }
     ];
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'localhost', 8888, pm2);
 
     await appService.create('app-name-623', 2373);
     await appService.create('app-name-773', 2374);
@@ -85,17 +85,19 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[0]).to.have.property('status', 'offline');
     expect(list[0]).to.have.property('memory');
     expect(list[0]).to.have.property('cpu');
+    expect(list[0]).to.have.property('url', 'http://app-name-623.localhost:8888');
 
     expect(list[1]).to.have.property('id', 'app-name-773');
     expect(list[1]).to.have.property('port', 2374);
     expect(list[1]).to.have.property('status', 'online');
     expect(list[1]).to.have.property('memory');
     expect(list[1]).to.have.property('cpu');
+    expect(list[1]).to.have.property('url', 'http://app-name-773.localhost:8888');
   });
 
   it('should list apps folders', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', pm2);
 
     await appService.create('p-xlkaj', 1107);
     await appService.create('p-aespf', 1108);
@@ -111,7 +113,7 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 connect error when listing', async function() {
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 982');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     await expect(appService.read()).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
   });
@@ -119,14 +121,14 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 list error when listing', async function() {
     const pm2 = new PM2Mock();
     pm2.listError = new Error('oops 238');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     await expect(appService.read()).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(1);
   });
 
   it('should create sample content in new app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     await appService.create('app97832', 8373);
 
     const script = path.join(workspace, 'app97832.8373', 'bin', 'index.js');
@@ -139,7 +141,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should throw on creation of invalid app name', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     expect(() => appService.create('', 12341)).to.throw();
     expect(() => appService.create('x', 12342)).to.throw();
@@ -150,7 +152,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should create valid app name', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     appService.create('valid', 12341);
     appService.create('valid-872_X', 12342);
@@ -158,12 +160,11 @@ describe('AppService', function() { // -----------------------------------------
     appService.create('12345678901234567890123456789012', 12344);
 
     expect(await appService.read()).to.have.lengthOf(4);
-
   });
 
   it('should throw on creation of invalid app port', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     expect(() => appService.create('valid8763-1', -2000)).to.throw();
     expect(() => appService.create('valid8763-2', 1023)).to.throw();
@@ -174,7 +175,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should create valid app port', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     appService.create('valid-773-1', 1024);
     appService.create('valid-773-2', 49151);
@@ -186,7 +187,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should throw on creation of duplicated app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     appService.create('valid9821-1', 4000);
 
@@ -195,7 +196,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should throw on creation of app with used port', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     appService.create('valid9821-1', 5959);
 
@@ -204,7 +205,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should check if app exists', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     expect(appService.exist('sample-8623')).to.be.false;
     appService.create('sample-8623', 9982);
@@ -213,7 +214,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should check if port is bound', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     expect(appService.isPortBound(2110)).to.be.false;
     appService.create('sample-0982', 2110);
@@ -230,7 +231,7 @@ describe('AppService', function() { // -----------------------------------------
         }
       }
     ];
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'https', 'sub.example534.com', 80, pm2);
 
     appService.create('app-12128', 1092);
     appService.create('app-99821', 1093);
@@ -242,18 +243,20 @@ describe('AppService', function() { // -----------------------------------------
     expect(result1).to.have.property('port', 1092);
     expect(result1).to.have.property('status', 'offline');
     expect(result2).to.have.property('status', 'online');
+    expect(result1).to.have.property('url', 'https://app-12128.sub.example534.com');
+    expect(result2).to.have.property('url', 'https://app-99821.sub.example534.com');
   });
 
   it('should throw when starting not existing app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     await expect(appService.start('void-8832')).to.be.rejected;
   });
 
   it('should throw when stopping not existing app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
 
     await expect(appService.stop('void-1992')).to.be.rejected;
   });
@@ -261,7 +264,7 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 connect error when starting', async function() {
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 390223');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('test-883773', 7281);
     await expect(appService.start('test-883773')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
@@ -270,7 +273,7 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 connect error when stopping', async function() {
     const pm2 = new PM2Mock();
     pm2.connectError = new Error('oops 133322');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('test-223910', 1231);
     await expect(appService.stop('test-223910')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(0);
@@ -280,7 +283,7 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 start error when starting', async function() {
     const pm2 = new PM2Mock();
     pm2.startError = new Error('oops 293');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('test-883773', 7281);
     await expect(appService.start('test-883773')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(2);
@@ -289,7 +292,7 @@ describe('AppService', function() { // -----------------------------------------
   it('should throw on PM2 delete error when stopping', async function() {
     const pm2 = new PM2Mock();
     pm2.deleteError = new Error('oops 029');
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('test-223910', 1231);
     await expect(appService.stop('test-223910')).to.be.rejectedWith(/pm2/i);
     expect(pm2.disconnect.callCount).to.be.equal(2);
@@ -297,7 +300,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should start app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('some-app-293', 5691);
     await appService.start('some-app-293');
     expect(pm2.start.callCount).to.be.equal(1);
@@ -306,7 +309,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should stop app', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('some-app-293', 5691);
     await appService.start('some-app-293');
     await appService.stop('some-app-293');
@@ -316,7 +319,7 @@ describe('AppService', function() { // -----------------------------------------
 
   it('should retreive app logs', async function() {
     const pm2 = new PM2Mock();
-    const appService = new AppService(workspace, pm2);
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
     appService.create('my-app-8324', 7110);
     appService.appLogger.log('my-app-8324', 'message #1 32452');
     appService.appLogger.log('my-app-8324', 'message #2 09231');
