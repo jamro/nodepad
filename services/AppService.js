@@ -195,12 +195,18 @@ class AppService extends AbstractService {
       `#!/usr/bin/env node
       const http = require('http');
 
-      console.log('Starting application ${appId} (port: ${appPort})...');
+      const port = process?.env?.port;
+
+      if(!port) {
+        throw new  Error('PORT env not defined');
+      }
+
+      console.log('Starting application ${appId} (port: ' + port + ')...');
 
       http.createServer(function (request, response) {
         console.log(\`Request \${request.method} \${request.url}\`);
         response.end('Hello from ${appId}!', 'utf-8');
-      }).listen(${appPort});`
+      }).listen(port);`
     );
   }
 
@@ -242,7 +248,8 @@ class AppService extends AbstractService {
       autorestart: true,
       output: path.join(this.basePath, `${app.id}.${app.port}`, `log-${app.id}.log`),
       error: path.join(this.basePath, `${app.id}.${app.port}`, `log-${app.id}.log`),
-      logDateFormat: 'YYYY-MM-DD HH:mm:ss.SSS Z'
+      logDateFormat: 'YYYY-MM-DD HH:mm:ss.SSS Z',
+      port: app.port
     };
     await this.pm2connect();
     try {

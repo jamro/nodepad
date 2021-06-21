@@ -29,7 +29,7 @@ function clearWorkspace(path) {
 const APP_ID  = 'my-test-app-7673';
 const NODEPAD_PORT = 39211;
 const APP_PORT = 39311;
-const BIN_DATA_PATH = path.resolve(__dirname, 'content-39311.zip');
+const BIN_DATA_PATH = path.resolve(__dirname, 'content.zip');
 
 describe('API End-to-end', function() { // ------------------------------------------------
 
@@ -145,7 +145,6 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Hello from my-test-app-7673/);
-      expect(response.data).to.not.match(/it works quite well/);
       
       // check logs
       response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/logs`);
@@ -183,7 +182,7 @@ describe('API End-to-end', function() { // -------------------------------------
       response = await axios.get(`http://localhost:${APP_PORT}`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
-      expect(response.data).to.match(/it works quite well/);
+      expect(response.data).to.match(/Hello from TestApp/);
 
     });
   });
