@@ -37,6 +37,7 @@
     "read-last-lines": "^1.8.0",
     "semantic-ui-react": "^2.0.3",
     "swagger-ui-express": "^4.1.6",
+    "websocket": "^1.0.34",
     "winston": "^3.3.3"
   },
   "devDependencies": {

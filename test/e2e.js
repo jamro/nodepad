@@ -7,6 +7,7 @@ const appCreate = require('../app').create;
 const axios = require('axios');
 const pm2 = require('pm2');
 const FormData = require('form-data');
+const WebSocketClient = require('websocket').client;
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -30,6 +31,7 @@ const APP_ID  = 'my-test-app-7673';
 const NODEPAD_PORT = 39211;
 const APP_PORT = 39311;
 const BIN_DATA_PATH = path.resolve(__dirname, 'content.zip');
+const WS_BIN_DATA_PATH = path.resolve(__dirname, 'content-ws.zip');
 
 describe('API End-to-end', function() { // ------------------------------------------------
 
@@ -50,6 +52,7 @@ describe('API End-to-end', function() { // -------------------------------------
         port: NODEPAD_PORT,
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
+        defaultApp: APP_ID,
         defaultSchema: 'http',
         rootDomain: `localhost`
       });
@@ -145,6 +148,13 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Hello from my-test-app-7673/);
+
+      // check whether routing works
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}`);
+      expect(response).to.have.property('status', 200);
+      expect(response).to.have.property('data');
+      expect(response.data).to.match(/Hello from my-test-app-7673/);
       
       // check logs
       response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/logs`);
@@ -183,6 +193,62 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Hello from TestApp/);
+
+    });
+
+    it('should handle web sockets', async () => {
+      let response;
+
+      // create  app
+      response = await axios.post(
+        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`,
+        {
+          id: APP_ID,
+          port: APP_PORT,
+          status: 'online'
+        }
+      );
+      expect(response).to.have.property('status', 201);
+
+      //upload new content
+      const form = new FormData();
+      form.append('bin', fs.createReadStream(WS_BIN_DATA_PATH));
+      response = await axios.post(
+        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/content/zip`,
+        form,
+        { headers: form.getHeaders() }
+      );
+      expect(response).to.have.property('status', 201);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // check whether the app responds
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}`);
+      expect(response).to.have.property('status', 200);
+      expect(response).to.have.property('data');
+      expect(response.data).to.match(/WebSocket Test/);
+
+      response = await new Promise((resolve, reject) => {
+        const client = new WebSocketClient();
+
+        client.on('connectFailed', reject);
+
+        client.on('connect', (connection) => {
+          connection.on('error', reject);
+          connection.on('message', (message) => {
+            if (message.type === 'utf8') {
+              connection.close();
+              resolve(message.utf8Data);
+            }
+          });
+          connection.sendUTF('MSG-882629102');
+        });
+
+        client.connect(`ws://localhost:${NODEPAD_PORT}/`);
+      
+      })
+
+      expect(response).to.be.equal('Echo: MSG-882629102')
 
     });
   });

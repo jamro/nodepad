@@ -58,4 +58,6 @@ To test routing locally, add proper entries to your `/etc/hosts`. For example
 127.0.0.1 webapp.localhost
 ```
 
-After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** on default port 3000)
+After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** on default port 3000).
+
+Routing work for both: HTTP requests and WebSockets.

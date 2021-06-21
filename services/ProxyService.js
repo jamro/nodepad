@@ -16,7 +16,14 @@ class ProxyService extends AbstractService {
   }
 
   getTargetAppId(req) {
-    const host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.hostname;
+    let host = req.hostname;
+    if(req.headers && req.headers['x-forwarded-host']) {
+      host = req.headers['x-forwarded-host'];
+    }
+    if(req.headers && req.headers['host']) {
+      host = req.headers['host'];
+    }
+    host = host.replace(/:.*/, '');
     if(!host.endsWith(this.rootDomain)) {
       return this.defaultApp;
     }
@@ -51,8 +58,8 @@ class ProxyService extends AbstractService {
   
   getProxy() {
     return createProxyMiddleware({
+      ws: true,
       router: (req) => {
-        console.log(req.url);
         let appId = this.getTargetAppId(req);
         const targetHost = this.getTargetHost(appId);
         if(!targetHost) {
