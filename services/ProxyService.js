@@ -1,6 +1,6 @@
-const proxy = require('express-http-proxy');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const AbstractService = require('./common/AbstractService');
-
+const { GatewayError } = require('./common/errors');
 
 class ProxyService extends AbstractService {
 
@@ -18,14 +18,14 @@ class ProxyService extends AbstractService {
   getTargetAppId(req) {
     const host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.hostname;
     if(!host.endsWith(this.rootDomain)) {
-      return null;
+      return this.defaultApp;
     }
     let appId = host.split('.');
     if(appId[0] === 'www') {
       appId.shift();
     }
     appId = appId[0];
-    return appId;
+    return appId !== this.rootDomain ? appId : this.defaultApp ;
   }
 
   getTargetHost(appId) {
@@ -39,34 +39,34 @@ class ProxyService extends AbstractService {
     const folders = this.cache;
     let app = folders.map(dir => dir.split('.'))
       .find(dir => dir[0]  === appId);
+
     if(!app) {
+      this.logger.warn(`Cannot find host target for '${appId}'. App not found.`);
       app = folders.map(dir => dir.split('.'))
         .find(dir => dir[0]  === this.defaultApp);
       return app ? 'localhost:' + app[1] : null;
     }
-    return 'localhost:' + app[1];
+    return 'http://localhost:' + app[1];
   }
   
   getProxy() {
-    return proxy(
-      (req) => {
+    return createProxyMiddleware({
+      router: (req) => {
+        console.log(req.url);
         let appId = this.getTargetAppId(req);
         const targetHost = this.getTargetHost(appId);
+        if(!targetHost) {
+          return new GatewayError(`No redirection found for app '${appId}'`);
+        }
         this.logger.info(`Redirecting '${req.url} to app '${appId}' at '${targetHost}'`);
         return targetHost;
-      }, 
-      { 
-        filter: (req) => {
-          let appId = this.getTargetAppId(req);
-          const targetHost = this.getTargetHost(appId);
-          return !!targetHost;
-        },
-        proxyErrorHandler: (err, res) => {
-          this.logger.error(err);
-          res.status(502).send('502 Bad Gateway');
-        }
-      }
-    );
+      },
+      onError: (err, req, res) => {
+        this.logger.error(err);
+        res.status(502).send('502 Bad Gateway');
+      },
+      logProvider: () => this.logger.child({ component: 'proxyMiddleware' })
+    });
   }
 }
 

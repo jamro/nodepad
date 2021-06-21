@@ -35,8 +35,8 @@ describe('ProxyService', function() { // ---------------------------------------
     ]);
     const proxyService = new ProxyService(appService, 'example88.co.uk');
 
-    expect(proxyService.getTargetHost('app-392')).to.be.equal('localhost:3911');
-    expect(proxyService.getTargetHost('app-111')).to.be.equal('localhost:3912');
+    expect(proxyService.getTargetHost('app-392')).to.be.equal('http://localhost:3911');
+    expect(proxyService.getTargetHost('app-111')).to.be.equal('http://localhost:3912');
     expect(proxyService.getTargetHost('no-app-XXX')).to.be.equal(null);
   });
 

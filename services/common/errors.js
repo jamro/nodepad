@@ -20,9 +20,14 @@ class AuthError extends AppError {
 
 }
 
+class GatewayError extends AppError {
+
+}
+
 module.exports = {
   ValidationError,
   EntityNotFoundError,
   ProcessManagerError,
-  AuthError
+  AuthError,
+  GatewayError
 };

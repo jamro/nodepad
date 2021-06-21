@@ -97,6 +97,9 @@ function create(config) {
       case 'ProcessManagerError':
         app.logger.debug(err);
         return res.status(500).json({error: 'Internal Process Manager error'});
+      case 'GatewayError':
+        app.logger.debug(err);
+        return res.status(502).json({error: 'Bad Gateway'});
       default:
         app.logger.debug(err);
         return res.status(500).json({error: 'Internal NodePad error'});
