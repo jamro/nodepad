@@ -1,9 +1,8 @@
-
 module.exports = function (appService) {
 
   async function GET(req, res) {
     let appId = req.params.appId;
-    res.status(200).json(await appService.getLogs(appId));
+    res.status(200).json(await appService.getLogs(appId, req.query.lines));
   }
 
   GET.apiDoc = {
@@ -16,6 +15,12 @@ module.exports = function (appService) {
         name: 'appId',
         required: true,
         type: 'string'
+      },
+      {
+        in: 'query',
+        name: 'lines',
+        default: 100,
+        type: 'number'
       }
     ],
     responses: {
