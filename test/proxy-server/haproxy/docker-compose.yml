@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  nodepad:
+    build: 
+      dockerfile: test/proxy-server/containers/nodepad/Dockerfile
+      context: ../../../
+    ports:
+      - "25193:25193"
+  proxy:
+    build: ../containers/haproxy
+    ports:
+      - "25101:25101"
+    links:
+      - nodepad

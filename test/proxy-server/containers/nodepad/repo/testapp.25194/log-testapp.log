@@ -1,0 +1,7 @@
+2021-06-30 17:07:01.321 [NODEPAD] Application testapp created
+2021-06-30 17:07:01.341 [NODEPAD] Starting application 'testapp'...
+2021-06-30 19:07:01.561 +02:00: Starting application testapp (port: 25194)...
+2021-06-30 19:07:04.649 +02:00: Request GET /
+2021-06-30 19:07:04.884 +02:00: Request GET /favicon.ico
+2021-06-30 19:17:33.631 +02:00: Request GET /
+2021-06-30 19:17:33.851 +02:00: Request GET /favicon.ico
