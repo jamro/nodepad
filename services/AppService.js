@@ -11,9 +11,9 @@ const AppLogger = require('./common/AppLogger');
 
 class AppService extends AbstractService {
   
-  constructor(basePath, defaultSchema, rootDomain, defaultPort, pm2) {
+  constructor(basePath, defaultScheme, rootDomain, defaultPort, pm2) {
     super();
-    this.defaultSchema = defaultSchema;
+    this.defaultScheme = defaultScheme;
     this.rootDomain = rootDomain;
     this.defaultPort = defaultPort;
     this.basePath = basePath;
@@ -298,7 +298,7 @@ class AppService extends AbstractService {
 
   getAppUrl(appId) {
     const port = this.defaultPort !== 80 ? `:${this.defaultPort}` : '';
-    return `${this.defaultSchema}://${appId}.${this.rootDomain}${port}`;
+    return `${this.defaultScheme}://${appId}.${this.rootDomain}${port}`;
   }
 
 }

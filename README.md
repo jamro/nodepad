@@ -50,9 +50,10 @@ The UI is available at http://localhost:3000/nodepad/ and it could be an alterna
 ## Application Upload
 You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. It has to contain `index.js` file that will act as a runner. After upload, NodePad will extract all files from the bundle, and will launch `/index.js` when starting the application.
 
-# Routing
-**NodePad** acts as a reverse proxy and route traffic to applications basing on domain names. It follows a pattern of `[appId].[rootDomain]`. For example, **NodePad** will redirect all requests to `webapp.example.com` to an application with ID `webapp`.
+## Routing
+**NodePad** acts as a reverse proxy and route traffic to applications basing on domain names. It follows a pattern of `[appId].[rootDomain]`. For example, **NodePad** will redirect all requests to `webapp.example.com` to an application with ID `webapp`. Routing work for both: HTTP requests and WebSockets.
 
+### Testing locally
 To test routing locally, add proper entries to your `/etc/hosts`. For example
 ```
 127.0.0.1 webapp.localhost
@@ -60,4 +61,52 @@ To test routing locally, add proper entries to your `/etc/hosts`. For example
 
 After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** on default port 3000).
 
-Routing work for both: HTTP requests and WebSockets.
+### Running NodePad behind a proxy
+You can run **NodePad** behind a proxy. To make routing work, add `X-Forwarded-For` headers to requests on the proxy level. 
+
+#### Sample Nginx configuration
+
+```
+events {
+  worker_connections  1024;
+}
+
+http {
+  server { 
+    listen 80;
+    server_name frontend;
+    
+    location / {
+      proxy_http_version 1.1;
+      proxy_pass http://localhost:3000;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_cache_bypass $http_upgrade;
+      proxy_redirect off;
+    }
+  }
+}
+```
+
+### Sample HAProxy configuration
+
+```
+global
+defaults
+	timeout client          30s
+	timeout server          30s
+	timeout connect         30s
+
+frontend frontend
+	bind 0.0.0.0:80
+  mode http
+	default_backend backend
+
+backend backend
+	mode http
+  option forwardfor
+	server upstream localhost:3000
+
+```

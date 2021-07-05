@@ -6,5 +6,5 @@ module.exports = {
   appRepoPath: path.resolve(__dirname, 'repo'),
   defaultApp: 'webapp',
   rootDomain: 'localhost',
-  defaultSchema: 'http'
+  defaultScheme: 'http'
 };

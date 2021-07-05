@@ -53,7 +53,7 @@ describe('API End-to-end', function() { // -------------------------------------
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
         defaultApp: APP_ID,
-        defaultSchema: 'http',
+        defaultScheme: 'http',
         rootDomain: `localhost`
       });
 
