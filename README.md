@@ -5,8 +5,8 @@ Main Features:
 - [REST API](#rest-api)
 - [Web User Interface](#web-user-interface)
 - [Application Upload](#application-upload)
-- Starting/stopping of node applications
-- Preview logs
+- [Starting/stopping of node applications](#web-user-interface)
+- [Preview logs](#web-user-interface)
 - [Routing](#routing)
 - [Authorization to NodePad API/UI](#authorization)
 - [Basic app monitoring](#web-user-interface)
