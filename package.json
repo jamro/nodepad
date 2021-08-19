@@ -1,6 +1,6 @@
 {
-  "name": "nodepad",
-  "version": "1.0.0",
+  "name": "@jamropl/nodepad",
+  "version": "1.0.1",
   "scripts": {
     "commit": "cz",
     "start": "node ./bin/www",
