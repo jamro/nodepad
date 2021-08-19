@@ -13,8 +13,8 @@ const DeployService = require('./services/DeployService');
 const AuthService = require('./services/AuthService');
 const { AuthError } = require('./services/common/errors');
 
-function create(config) {
-  const appConfig = config || {};
+
+function createBase(config) {
   const app = express();
 
   app.logger = winston.createLogger({
@@ -28,13 +28,13 @@ function create(config) {
       winston.format.simple(),
     )
   }).child({service: 'core'});
+
   app.use(expressWinston.logger({
     winstonInstance: app.logger.child({service: 'web'}),
     meta: false,
     msg: 'HTTP  {{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}',
     expressFormat: true,
   }));
-  app.logger.info('Configuring NodePad...');
 
   // view engine setup
   app.logger.debug('Setting views');
@@ -45,26 +45,46 @@ function create(config) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+  return app;
+}
+
+function finalizeApp(app, services) {
+  app.logger.debug('Attach error handlers');
+  // catch 404 and forward to error handler
+  app.use(function(req, res) {
+    return res.status(404).send('<h1>404 Not Found</h1>');
+  });
   
-  app.logger.debug('Create services');
-  const services = {};
-  const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
-  const defaultScheme = appConfig.defaultScheme || 'http';
-  const rootDomain = appConfig.rootDomain || 'localhost:3000';
-  services.appService = new AppService(appRepoPath, defaultScheme, rootDomain, appConfig.port, pm2);
-  services.appService.logger = app.logger.child({ service: 'appService' });
-  services.proxyService = new ProxyService(services.appService, rootDomain, config.defaultApp);
-  services.proxyService.logger = app.logger.child({ service: 'proxyService' });
-  services.deployService = new DeployService(appRepoPath);
-  services.deployService.logger = app.logger.child({ service: 'deployService' });
-  services.authService = new AuthService(config.auth);
-  services.authService.logger = app.logger.child({ service: 'authService' });
-  services.logger = app.logger.child({ service: 'api' });
+  // error handler
+  app.use(function(err, req, res) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    app.logger.error(err);
   
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+  });
+
+  app.destroy = () => {
+    const names = Object.keys(services);
+    names.forEach(serviceName => {
+      if(services[serviceName].destroy) {
+        services[serviceName].destroy();
+      }
+    });
+  };
+}
+
+function buildApp(app, config, services) {
+
   app.logger.debug('Setting up OpenApi');
   const openApiConfig = {
     app,
-    apiDoc: apiDocCreate(appConfig),
+    apiDoc: apiDocCreate(config),
     paths: './api/paths',
     docsPath: '/swagger.json',
     dependencies: services,
@@ -107,7 +127,7 @@ function create(config) {
     },
     promiseMode: true
   };
-  if(appConfig.auth) {
+  if(config.auth) {
     app.logger.info('Authorization enabled');
     app.logger.debug('Configure Authorization');
     openApiConfig.securityHandlers = {
@@ -131,11 +151,11 @@ function create(config) {
   
   app.logger.debug('Configure Swagger UI');
   app.use(
-    '/nodepad/api',
+    '/api',
     swaggerUi.serve,
     swaggerUi.setup(null, {
       swaggerOptions: {
-        url: '/nodepad/api/swagger.json',
+        url: '/api/swagger.json',
       },
     })
   );
@@ -154,37 +174,41 @@ function create(config) {
       .status(401)
       .send('auth needed');
   }
-  app.use('/nodepad', [authMiddleware, express.static(path.join(__dirname, 'public'))]);
+  app.use('/', [authMiddleware, express.static(path.join(__dirname, 'public'))]);
+}
+
+function buildProxy(app, config, services) {
   app.use('/', services.proxyService.getProxy());
-  
-  app.logger.debug('Attach error handlers');
-  // catch 404 and forward to error handler
-  app.use(function(req, res) {
-    return res.status(404).send('<h1>404 Not Found</h1>');
-  });
-  
-  // error handler
-  app.use(function(err, req, res) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+}
 
-    app.logger.error(err);
-  
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-  });
+function create(config) {
+  const appConfig = config || {};
+  const app = createBase(appConfig);
+  const proxy = createBase(appConfig);
 
-  app.destroy = () => {
-    const names = Object.keys(services);
-    names.forEach(serviceName => {
-      if(services[serviceName].destroy) {
-        services[serviceName].destroy();
-      }
-    });
-  };
-  return app;
+  app.logger.info('Configuring NodePad...');
+  
+  app.logger.debug('Create services');
+  const services = {};
+  const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
+  const defaultScheme = appConfig.defaultScheme || 'http';
+  const rootDomain = appConfig.rootDomain || 'localhost:3000';
+  services.appService = new AppService(appRepoPath, defaultScheme, rootDomain, appConfig.proxyPort, pm2);
+  services.appService.logger = app.logger.child({ service: 'appService' });
+  services.proxyService = new ProxyService(services.appService, rootDomain, appConfig.defaultApp);
+  services.proxyService.logger = app.logger.child({ service: 'proxyService' });
+  services.deployService = new DeployService(appRepoPath);
+  services.deployService.logger = app.logger.child({ service: 'deployService' });
+  services.authService = new AuthService(appConfig.auth);
+  services.authService.logger = app.logger.child({ service: 'authService' });
+  services.logger = app.logger.child({ service: 'api' });
+  
+  buildApp(app, appConfig, services);
+  buildProxy(proxy, appConfig, services);
+
+  finalizeApp(app, services);  
+
+  return { app, proxy };
 }
 
 module.exports = { create };

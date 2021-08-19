@@ -29,7 +29,8 @@ function clearWorkspace(path) {
 
 const APP_ID  = 'my-test-app-7673';
 const NODEPAD_PORT = 39211;
-const APP_PORT = 39311;
+const PROXY_PORT = 39311;
+const APP_PORT = 39411;
 const BIN_DATA_PATH = path.resolve(__dirname, 'content.zip');
 const WS_BIN_DATA_PATH = path.resolve(__dirname, 'content-ws.zip');
 
@@ -39,8 +40,10 @@ describe('API End-to-end', function() { // -------------------------------------
   describe('Auth disabled', function() {
 
     let e2eWorkspace;
-    let server;
+    let appServer;
+    let proxyServer;
     let app;
+    let proxy;
 
     this.timeout(5000);
 
@@ -48,21 +51,34 @@ describe('API End-to-end', function() { // -------------------------------------
 
       e2eWorkspace = createWorkspace();
 
-      app = appCreate({
-        port: NODEPAD_PORT,
+      const appSet = appCreate({
+        appPort: NODEPAD_PORT,
+        proxyPort: PROXY_PORT,
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
         defaultApp: APP_ID,
         defaultScheme: 'http',
         rootDomain: `localhost`
       });
+      app = appSet.app;
+      proxy = appSet.proxy;
 
       app.set('port', NODEPAD_PORT);
-      server = http.createServer(app);
-      server.listen(NODEPAD_PORT);
+      appServer = http.createServer(app);
+      appServer.listen(NODEPAD_PORT);
 
       await new Promise(resolve => {
-        server.on('listening', () => {
+        appServer.on('listening', () => {
+          setTimeout(() => resolve(), 500);
+        });
+      });
+
+      proxy.set('port', PROXY_PORT);
+      proxyServer = http.createServer(proxy);
+      proxyServer.listen(PROXY_PORT);
+
+      await new Promise(resolve => {
+        proxyServer.on('listening', () => {
           setTimeout(() => resolve(), 500);
         });
       });
@@ -72,7 +88,8 @@ describe('API End-to-end', function() { // -------------------------------------
     afterEach(async function() {
       clearWorkspace(e2eWorkspace);
       
-      await new Promise(resolve => server.close(() => resolve()));
+      await new Promise(resolve => proxyServer.close(() => resolve()));
+      await new Promise(resolve => appServer.close(() => resolve()));
       app.destroy();
       
       await new Promise(resolve => {
@@ -90,14 +107,14 @@ describe('API End-to-end', function() { // -------------------------------------
     });
 
     it('should open home page', async function() {
-      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`);
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/NodePad Dashboard/);
     });
 
     it('should open swagger UI', async function() {
-      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api`);
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/api`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Swagger/);
@@ -108,7 +125,7 @@ describe('API End-to-end', function() { // -------------------------------------
 
       // create  app
       response = await axios.post(
-        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`,
+        `http://localhost:${NODEPAD_PORT}/api/apps/`,
         {
           id: APP_ID,
           port: APP_PORT,
@@ -118,24 +135,24 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response).to.have.property('status', 201);
 
       // check whether the app was created
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`);
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.have.lengthOf(1);
       expect(response.data[0]).to.have.property('id', APP_ID);
       expect(response.data[0]).to.have.property('port', APP_PORT);
       expect(response.data[0]).to.have.property('status', 'offline');
-      expect(response.data[0]).to.have.property('url', `http://${APP_ID}.localhost:${NODEPAD_PORT}`);
+      expect(response.data[0]).to.have.property('url', `http://${APP_ID}.localhost:${PROXY_PORT}`);
 
       // start app
       response = await axios.put(
-        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}`,
+        `http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}`,
         {status: 'online'}
       );
       expect(response).to.have.property('status', 200);
 
       // check whether the app is online
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`);
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.have.lengthOf(1);
@@ -151,13 +168,13 @@ describe('API End-to-end', function() { // -------------------------------------
 
       // check whether routing works
       await new Promise((resolve) => setTimeout(resolve, 500));
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}`);
+      response = await axios.get(`http://localhost:${PROXY_PORT}`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Hello from my-test-app-7673/);
       
       // check logs
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/logs`);
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/logs`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.have.length.greaterThan(0);
@@ -166,7 +183,7 @@ describe('API End-to-end', function() { // -------------------------------------
       const form = new FormData();
       form.append('bin', fs.createReadStream(BIN_DATA_PATH));
       response = await axios.post(
-        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/content/zip`,
+        `http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/content/zip`,
         form,
         { headers: form.getHeaders() }
       );
@@ -174,13 +191,13 @@ describe('API End-to-end', function() { // -------------------------------------
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // check whether the deplyment is done
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/content`);
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/content`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.have.property('status', 'deployed');
 
       // check whether the app is online
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`);
+      response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.have.lengthOf(1);
@@ -201,7 +218,7 @@ describe('API End-to-end', function() { // -------------------------------------
 
       // create  app
       response = await axios.post(
-        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/`,
+        `http://localhost:${NODEPAD_PORT}/api/apps/`,
         {
           id: APP_ID,
           port: APP_PORT,
@@ -214,7 +231,7 @@ describe('API End-to-end', function() { // -------------------------------------
       const form = new FormData();
       form.append('bin', fs.createReadStream(WS_BIN_DATA_PATH));
       response = await axios.post(
-        `http://localhost:${NODEPAD_PORT}/nodepad/api/apps/${APP_ID}/content/zip`,
+        `http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/content/zip`,
         form,
         { headers: form.getHeaders() }
       );
@@ -223,7 +240,7 @@ describe('API End-to-end', function() { // -------------------------------------
 
       // check whether the app responds
       await new Promise((resolve) => setTimeout(resolve, 500));
-      response = await axios.get(`http://localhost:${NODEPAD_PORT}`);
+      response = await axios.get(`http://localhost:${PROXY_PORT}`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
       expect(response.data).to.match(/WebSocket Test/);
@@ -244,7 +261,7 @@ describe('API End-to-end', function() { // -------------------------------------
           connection.sendUTF('MSG-882629102');
         });
 
-        client.connect(`ws://localhost:${NODEPAD_PORT}/`);
+        client.connect(`ws://localhost:${PROXY_PORT}/`);
       
       })
 
@@ -256,8 +273,10 @@ describe('API End-to-end', function() { // -------------------------------------
   describe('Auth enabled', function() {
 
     let e2eWorkspace;
-    let server;
+    let appServer;
+    let proxyServer;
     let app;
+    let proxy;
 
     this.timeout(5000);
 
@@ -265,8 +284,9 @@ describe('API End-to-end', function() { // -------------------------------------
 
       e2eWorkspace = createWorkspace();
 
-      app = appCreate({
-        port: NODEPAD_PORT,
+      const appSet = appCreate({
+        appPort: NODEPAD_PORT,
+        proxyPort: PROXY_PORT,
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
         auth: {
@@ -275,12 +295,25 @@ describe('API End-to-end', function() { // -------------------------------------
         }
       });
 
+      app = appSet.app;
+      proxy = appSet.proxy;
+
       app.set('port', NODEPAD_PORT);
-      server = http.createServer(app);
-      server.listen(NODEPAD_PORT);
+      appServer = http.createServer(app);
+      appServer.listen(NODEPAD_PORT);
 
       await new Promise(resolve => {
-        server.on('listening', () => {
+        appServer.on('listening', () => {
+          setTimeout(() => resolve(), 500);
+        });
+      });
+
+      proxy.set('port', PROXY_PORT);
+      proxyServer = http.createServer(proxy);
+      proxyServer.listen(PROXY_PORT);
+
+      await new Promise(resolve => {
+        proxyServer.on('listening', () => {
           setTimeout(() => resolve(), 500);
         });
       });
@@ -290,7 +323,8 @@ describe('API End-to-end', function() { // -------------------------------------
     afterEach(async function() {
       clearWorkspace(e2eWorkspace);
       
-      await new Promise(resolve => server.close(() => resolve()));
+      await new Promise(resolve => proxyServer.close(() => resolve()));
+      await new Promise(resolve => appServer.close(() => resolve()));
       app.destroy();
       
       await new Promise(resolve => {
@@ -317,13 +351,13 @@ describe('API End-to-end', function() { // -------------------------------------
       {method: 'post', uri: `apps/${APP_ID}/content/zip`},
     ].forEach((data) => {
       it(`should allow athorized only to ${data.method.toUpperCase()} /api/${data.uri}`, async function() {
-        const response1 = await axios(`http://localhost:${NODEPAD_PORT}/nodepad/api/${data.uri}`, {
+        const response1 = await axios(`http://localhost:${NODEPAD_PORT}/api/${data.uri}`, {
           method: data.method,
           validateStatus: () => true
         });
         expect(response1).to.have.property('status', 401);
   
-        const response2 = await axios(`http://localhost:${NODEPAD_PORT}/nodepad/api/${data.uri}`, {
+        const response2 = await axios(`http://localhost:${NODEPAD_PORT}/api/${data.uri}`, {
           method: data.method,
           validateStatus: () => true,
           auth: {
@@ -333,7 +367,7 @@ describe('API End-to-end', function() { // -------------------------------------
         });
         expect(response2).to.have.property('status', 401);
         
-        const response3 = await axios(`http://localhost:${NODEPAD_PORT}/nodepad/api/${data.uri}`, {
+        const response3 = await axios(`http://localhost:${NODEPAD_PORT}/api/${data.uri}`, {
           method: data.method,
           validateStatus: () => true,
           auth: {
@@ -349,13 +383,13 @@ describe('API End-to-end', function() { // -------------------------------------
     });
 
     it('should require auth to open home page', async function() {
-      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`, {validateStatus: () => true});
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}`, {validateStatus: () => true});
       expect(response).to.have.property('status', 401);
       expect(response.headers).to.have.property('www-authenticate');
     });
 
     it('should require login to home page', async function() {
-      const response = await axios.get(`http://localhost:${NODEPAD_PORT}/nodepad`, {
+      const response = await axios.get(`http://localhost:${NODEPAD_PORT}`, {
         validateStatus: () => true,
         headers: {
           authorization: basicAuth('admin731', 'secret731')
