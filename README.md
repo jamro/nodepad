@@ -9,7 +9,7 @@ Main Features:
 - Preview logs
 - [Routing](#routing)
 - [Authorization to NodePad API/UI](#authorization)
-- Basic app monitoring
+- [Basic app monitoring](#web-user-interface)
 
 Under the hood, **NodePad** runs [PM2](https://www.npmjs.com/package/pm2) as a process manager.
 
@@ -164,3 +164,24 @@ module.exports = {
 It will secure both: the UI and the API.
 
 Additional security measures could be applied on a firewall level since the dashboard of **NodePad** is available at a dedicated port. See `appPort` parameter in `./config.js`.
+
+# Troubleshooting
+
+## How to manually deploy an app?
+All app files are kept in `/repo` by default The path can be changed in `config.js` by setting `appRepoPath` parameter. To manually change the app copy all files (including `index.js`) to `/repo/[AppId].[AppPort]/bin`. Remember to restart the application to apply changes.
+
+## How to manually the check status of running apps?
+Run `npm run pm2 -- ls`
+
+## How to manually stop an app?
+Run `npm run pm2 -- stop [AppId]`
+
+## How to manually read logs?
+All logs are kept in `/repo/[AppId].[AppPort]/log-[AppId].log` file. To get logs directly from PM2 call `npm run pm2 -- logs [AppId]`
+
+## PM2 is not responding. 
+You can kill PM2 daemon by running `npm run pm2 -- kill`. Please notice that it will stop all running apps.
+
+## How to manually run PM2 command? 
+NPM scripts expose PM2 CLI: `npm run pm2 -- [arguments...]`
+For example `npm run pm2 -- ls` is an equivalent of `pm2 ls`.

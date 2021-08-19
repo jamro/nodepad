@@ -12,7 +12,8 @@
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --ignore-pattern tmp --ignore-pattern projects/ --fix",
     "test": "mocha --recursive --require @babel/register --exclude test/proxy-server/**/*.js test",
     "test-watch": "nodemon --config test.nodemon.json --exec \"npm run test\"",
-    "all": "npm run lint && npm run build && npm run test"
+    "all": "npm run lint && npm run build && npm run test",
+    "pm2": "pm2"
   },
   "dependencies": {
     "@babel/register": "^7.13.16",
