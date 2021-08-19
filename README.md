@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/%40jamropl%2Fnodepad.svg)](https://badge.fury.io/js/%40jamropl%2Fnodepad)
+
 # NodePad
 NodePad is a simple tool to manage life cycle of your NodeJs apps. It allow to easily deploy, start/stop and monitor multiple apps via web interface or REST API.
 
