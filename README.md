@@ -8,7 +8,7 @@ Main Features:
 - Starting/stopping of node applications
 - Preview logs
 - [Routing](#routing)
-- Authorization to NodePad API/UI
+- [Authorization to NodePad API/UI](#authorization)
 - Basic app monitoring
 
 Under the hood, **NodePad** runs [PM2](https://www.npmjs.com/package/pm2) as a process manager.
@@ -96,7 +96,7 @@ To test routing locally, add proper entries to your `/etc/hosts`. For example
 127.0.0.1 webapp.localhost
 ```
 
-After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** on default port 3000).
+After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** Proxy on default port 3000).
 
 ### Running NodePad behind a proxy
 You can run **NodePad** behind a proxy. To make routing work, add `X-Forwarded-For` headers to requests on the proxy level. 
@@ -147,3 +147,20 @@ backend backend
 	server upstream localhost:3000
 
 ```
+
+## Authorization
+**NodePad** supports Basic Auth. You can configure it in `./config.js` by uncommenting `auth` section:
+
+```javascript
+module.exports = {
+  // ...
+  auth: {
+    user: 'admin',
+    pass: 'mysecretpass'
+  }
+};
+```
+
+It will secure both: the UI and the API.
+
+Additional security measures could be applied on a firewall level since the dashboard of **NodePad** is available at a dedicated port. See `appPort` parameter in `./config.js`.
