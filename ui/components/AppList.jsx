@@ -50,7 +50,7 @@ const AppList = (props) => {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>App ID</Table.HeaderCell>
-          <Table.HeaderCell>Port</Table.HeaderCell>
+          <Table.HeaderCell>Internal Port</Table.HeaderCell>
           <Table.HeaderCell>Status</Table.HeaderCell>
           <Table.HeaderCell>Memory</Table.HeaderCell>
           <Table.HeaderCell>CPU</Table.HeaderCell>

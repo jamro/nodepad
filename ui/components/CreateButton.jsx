@@ -28,7 +28,7 @@ const CreateButton = (props) => {
             <input id="app-id" placeholder='Application ID' defaultValue={appId} onChange={(e) => setAppId(e.target.value)}/>
           </Form.Field>
           <Form.Field>
-            <label>App Port</label>
+            <label>App Port (internal)</label>
             <input id="app-port" placeholder='Application Port' type="number" defaultValue={appPort} onChange={(e) => setAppPort(e.target.value)} />
           </Form.Field>
         </Form>

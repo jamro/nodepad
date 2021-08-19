@@ -33,9 +33,46 @@ Launch **NodePad**
 npm start
 ```
 
-Open **NodePad** in youur Browser:
+Open **NodePad** in your Browser:
 - User Interface: http://localhost:3333/
 - REST API: http://localhost:3333/api
+
+# Getting Started
+
+## Create the app
+
+- Open **NodePad** in your Browser (e.g. http://localhost:3333/). The port is configured in `config.js` under `appPort`.
+- Click **Create New Application** and provide necessary details:
+-- App ID: **helloworld**
+-- App Port: **3335**
+-- Click **Create** to add your new app
+- **helloworld** app should be listed on the screen with status **off-line**
+- Launch the app by clicking **Play** button. The status should change to **on-line**
+- Go to your app URL: http://helloworld.localhost:3000/. The subdomain is the App ID provided before. The port is configured in `config.js` under `proxyPort`. It should return a default hello message from your app.
+
+## Deploy the app
+
+- Create app `index.js` source file anywhere on your disk:
+  ```javascript
+    #!/usr/bin/env node
+    const http = require('http');
+
+    const port = process?.env?.port;
+
+    console.log('Starting application helloworld (port: ' + port + ')...');
+
+    http.createServer(function (request, response) {
+      console.log(`Request ${request.method} ${request.url}`);
+      const content = '<h1>Hello World</h1>' + 
+        '<p>This is a message from your new app. Congrats! It seems to work :)</p>';
+      response.end(content, 'utf-8');
+    }).listen(port);
+  ```
+- Compress `index.js` into `app.zip` file
+- Open **NodePad** in your Browser (e.g. http://localhost:3333/).
+- Click **Upload** next to **helloworld** app
+- Choose `app.zip` and upload it.
+- Go to your app URL: http://helloworld.localhost:3000/. It should return the new content
 
 # Main Features
 
