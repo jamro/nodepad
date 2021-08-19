@@ -1,7 +1,6 @@
 {
   "name": "nodepad",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
     "commit": "cz",
     "start": "node ./bin/www",
