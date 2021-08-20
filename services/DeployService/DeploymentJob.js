@@ -3,6 +3,7 @@ const winston = require('winston');
 const Busboy = require('busboy');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
+const { spawn } = require('child_process');
 
 const AdmZip = require('adm-zip');
 const { EntityNotFoundError } = require('../common/errors');
@@ -72,13 +73,12 @@ class DeploymentJob {
 
   upload(req) {
     return new Promise((resolve, reject) => {
-      this.logger.debug('uploading');
+      this.logger.debug('uploading new content...');
       this.busboy = new Busboy({ 
         headers: req.headers,
         highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
       });
       this.req = req;
-      
       
       this.busboy.on('file', (fieldname, file) => {
         this.logger.info('Writing uploaded file to ' + this.uploadFilePath);
@@ -89,6 +89,7 @@ class DeploymentJob {
           }
           this.uploadedBytes += data.length;
           this.status = 'uploading (' + bytesToSize(this.uploadedBytes) + ')';
+          this.logger.debug(this.status);
         });
         file.on('error', (err) => {
           this.onUploadError(err);
@@ -116,8 +117,9 @@ class DeploymentJob {
   }
 
   async extract() {
-    this.logger.debug('extracting');
+    this.logger.debug('extracting...');
     if(!fs.existsSync(this.uploadFilePath)) {
+      this.logger.error('nothing to extract');
       throw new EntityNotFoundError('nothing to extract');
     }
     this.status = 'extracting';
@@ -140,6 +142,7 @@ class DeploymentJob {
           return reject(err);
         }
         this.status = 'extracted';
+        this.logger.info('files extracted');
         resolve();
       });
     });
@@ -150,18 +153,49 @@ class DeploymentJob {
   }
 
   async install() { 
-    this.logger.debug('installing');
+    this.logger.info('installing...');
     if(!fs.existsSync(this.tmpPath)) {
       throw new EntityNotFoundError('nothing to install');
     }
     const binTmpPath = path.resolve(this.workspace, 'tmp-bin' + Math.round(Math.random()*0xffffff).toString(16));
     const binPath = path.resolve(this.workspace, 'bin');
     this.status = 'installing';
+
+    // install dependencies
+    const packageJsonPath = path.resolve(this.tmpPath, 'package.json');
+    if(!fs.existsSync(packageJsonPath)) {
+      this.logger.debug('No package.json found. Moving forward.');
+    } else {
+      this.logger.debug('package.json found. Installing dependencies');
+      await new Promise((resolve) => {
+        const child = spawn('npm', ['install'], {cwd: this.tmpPath});
+        
+        child.on('exit', (code, signal) => {
+          const msg = `child process exited with code ${code} and signal ${signal}`;
+          this.logger.debug(`[npm i] ${msg}`);
+          resolve();
+        });
+        
+        child.stdout.on('data', (data) => {
+          const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
+          this.logger.debug(`[npm i] ${msg}`);
+        });
+        
+        child.stderr.on('data', (data) => {
+          const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
+          this.logger.error(`[npm i] ${msg}`);
+        });
+      });
+    }
+
+    // copy to destination
+    this.logger.info('moving files to target destination');
     try {
       await fsPromises.rename(binPath, binTmpPath);
       await new Promise(resolve => setTimeout(resolve, 50));
       await fsPromises.rename(this.tmpPath, binPath);
       await fsPromises.rmdir(binTmpPath, { recursive: true });
+      this.logger.info('installation completed');
       this.stop();
     } catch(err) {
       this.logger.error(err);

@@ -4,6 +4,7 @@ const path = require('path');
 const AppLogger = require('./common/AppLogger');
 const { ValidationError, EntityNotFoundError } = require('./common/errors');
 const AbstractService = require('./common/AbstractService');
+const AppLoggerTransport = require('./common/AppLoggerTransport');
 
 class DeployService extends AbstractService {
 
@@ -50,7 +51,6 @@ class DeployService extends AbstractService {
 
   async upload(appId, req) {
     this.logger.info(`Uploading new content to '${appId}'`);
-    this.appLogger.log(appId, `Uploading new content to '${appId}'`);
     const app = fs.readdirSync(this.basePath, { withFileTypes: true })
       .filter(dir => dir.isDirectory())
       .map(dir => {
@@ -67,9 +67,13 @@ class DeployService extends AbstractService {
       this.jobMap[appId].stop();
     }
     this.jobMap[appId] = new DeploymentJob(workspace);
-    this.jobMap[appId].logger = this.logger.child({service: 'deploymmentJob', appId: appId});
+    this.jobMap[appId].logger.configure({
+      level: 'debug',
+      transports: [
+        new AppLoggerTransport(appId, this.appLogger)
+      ]
+    });
     await this.jobMap[appId].upload(req);
-    this.appLogger.log(appId, `Uploading of '${appId}' completed`);
     this.logger.info(`Uploading of '${appId}' completed`);
   }
 
@@ -78,9 +82,7 @@ class DeployService extends AbstractService {
     if(!this.jobMap[appId]) {
       throw new ValidationError(`No deployment jobs for application '${appId}'`);
     }
-    this.appLogger.log(appId, `Extracting '${appId}'...`);
     await this.jobMap[appId].extract();
-    this.appLogger.log(appId, `Content of '${appId}' extracted`);
     this.logger.info(appId, `Content of '${appId}' extracted`);
   }
 
@@ -90,9 +92,7 @@ class DeployService extends AbstractService {
       throw new ValidationError(`No deployment jobs for application '${appId}'`);
     }
 
-    this.appLogger.log(appId, `Installing '${appId}'...`);
     await this.jobMap[appId].install();
-    this.appLogger.log(appId, `Content of '${appId}' installed`);
     this.logger.info(`Content of '${appId}' installed`);
   }
 }
