@@ -4,14 +4,16 @@
 NodePad is a simple tool to manage life cycle of your NodeJs apps. It allow to easily deploy, start/stop and monitor multiple apps via web interface or REST API.
 
 Main Features:
-- [REST API](#rest-api)
-- [Web User Interface](#web-user-interface)
-- [Application Upload](#application-upload)
-- [Starting/stopping of node applications](#web-user-interface)
-- [Preview logs](#web-user-interface)
+- [Application Bundle Upload](#application-upload)
+- [Install NPM dependencies](#npm-application)
+- [Static files hosting](#static-application)
+- [Manage application life cycle](#web-user-interface)
 - [Routing](#routing)
+- [Preview logs](#web-user-interface)
 - [Authorization to NodePad API/UI](#authorization)
 - [Basic app monitoring](#web-user-interface)
+- [REST API](#rest-api)
+- [Web User Interface](#web-user-interface)
 
 Under the hood, **NodePad** runs [PM2](https://www.npmjs.com/package/pm2) as a process manager.
 
@@ -89,13 +91,13 @@ The UI is available at http://localhost:3333/ and it could be an alternative to 
 ## Application Upload
 You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. After upload, NodePad will extract all files from the bundle, and will launch the application. Several application bundles are supported:
 
-### Simple NodeJs App
+### Simple NodeJs Application
 The bundle must contain `/index.js` file that will act as a runner. After upload, NodePad will launch execute it.
 
-### NPM App
-The bundle must contain `/index.js` and `package.json` file that will act as a runner. After upload, all dependencies will be installed by calling `npm instal`. NodePad will launch the app by executing `/index.js`
+### NPM Application
+The bundle must contain `/index.js` and `package.json` file that will act as a runner. After upload, all dependencies will be installed by calling `npm install`. NodePad will launch the app by executing `/index.js`
 
-### Static App
+### Static Application
 The bundle must contain `/index.html`. All files from the bindle will be served as static content by the server.
 
 
