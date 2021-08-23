@@ -1,7 +1,7 @@
 const DeployService = require('../../services/DeployService.js');
 const fs = require('fs');
 const path = require('path');
-var MockReq = require('mock-req');
+const MockReq = require('mock-req');
 
 const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
 const APP_ID = 'app-test-009861';

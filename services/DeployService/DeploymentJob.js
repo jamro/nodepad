@@ -106,7 +106,7 @@ class DeploymentJob {
         }
         this.logger.info('Upload completed');
         this.status = 'uploaded';
-        setTimeout(resolve, 100);
+        setTimeout(() => resolve(this.uploadFilePath), 100);
       });
 
       this.busboy.on('error', (err) => {
@@ -176,7 +176,7 @@ class DeploymentJob {
       } else if (hasIndexJs) {
         this.logger.debug('Application Bundle Type: NODEJS');
       } else {
-        this.logger.warn('Unknown application type');
+        throw new Error('Unknown application type');
       }
 
       await this.copyToBin();
