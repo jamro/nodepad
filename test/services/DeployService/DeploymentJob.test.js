@@ -18,7 +18,7 @@ function createWorkspace() {
 }
 
 function clearWorkspace(path) {
-  //fs.rmdirSync(path, { recursive: true });
+  fs.rmdirSync(path, { recursive: true });
 }
 
 function createUploadRequest(filename, data) {
