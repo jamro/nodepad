@@ -87,9 +87,17 @@ The UI is available at http://localhost:3333/ and it could be an alternative to 
 ![Applicatoin list user interface](./docs/nodepad_ui.png)
 
 ## Application Upload
-You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. It has to contain `index.js` file that will act as a runner. After upload, NodePad will extract all files from the bundle, and will launch `/index.js` when starting the application.
+You can upload application bundles via [REST API](#rest-api) or [User Interface](#web-user-interface). The bundle is a ZIP file containing all application files. After upload, NodePad will extract all files from the bundle, and will launch the application. Several application bundles are supported:
 
-If the bundle contains `/package.json`, all dependencies will be installed before launching (by calling `npm install`).
+### Simple NodeJs App
+The bundle must contain `/index.js` file that will act as a runner. After upload, NodePad will launch execute it.
+
+### NPM App
+The bundle must contain `/index.js` and `package.json` file that will act as a runner. After upload, all dependencies will be installed by calling `npm instal`. NodePad will launch the app by executing `/index.js`
+
+### Static App
+The bundle must contain `/index.html`. All files from the bindle will be served as static content by the server.
+
 
 ## Routing
 **NodePad** acts as a reverse proxy and route traffic to applications basing on domain names. It follows a pattern of `[appId].[rootDomain]`. For example, **NodePad** will redirect all requests to `webapp.example.com` to an application with ID `webapp`. Routing work for both: HTTP requests and WebSockets.

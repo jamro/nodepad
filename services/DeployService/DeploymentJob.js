@@ -4,6 +4,7 @@ const Busboy = require('busboy');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
 const { spawn } = require('child_process');
+const ncp = require('ncp').ncp;
 
 const AdmZip = require('adm-zip');
 const { EntityNotFoundError } = require('../common/errors');
@@ -157,54 +158,122 @@ class DeploymentJob {
     if(!fs.existsSync(this.tmpPath)) {
       throw new EntityNotFoundError('nothing to install');
     }
-    const binTmpPath = path.resolve(this.workspace, 'tmp-bin' + Math.round(Math.random()*0xffffff).toString(16));
-    const binPath = path.resolve(this.workspace, 'bin');
     this.status = 'installing';
 
-    // install dependencies
-    const packageJsonPath = path.resolve(this.tmpPath, 'package.json');
-    if(!fs.existsSync(packageJsonPath)) {
-      this.logger.debug('No package.json found. Moving forward.');
-    } else {
-      this.logger.debug('package.json found. Installing dependencies');
-      await new Promise((resolve) => {
-        const child = spawn('npm', ['install'], {cwd: this.tmpPath});
-        
-        child.on('exit', (code, signal) => {
-          const msg = `child process exited with code ${code} and signal ${signal}`;
-          this.logger.debug(`[npm i] ${msg}`);
-          resolve();
-        });
-        
-        child.stdout.on('data', (data) => {
-          const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
-          this.logger.debug(`[npm i] ${msg}`);
-        });
-        
-        child.stderr.on('data', (data) => {
-          const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
-          this.logger.error(`[npm i] ${msg}`);
-        });
-      });
-    }
+    const hasPackageJson = fs.existsSync(path.resolve(this.tmpPath, 'package.json'));
+    const hasIndexHtml = fs.existsSync(path.resolve(this.tmpPath, 'index.html'));
+    const hasIndexJs = fs.existsSync(path.resolve(this.tmpPath, 'index.js'));
 
-    // copy to destination
-    this.logger.info('moving files to target destination');
     try {
-      await fsPromises.rename(binPath, binTmpPath);
-      await new Promise(resolve => setTimeout(resolve, 50));
-      await fsPromises.rename(this.tmpPath, binPath);
-      await fsPromises.rmdir(binTmpPath, { recursive: true });
+      if(hasIndexHtml) {
+        this.logger.debug('Application Bundle Type: STATIC');
+        this.logger.debug('index.html found. Installing static server');
+        await this.hostStatic();
+      } else if(hasPackageJson && hasIndexJs) {
+        this.logger.debug('Application Bundle Type: NPM');
+        this.logger.debug('package.json found. Installing dependencies');
+        await this.installPackageJson();
+      } else if (hasIndexJs) {
+        this.logger.debug('Application Bundle Type: NODEJS');
+      } else {
+        this.logger.warn('Unknown application type');
+      }
+
+      await this.copyToBin();
       this.logger.info('installation completed');
+      this.status = 'deployed';
       this.stop();
     } catch(err) {
       this.logger.error(err);
       this.status = 'install error';
       return;
     }
-    this.status = 'deployed';
+    
   }
-  
+
+  async installPackageJson() {
+    await new Promise((resolve) => {
+      const child = spawn('npm', ['install'], {cwd: this.tmpPath});
+      
+      child.on('exit', (code, signal) => {
+        const msg = `child process exited with code ${code} and signal ${signal}`;
+        this.logger.debug(`[npm i] ${msg}`);
+        resolve();
+      });
+      
+      child.stdout.on('data', (data) => {
+        const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
+        this.logger.debug(`[npm i] ${msg}`);
+      });
+      
+      child.stderr.on('data', (data) => {
+        const msg = data.toString('utf8').replace(/(\n$|^\n)/g, '');
+        this.logger.error(`[npm i] ${msg}`);
+      });
+    });
+  }
+
+  async copyToBin() { 
+    this.logger.info('moving files to target destination');
+
+    const binTmpPath = path.resolve(this.workspace, 'tmp-bin' + Math.round(Math.random()*0xffffff).toString(16));
+    const binPath = path.resolve(this.workspace, 'bin');
+
+    await fsPromises.rename(binPath, binTmpPath);
+    await new Promise(resolve => setTimeout(resolve, 50));
+    await fsPromises.rename(this.tmpPath, binPath);
+    await fsPromises.rmdir(binTmpPath, { recursive: true });
+  }
+
+  async hostStatic(){
+    const wwwPath = path.resolve(this.tmpPath, 'www');
+    const indexPath = path.resolve(this.tmpPath, 'index.js');
+    const wwwTmpPath = path.resolve(this.workspace, 'tmp-www' + Math.round(Math.random()*0xffffff).toString(16));
+    this.logger.info('moving public files to www location');
+    fs.mkdirSync(wwwTmpPath);
+
+    await new Promise((resolve, reject) => {
+      ncp(this.tmpPath, wwwTmpPath, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+    fs.mkdirSync(wwwPath);
+    await new Promise((resolve, reject) => {
+      ncp(wwwTmpPath, wwwPath, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+
+    await fsPromises.rmdir(wwwTmpPath, { recursive: true });
+
+    this.logger.info('adding static server');
+    fs.writeFileSync(
+      indexPath,
+      `#!/usr/bin/env node
+      const StaticServer = require('static-server');
+      const path = require('path');
+      const port = process?.env?.port;
+
+      var server = new StaticServer({
+        rootPath: path.resolve(__dirname, 'www'),
+        port: port
+      });
+      
+      server.start(function () {
+        console.log('Static server listening on', server.port);
+      })
+      
+      server.on('response', function (req, res) {
+        console.log(req.method + ' ' + req.path + ' ' + res.status)
+      });
+    `);
+  }
 }
 
 module.exports = DeploymentJob;

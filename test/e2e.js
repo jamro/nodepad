@@ -34,6 +34,7 @@ const APP_PORT = 39411;
 const BIN_DATA_PATH = path.resolve(__dirname, 'content.zip');
 const WS_BIN_DATA_PATH = path.resolve(__dirname, 'content-ws.zip');
 const PACKAGE_BIN_DATA_PATH = path.resolve(__dirname, 'content-package.zip');
+const STATIC_BIN_DATA_PATH = path.resolve(__dirname, 'content-static.zip');
 
 describe('API End-to-end', function() { // ------------------------------------------------
 
@@ -306,6 +307,45 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response2).to.have.property('data');
       expect(response2.data).to.match(/Lorem Ipsum/);
       expect(response2.data).not.to.be.equal(response1.data);
+    });
+
+
+    it('should handle static content', async () => {
+      let response;
+
+      // create  app
+      response = await axios.post(
+        `http://localhost:${NODEPAD_PORT}/api/apps/`,
+        {
+          id: APP_ID,
+          port: APP_PORT,
+          status: 'online'
+        }
+      );
+      expect(response).to.have.property('status', 201);
+
+      //upload new content
+      const form = new FormData();
+      form.append('bin', fs.createReadStream(STATIC_BIN_DATA_PATH));
+      response = await axios.post(
+        `http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/content/zip`,
+        form,
+        { headers: form.getHeaders() }
+      );
+      expect(response).to.have.property('status', 201);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // check whether the app responds
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      response = await axios.get(`http://localhost:${PROXY_PORT}`);
+      expect(response).to.have.property('status', 200);
+      expect(response).to.have.property('data');
+      expect(response.data).to.match(/This is a static page/);
+
+      response = await axios.get(`http://localhost:${PROXY_PORT}/foo/bar.html`);
+      expect(response).to.have.property('status', 200);
+      expect(response).to.have.property('data');
+      expect(response.data).to.match(/Foo Bar/);
     });
   });
 

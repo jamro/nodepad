@@ -241,8 +241,12 @@ class AppService extends AbstractService {
     let app;
     app = await this.find(appId);
     this.appLogger.log(appId, `Starting application '${appId}'...`);
+    const appRunnerPath = path.join(this.basePath, `${app.id}.${app.port}`, 'bin', 'index.js');
+    if(!fs.existsSync(appRunnerPath)) {
+      throw new ProcessManagerError('Unable to find app script at ' + appRunnerPath);
+    }
     const options = {
-      script: path.join(this.basePath, `${app.id}.${app.port}`, 'bin', 'index.js'),
+      script: appRunnerPath,
       name: app.id,
       cwd: path.join(this.basePath, `${app.id}.${app.port}`, 'bin'),
       autorestart: true,
