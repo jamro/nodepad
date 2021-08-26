@@ -4,10 +4,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './ui/index.js',
+  entry: './src/ui/index.js',
   output: {
     filename: 'bundle.[fullhash].js',
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'src', 'public'),
   },
   devtool: 'source-map',
   module: {
@@ -42,13 +42,13 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'NodePad',
-      template: 'ui/index.html'
+      template: 'src/ui/index.html'
     }),
     new CopyPlugin({
       patterns: [
         { 
-          from: path.resolve(__dirname, 'ui', 'static'), 
-          to: path.resolve(__dirname, 'public'), 
+          from: path.resolve(__dirname, 'src', 'ui', 'static'), 
+          to: path.resolve(__dirname, 'src', 'public'), 
         },
       ],
     })

@@ -85,7 +85,7 @@ function buildApp(app, config, services) {
   const openApiConfig = {
     app,
     apiDoc: apiDocCreate(config),
-    paths: './api/paths',
+    paths: path.resolve(__dirname, 'api', 'paths'),
     docsPath: '/swagger.json',
     dependencies: services,
     errorTransformer: function(err) {

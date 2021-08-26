@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const appCreate = require('../app').create;
+const appCreate = require('../src/app').create;
 const http = require('http');
 const path = require('path');
 

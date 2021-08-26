@@ -1,4 +1,4 @@
-const DeploymentJob = require('../../../services/DeployService/DeploymentJob.js');
+const DeploymentJob = require('../../../src/services/DeployService/DeploymentJob.js');
 const fs = require('fs');
 const path = require('path');
 const MockReq = require('mock-req');

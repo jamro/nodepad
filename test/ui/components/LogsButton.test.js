@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import LogsButton from '../../../ui/components/LogsButton.jsx';
+import LogsButton from '../../../src/ui/components/LogsButton.jsx';
 
 describe('LogButton', function() { // ------------------------------------------------
 

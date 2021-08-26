@@ -1,4 +1,4 @@
-const AuthService = require('../../services/AuthService.js');
+const AuthService = require('../../src/services/AuthService.js');
 
 function basicAuth(user, pass) {
   return 'Basic ' + Buffer.from(user + ':' + pass).toString('base64');

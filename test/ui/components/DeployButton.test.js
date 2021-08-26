@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import DeployButton from '../../../ui/components/DeployButton.jsx';
+import DeployButton from '../../../src/ui/components/DeployButton.jsx';
 
 describe('DeployButton', function() { // ------------------------------------------------
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import StatusToggle from '../../../ui/components/StatusToggle.jsx';
+import StatusToggle from '../../../src/ui/components/StatusToggle.jsx';
 
 describe('StatusToggle', function() { // ------------------------------------------------
 

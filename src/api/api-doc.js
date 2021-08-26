@@ -1,4 +1,4 @@
-const packageInfo = require('../package.json');
+const packageInfo = require('../../package.json');
 
 function create(config) {
   const appConfig = config || {};

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import CreateButton from '../../../ui/components/CreateButton.jsx';
+import CreateButton from '../../../src/ui/components/CreateButton.jsx';
 
 describe('CreateButton', function() { // ------------------------------------------------
 

@@ -1,4 +1,4 @@
-const AppService = require('../../services/AppService.js');
+const AppService = require('../../src/services/AppService.js');
 const path = require('path');
 const fs = require('fs');
 

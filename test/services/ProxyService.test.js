@@ -1,4 +1,4 @@
-const ProxyService = require('../../services/ProxyService.js');
+const ProxyService = require('../../src/services/ProxyService.js');
 
 class AppServiceMock {
   constructor() {

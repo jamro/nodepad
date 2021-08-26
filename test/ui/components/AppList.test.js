@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { Table, TableHeader } from 'semantic-ui-react';
-import AppList from '../../../ui/components/AppList.jsx';
-import DeployButton from '../../../ui/components/DeployButton.jsx';
-import StatusToggle from '../../../ui/components/StatusToggle.jsx';
+import AppList from '../../../src/ui/components/AppList.jsx';
+import DeployButton from '../../../src/ui/components/DeployButton.jsx';
+import StatusToggle from '../../../src/ui/components/StatusToggle.jsx';
 
 describe('AppList', function() { // ------------------------------------------------
 

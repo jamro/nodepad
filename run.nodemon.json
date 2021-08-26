@@ -1,9 +1,8 @@
 {
   "verbose": true,
   "watch": [
-    "api/*",
-    "services/*",
-    "app.js",
-    "config.js"
+    "src/api/*",
+    "src/services/*",
+    "src/*"
   ]
 }

@@ -8,7 +8,7 @@ module.exports = {
     }
   },
   'ignorePatterns': [
-    'public/*',
+    'src/public/*',
     'test/*'
   ],
   'extends': [
