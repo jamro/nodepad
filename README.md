@@ -220,6 +220,8 @@ It is possible to run the dashboard and the proxy in separate processes by:
   ./bin/nodepad --module=dashboard
   ./bin/nodepad --module=proxy
 ```
+# Architecture
+![System Architecture](./docs/arch.png)
 
 # Troubleshooting
 

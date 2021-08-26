@@ -1,0 +1,20 @@
+@startuml
+
+title Component Diagram
+
+Actor Admin
+Actor User1
+Actor User2
+[proxy] as proxy << NodePad >>
+[dashboard] as dashbard << NodePad >>
+
+User1 -> [proxy] : app001.example.com:3000
+[proxy] <- User2 : app002.example.com:3000
+[proxy] --> [app001]: localhost:8881
+[proxy] --> [app002] : localhost:8882
+[app001] --> [PM2]
+[app002] --> [PM2]
+Admin -> [dashbard] : example.com:3000
+[dashbard] -> [PM2]
+
+@enduml
