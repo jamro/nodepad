@@ -1,53 +1,15 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const expressOpenApi = require('express-openapi');
 const swaggerUi = require('swagger-ui-express');
 const pm2 = require('pm2');
-const winston = require('winston');
-const expressWinston = require('express-winston');
 const apiDocCreate = require('./api/api-doc').create;
 const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
 const AuthService = require('./services/AuthService');
 const { AuthError } = require('./services/common/errors');
-
-
-function createBase(config) {
-  const app = express();
-
-  app.logger = winston.createLogger({
-    level: config.logLevel || 'info',
-    transports: [
-      new winston.transports.Console()
-    ],
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.errors(),
-      winston.format.simple(),
-    )
-  }).child({service: 'core'});
-
-  app.use(expressWinston.logger({
-    winstonInstance: app.logger.child({service: 'web'}),
-    meta: false,
-    msg: 'HTTP  {{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}',
-    expressFormat: true,
-  }));
-
-  // view engine setup
-  app.logger.debug('Setting views');
-  app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'ejs');
-  
-  app.logger.debug('Configure ExpressJS middleware');
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(cookieParser());
-
-  return app;
-}
+const { createAppBase } = require('./appBuilder')
 
 function finalizeApp(app, services) {
   app.logger.debug('Attach error handlers');
@@ -177,14 +139,9 @@ function buildApp(app, config, services) {
   app.use('/', [authMiddleware, express.static(path.join(__dirname, 'public'))]);
 }
 
-function buildProxy(app, config, services) {
-  app.use('/', services.proxyService.getProxy());
-}
-
-function create(config) {
+function createDashboard(config) {
   const appConfig = config || {};
-  const app = createBase(appConfig);
-  const proxy = createBase(appConfig);
+  const app = createAppBase(appConfig)
 
   app.logger.info('Configuring NodePad...');
   
@@ -204,11 +161,9 @@ function create(config) {
   services.logger = app.logger.child({ service: 'api' });
   
   buildApp(app, appConfig, services);
-  buildProxy(proxy, appConfig, services);
-
   finalizeApp(app, services);  
 
-  return { app, proxy };
+  return app;
 }
 
-module.exports = { create };
+module.exports = { createDashboard };

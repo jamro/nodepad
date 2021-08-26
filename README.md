@@ -45,7 +45,7 @@ Open **NodePad** in your Browser:
 
 ## Create the app
 
-- Open **NodePad** in your Browser (e.g. http://localhost:3333/). The port is configured in `config.js` under `appPort`.
+- Open **NodePad** in your Browser (e.g. http://localhost:3333/). The port is configured in `config.js` under `dashboardPort`.
 - Click **Create New Application** and provide necessary details:
 -- App ID: **helloworld**
 -- App Port: **3335**
@@ -177,7 +177,7 @@ module.exports = {
 
 It will secure both: the UI and the API.
 
-Additional security measures could be applied on a firewall level since the dashboard of **NodePad** is available at a dedicated port. See `appPort` parameter in `./config.js`.
+Additional security measures could be applied on a firewall level since the dashboard of **NodePad** is available at a dedicated port. See `dashboardPort` parameter in `./config.js`.
 
 # Troubleshooting
 

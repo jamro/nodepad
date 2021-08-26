@@ -5,16 +5,19 @@ services:
       dockerfile: test/proxy-server/containers/nodepad/Dockerfile
       context: ../../
     ports:
-      - "25193:25193"
+      - "20181:20181"
+      - "20182:20182"
   haproxy:
     build: ./containers/haproxy
     ports:
-      - "25101:25101"
+      - "20281:20281"
+      - "20282:20282"
     links:
       - nodepad
   nginx:
     build: ./containers/nginx
     ports:
-      - "25102:25102"
+      - "20381:20381"
+      - "20382:20382"
     links:
       - nodepad

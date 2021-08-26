@@ -4,9 +4,10 @@
  * Module dependencies.
  */
 
-const appCreate = require('../src/app').create;
 const http = require('http');
 const path = require('path');
+const { createDashboard } = require('../src/dashboard');
+const { createProxy } = require('../src/proxy');
 
 /**
  * Get port from environment and store in Express.
@@ -15,53 +16,54 @@ const path = require('path');
 const externalConfig = (process.argv && process.argv[2]) ? path.resolve(process.argv[2]) : null;
 
 const config = require(externalConfig || '../config.js');
-const {app, proxy} = appCreate(config);
-var appPort = normalizePort(config.appPort || 3333);
+const dashboard = createDashboard(config);
+const proxy = createProxy(config);
+var dashboardPort = normalizePort(config.dashboardPort || 3333);
 var proxyPort = normalizePort(config.proxyPort || 3000);
-app.set('port', appPort);
+dashboard.set('port', dashboardPort);
 proxy.set('port', proxyPort);
 
 /**
  * Create HTTP server.
  */
-app.logger.info('Starting web servers...')
-var appServer = http.createServer(app);
+ dashboard.logger.info('Starting web servers...')
+var dashboardServer = http.createServer(dashboard);
 var proxyServer = http.createServer(proxy);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-appServer.listen(appPort);
-appServer.on('error', (error) => {
+dashboardServer.listen(dashboardPort);
+dashboardServer.on('error', (error) => {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
   var bind = typeof port === 'string'
-    ? 'Pipe ' + appPort
-    : 'Port ' + appPort;
+    ? 'Pipe ' + dashboardPort
+    : 'Port ' + dashboardPort;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      app.logger.error(bind + ' requires elevated privileges');
+      dashboard.logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      app.logger.error(bind + ' is already in use');
+      dashboard.logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
       throw error;
   }
 });
-appServer.on('listening', () => {
-  var addr = appServer.address();
+dashboardServer.on('listening', () => {
+  var addr = dashboardServer.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  app.logger.info('NodePad (APP) listening on ' + bind);
+  dashboard.logger.info('NodePad (DASHBOARD) listening on ' + bind);
 });
 
 proxyServer.listen(proxyPort);
@@ -77,11 +79,11 @@ proxyServer.on('error', (error) => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      app.logger.error(bind + ' requires elevated privileges');
+      proxy.logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      app.logger.error(bind + ' is already in use');
+      proxy.logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -93,7 +95,7 @@ proxyServer.on('listening', () => {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  app.logger.info('NodePad (PROXY) listening on ' + bind);
+  proxy.logger.info('NodePad (PROXY) listening on ' + bind);
 });
 
 /**

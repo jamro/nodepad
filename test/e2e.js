@@ -3,7 +3,8 @@ const http = require('http');
 const chaiAsPromised = require('chai-as-promised');
 const path = require('path');
 const fs = require('fs');
-const appCreate = require('../src/app').create;
+const { createDashboard } = require('../src/dashboard');
+const { createProxy } = require('../src/proxy');
 const axios = require('axios');
 const pm2 = require('pm2');
 const FormData = require('form-data');
@@ -53,17 +54,17 @@ describe('API End-to-end', function() { // -------------------------------------
 
       e2eWorkspace = createWorkspace();
 
-      const appSet = appCreate({
-        appPort: NODEPAD_PORT,
+      const appConfig = {
+        dashboardPort: NODEPAD_PORT,
         proxyPort: PROXY_PORT,
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
         defaultApp: APP_ID,
         defaultScheme: 'http',
         rootDomain: `localhost`
-      });
-      app = appSet.app;
-      proxy = appSet.proxy;
+      };
+      app = createDashboard(appConfig);
+      proxy = createProxy(appConfig);
 
       app.set('port', NODEPAD_PORT);
       appServer = http.createServer(app);
@@ -363,8 +364,8 @@ describe('API End-to-end', function() { // -------------------------------------
 
       e2eWorkspace = createWorkspace();
 
-      const appSet = appCreate({
-        appPort: NODEPAD_PORT,
+      const appConfig = {
+        dashboardPort: NODEPAD_PORT,
         proxyPort: PROXY_PORT,
         appRepoPath: e2eWorkspace,
         logLevel: 'silent',
@@ -372,10 +373,10 @@ describe('API End-to-end', function() { // -------------------------------------
           user: 'admin731',
           pass: 'secret731'
         }
-      });
+      };
 
-      app = appSet.app;
-      proxy = appSet.proxy;
+      app = createDashboard(appConfig);
+      proxy = createProxy(appConfig);
 
       app.set('port', NODEPAD_PORT);
       appServer = http.createServer(app);

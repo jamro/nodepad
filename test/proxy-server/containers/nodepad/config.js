@@ -1,10 +1,11 @@
 const path = require('path');
 
 module.exports = {
-  port: 25193,
+  dashboardPort: 20181,
+  proxyPort: 20182,
   logLevel: 'debug',
   appRepoPath: path.resolve(__dirname, 'repo'),
-  defaultApp: 'webapp',
+  defaultApp: 'testapp',
   rootDomain: 'localhost',
   defaultScheme: 'http'
 };
