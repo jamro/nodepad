@@ -14,6 +14,7 @@ Main Features:
 - [Basic app monitoring](#web-user-interface)
 - [REST API](#rest-api)
 - [Web User Interface](#web-user-interface)
+- [Command Line Interface](#command-line-interface)
 
 Under the hood, **NodePad** runs [PM2](https://www.npmjs.com/package/pm2) as a process manager.
 
@@ -124,8 +125,24 @@ events {
 
 http {
   server { 
+    listen 81;
+    server_name ndoepad_dashboard;
+    
+    location / {
+      proxy_http_version 1.1;
+      proxy_pass http://localhost:3333;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_cache_bypass $http_upgrade;
+      proxy_redirect off;
+    }
+  }
+
+  server { 
     listen 80;
-    server_name frontend;
+    server_name ndoepad_proxy;
     
     location / {
       proxy_http_version 1.1;
@@ -150,16 +167,25 @@ defaults
 	timeout server          30s
 	timeout connect         30s
 
-frontend frontend
+frontend frontend_dashboard
+	bind 0.0.0.0:81
+  mode http
+	default_backend backend_dashboard
+
+frontend frontend_proxy
 	bind 0.0.0.0:80
   mode http
-	default_backend backend
+	default_backend backend_proxy
 
-backend backend
+backend backend_dashboard
 	mode http
   option forwardfor
-	server upstream localhost:3000
+	server upstream nodepad:3333
 
+backend backend_proxy
+	mode http
+  option forwardfor
+	server upstream nodepad:3000
 ```
 
 ## Authorization
@@ -178,6 +204,22 @@ module.exports = {
 It will secure both: the UI and the API.
 
 Additional security measures could be applied on a firewall level since the dashboard of **NodePad** is available at a dedicated port. See `dashboardPort` parameter in `./config.js`.
+
+## Command Line Interface
+Nodepad can be controlled over command line. The simplest way to start it is:
+```bash
+  ./bin/nodepad
+```
+The configuration file can be altered by:
+```bash
+  ./bin/nodepad --config /path/to/your/config.js
+```
+
+It is possible to run the dashboard and the proxy in separate processes by:
+```bash
+  ./bin/nodepad --module=dashboard
+  ./bin/nodepad --module=proxy
+```
 
 # Troubleshooting
 

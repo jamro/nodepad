@@ -1,0 +1,163 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+const yargs = require('yargs');
+const http = require('http');
+const path = require('path');
+const { createDashboard } = require('../src/dashboard');
+const { createProxy } = require('../src/proxy');
+
+/**
+ * get process args
+ */
+const argv = yargs
+  .option('module', {
+    alias: 'm',
+    description: 'Modules to run. Allows starting each module in a separate process',
+    default: 'all',
+    choices: ['all', 'dashboard', 'proxy']
+  })
+  .option('config', {
+    alias: 'c',
+    description: 'Path to configuration file',
+    default: path.resolve(__dirname, '..', 'config.js'),
+    type: 'string'
+  })
+  .argv;
+
+let proxyEnabled = false;
+let dashboardEnabled = false;
+switch(argv.module) {
+  case 'all':
+    proxyEnabled=true;
+    dashboardEnabled=true;
+    break;
+  case 'dashboard':
+    dashboardEnabled=true;
+    break;
+  case 'proxy':
+    proxyEnabled=true;
+    break;
+}
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+const config = require(argv.config);
+
+if(dashboardEnabled) {
+  /**
+   * Create HTTP server.
+   */
+  const dashboard = createDashboard(config);
+  var dashboardPort = normalizePort(config.dashboardPort || 3333);
+  dashboard.set('port', dashboardPort);
+  dashboard.logger.info('Configuration file: ' + argv.config)
+  dashboard.logger.info('Starting dashboard server...')
+  var dashboardServer = http.createServer(dashboard);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+  dashboardServer.listen(dashboardPort);
+  dashboardServer.on('error', (error) => {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + dashboardPort
+      : 'Port ' + dashboardPort;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        dashboard.logger.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        dashboard.logger.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  });
+  dashboardServer.on('listening', () => {
+    var addr = dashboardServer.address();
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    dashboard.logger.info('NodePad (DASHBOARD) listening on ' + bind);
+  });
+}
+
+if(proxyEnabled) {
+  /**
+   * Create HTTP server.
+   */
+  const proxy = createProxy(config);
+  var proxyPort = normalizePort(config.proxyPort || 3000);
+  proxy.set('port', proxyPort);
+  proxy.logger.info('Starting proxy server...')
+  proxy.logger.info('Configuration file: ' + argv.config)
+  var proxyServer = http.createServer(proxy);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+  proxyServer.listen(proxyPort);
+  proxyServer.on('error', (error) => {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + proxyPort
+      : 'Port ' + proxyPort;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        proxy.logger.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        proxy.logger.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  });
+  proxyServer.on('listening', () => {
+    var addr = proxyServer.address();
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    proxy.logger.info('NodePad (PROXY) listening on ' + bind);
+  });
+}
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}

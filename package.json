@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "scripts": {
     "commit": "cz",
-    "start": "node ./bin/www",
+    "start": "node ./bin/nodepad",
     "watch": "concurrently --kill-others 'npm:watch-server' 'npm:watch-ui'",
     "watch-server": "nodemon --config run.nodemon.json --exec \"npm run start\"",
     "watch-ui": "webpack --watch --progress --config webpack.config.js --mode=development",
@@ -40,7 +40,8 @@
     "static-server": "^2.2.1",
     "swagger-ui-express": "^4.1.6",
     "websocket": "^1.0.34",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "yargs": "^17.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

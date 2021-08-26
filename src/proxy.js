@@ -1,15 +1,8 @@
-const express = require('express');
 const path = require('path');
-const expressOpenApi = require('express-openapi');
-const swaggerUi = require('swagger-ui-express');
 const pm2 = require('pm2');
-const apiDocCreate = require('./api/api-doc').create;
 const AppService = require('./services/AppService');
 const ProxyService = require('./services/ProxyService');
-const DeployService = require('./services/DeployService');
-const AuthService = require('./services/AuthService');
-const { AuthError } = require('./services/common/errors');
-const { createAppBase } = require('./appBuilder')
+const { createAppBase } = require('./appBuilder');
 
 function createProxy(config) {
   const appConfig = config || {};

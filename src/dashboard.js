@@ -9,7 +9,7 @@ const ProxyService = require('./services/ProxyService');
 const DeployService = require('./services/DeployService');
 const AuthService = require('./services/AuthService');
 const { AuthError } = require('./services/common/errors');
-const { createAppBase } = require('./appBuilder')
+const { createAppBase } = require('./appBuilder');
 
 function finalizeApp(app, services) {
   app.logger.debug('Attach error handlers');
@@ -141,7 +141,7 @@ function buildApp(app, config, services) {
 
 function createDashboard(config) {
   const appConfig = config || {};
-  const app = createAppBase(appConfig)
+  const app = createAppBase(appConfig);
 
   app.logger.info('Configuring NodePad...');
   
