@@ -14,7 +14,7 @@ User1 -> [proxy] : app001.example.com:3000
 [proxy] --> [app002] : localhost:8882
 [app001] --> [PM2]
 [app002] --> [PM2]
-Admin -> [dashbard] : example.com:3000
+Admin -> [dashbard] : example.com:3333
 [dashbard] -> [PM2]
 
 @enduml
