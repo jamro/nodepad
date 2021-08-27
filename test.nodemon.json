@@ -3,7 +3,7 @@
   "watch": [
     "src/api/*",
     "src/services/*",
-    "src/test/*",
+    "test/*",
     "src/*"
   ]
 }

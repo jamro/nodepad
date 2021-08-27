@@ -328,5 +328,44 @@ describe('AppService', function() { // -----------------------------------------
     expect(logs[0]).to.be.match(/message #1 32452/);
     expect(logs[1]).to.be.match(/message #2 09231/);
   });
+
+  it('should autostart', async function() {
+    const pm2 = new PM2Mock();
+    const initAppService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    await initAppService.create('keep-working', 8870);
+    await initAppService.create('keep-stopped', 8871);
+    await initAppService.create('stop-working', 8872);
+    await initAppService.create('start-working', 8873);
+    await initAppService.start('keep-working');
+    await initAppService.start('start-working');
+    await initAppService.start('keep-stopped');
+    await initAppService.stop('keep-stopped');
+    pm2.start.resetHistory();
+    pm2.delete.resetHistory();
+    pm2.listOutput = [
+      {
+        name: 'keep-working',
+        pm2_env: {
+          status: 'online'
+        }
+      },
+      {
+        name: 'stop-working',
+        pm2_env: {
+          status: 'online'
+        }
+      }
+    ];
+
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    await appService.autostart();
+
+    expect(pm2.start.callCount).to.be.equal(1);
+    expect(pm2.delete.callCount).to.be.equal(1);
+
+    expect(pm2.start.getCalls()[0].args[0].name).to.be.equal('start-working')
+    expect(pm2.delete.getCalls()[0].args[0]).to.be.equal('stop-working')
+    
+  });
   
 });

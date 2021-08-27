@@ -258,6 +258,7 @@ class AppService extends AbstractService {
     await this.pm2connect();
     try {
       await this.pm2start(options);
+      fs.closeSync(fs.openSync(path.join(this.basePath, `${app.id}.${app.port}`, '.autostart'), 'w'));
     } finally {
       this.pm2disconnect();
     }
@@ -267,12 +268,16 @@ class AppService extends AbstractService {
 
   async stop(appId) {
     this.logger.info(`Stopping application ${appId}`);
-    await this.find(appId);
+    const app = await this.find(appId);
     this.appLogger.log(appId, `Stopping application '${appId}'...`);
 
     await this.pm2connect();
     try {
       await this.pm2delete(appId);
+      const autostartPath = path.join(this.basePath, `${app.id}.${app.port}`, '.autostart');
+      if(fs.existsSync(autostartPath)) {
+        fs.unlinkSync(autostartPath);
+      }
     } finally {
       this.pm2disconnect();
     }
@@ -293,6 +298,22 @@ class AppService extends AbstractService {
       this.pm2disconnect();
     }
     this.logger.info(`Application ${appId} reloaded`);
+  }
+
+  async autostart() {
+    const apps = (await this.read()).map(app => ({
+      ...app,
+      autostart: fs.existsSync(path.resolve(this.basePath, `${app.id}.${app.port}`, '.autostart'))
+    }));
+    for(let i=0; i < apps.length; i++) {
+      if(apps[i].autostart && apps[i].status !== 'online') {
+        this.logger.info(`Restoring "${apps[i].id}" to online state`);
+        await this.start(apps[i].id);
+      } else if(!apps[i].autostart && apps[i].status === 'online') {
+        this.logger.info(`Restoring "${apps[i].id}" to offline state`);
+        await this.stop(apps[i].id);
+      }
+    }
   }
 
   async getLogs(appId, lines) {

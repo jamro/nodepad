@@ -42,13 +42,13 @@ describe('API End-to-end', function() { // -------------------------------------
 
   describe('Auth disabled', function() {
 
+    this.timeout(10000);
+
     let e2eWorkspace;
     let appServer;
     let proxyServer;
     let app;
     let proxy;
-
-    this.timeout(10000);
 
     beforeEach(async function() {
 
@@ -214,7 +214,7 @@ describe('API End-to-end', function() { // -------------------------------------
       expect(response).to.have.property('data');
       expect(response.data).to.match(/Hello from TestApp/);
 
-    });
+    }).timeout(10000);
 
     it('should handle web sockets', async () => {
       let response;
@@ -242,7 +242,7 @@ describe('API End-to-end', function() { // -------------------------------------
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // check whether the app responds
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       response = await axios.get(`http://localhost:${PROXY_PORT}`);
       expect(response).to.have.property('status', 200);
       expect(response).to.have.property('data');
@@ -270,7 +270,7 @@ describe('API End-to-end', function() { // -------------------------------------
 
       expect(response).to.be.equal('Echo: MSG-882629102')
 
-    });
+    }).timeout(10000);
 
     it('should handle content with package.json', async () => {
       let response;
@@ -298,7 +298,7 @@ describe('API End-to-end', function() { // -------------------------------------
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // check whether the app responds
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       let response1 = await axios.get(`http://localhost:${PROXY_PORT}`);
       let response2 = await axios.get(`http://localhost:${PROXY_PORT}`);
       expect(response1).to.have.property('status', 200);

@@ -17,6 +17,7 @@ function createProxy(config) {
   const rootDomain = appConfig.rootDomain || 'localhost:3000';
   services.appService = new AppService(appRepoPath, defaultScheme, rootDomain, appConfig.proxyPort, pm2);
   services.appService.logger = app.logger.child({ service: 'appService' });
+  services.appService.autostart();
   services.proxyService = new ProxyService(services.appService, rootDomain, appConfig.defaultApp);
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
   
