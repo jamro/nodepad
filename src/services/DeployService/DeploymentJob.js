@@ -169,6 +169,7 @@ class DeploymentJob {
         this.logger.debug('Application Bundle Type: STATIC');
         this.logger.debug('index.html found. Installing static server');
         await this.hostStatic();
+        await this.installPackageJson();
       } else if(hasPackageJson && hasIndexJs) {
         this.logger.debug('Application Bundle Type: NPM');
         this.logger.debug('package.json found. Installing dependencies');
@@ -228,18 +229,13 @@ class DeploymentJob {
   async hostStatic(){
     const wwwPath = path.resolve(this.tmpPath, 'www');
     const indexPath = path.resolve(this.tmpPath, 'index.js');
+    const packageJsonPath = path.resolve(this.tmpPath, 'package.json');
     const wwwTmpPath = path.resolve(this.workspace, 'tmp-www' + Math.round(Math.random()*0xffffff).toString(16));
     this.logger.info('moving public files to www location');
-    fs.mkdirSync(wwwTmpPath);
+    
+    fs.renameSync(this.tmpPath, wwwTmpPath);
+    fs.mkdirSync(this.tmpPath);
 
-    await new Promise((resolve, reject) => {
-      ncp(this.tmpPath, wwwTmpPath, (err) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    });
     fs.mkdirSync(wwwPath);
     await new Promise((resolve, reject) => {
       ncp(wwwTmpPath, wwwPath, (err) => {
@@ -273,6 +269,18 @@ class DeploymentJob {
         console.log(req.method + ' ' + req.path + ' ' + res.status)
       });
     `);
+    
+    fs.writeFileSync(
+      packageJsonPath,
+      `{
+        "name": "nodepad-static-wrapper",
+        "description": "",
+        "version": "1.0.0",
+        "dependencies": {
+          "static-server": "latest"
+        },
+        "devDependencies": {}
+      }`);
   }
 }
 

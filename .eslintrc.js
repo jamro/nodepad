@@ -9,6 +9,7 @@ module.exports = {
   },
   'ignorePatterns': [
     'src/public/*',
+    'repo/*',
     'test/*'
   ],
   'extends': [
