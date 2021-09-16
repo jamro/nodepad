@@ -250,6 +250,8 @@ class AppService extends AbstractService {
       name: app.id,
       cwd: path.join(this.basePath, `${app.id}.${app.port}`, 'bin'),
       autorestart: true,
+      restart_delay: 5000,
+      max_restarts: 10,
       output: path.join(this.basePath, `${app.id}.${app.port}`, `log-${app.id}.log`),
       error: path.join(this.basePath, `${app.id}.${app.port}`, `log-${app.id}.log`),
       logDateFormat: 'YYYY-MM-DD HH:mm:ss.SSS Z',
