@@ -42,7 +42,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'NodePad',
-      template: 'src/ui/index.html'
+      template: 'src/ui/index.html',
+      favicon: path.resolve(__dirname, 'assets', 'logo', 'nodepad_favicon.png'), 
     }),
     new CopyPlugin({
       patterns: [
