@@ -3,6 +3,8 @@
 # NodePad
 NodePad is a simple tool to manage life cycle of your NodeJs apps. It allow to easily deploy, start/stop and monitor multiple apps via web interface or REST API.
 
+![Logo](./assets/logo/nodepad_logo_transparent.png)
+
 Main Features:
 - [Application Bundle Upload](#application-upload)
 - [Install NPM dependencies](#npm-application)
