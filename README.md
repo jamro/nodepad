@@ -113,6 +113,8 @@ To test routing locally, add proper entries to your `/etc/hosts`. For example
 
 After that configuration, `webapp` application will be available at http://webapp.localhost:3000 (assuming that you run **NodePad** Proxy on default port 3000).
 
+**NodePad** offers app aliases, allowing accessing the same app via multiple domains (appIds). Let's assume that an app with ID `webapp` exists and it runs at port `8888`. Creating an alias with ID `webapp-v2` and assigned to port `8888` will result in having the app accessible at two URLs: http://webapp.localhost:3000 and http://webapp-v2.localhost:3000 (assuming that you run **NodePad** Proxy on default port 3000).
+
 ### Running NodePad behind a proxy
 You can run **NodePad** behind a proxy. To make routing work, add `X-Forwarded-For` headers to requests on the proxy level. 
 
@@ -235,7 +237,7 @@ Run `npm run pm2 -- ls`
 Run `npm run pm2 -- stop [AppId]`
 
 ## How to manually read logs?
-All logs are kept in `/repo/[AppId].[AppPort]/log-[AppId].log` file. To get logs directly from PM2 call `npm run pm2 -- logs [AppId]`
+All logs are kept in `[appRepoPath]/[AppId].[AppPort]/log-[AppId].log` file. To get logs directly from PM2 call `npm run pm2 -- logs [AppId]`
 
 ## PM2 is not responding. 
 You can kill PM2 daemon by running `npm run pm2 -- kill`. Please notice that it will stop all running apps.
@@ -243,3 +245,12 @@ You can kill PM2 daemon by running `npm run pm2 -- kill`. Please notice that it 
 ## How to manually run PM2 command? 
 NPM scripts expose PM2 CLI: `npm run pm2 -- [arguments...]`
 For example `npm run pm2 -- ls` is an equivalent of `pm2 ls`.
+
+## How to manually remove an app?
+Remove application directory located at `[appRepoPath]/[AppId].[AppPort]`. Keep in mind that the NodePad proxy may keep it cached after removal for some time.
+
+## How to manually create an alias?
+Create an empty alias file `[appRepoPath]/[AppId].[AppPort].alias`. Keep in mind that the NodePad proxy may keep it cached after removal for some time.
+
+## How to manually remove an alias?
+Delete the alias file located at`[appRepoPath]/[AppId].[AppPort].alias`.

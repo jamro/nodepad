@@ -4,9 +4,10 @@ const { GatewayError } = require('./common/errors');
 
 class ProxyService extends AbstractService {
 
-  constructor(appService, rootDomain, defaultApp, cacheTimeout) {
+  constructor(appService, aliasService, rootDomain, defaultApp, cacheTimeout) {
     super();
     this.appService = appService;
+    this.aliasService = aliasService;
     this.rootDomain = rootDomain;
     this.defaultApp = defaultApp || null;
     this.loop = null;
@@ -40,6 +41,8 @@ class ProxyService extends AbstractService {
     if(now - this.cacheTime > this.cacheTimeout) {
       this.logger.debug('Refreshing app cache');
       this.cache = this.appService.getAppFolders();
+      const aliases = this.aliasService.getAliasList().map(a => `${a.id}.${a.port}`);
+      this.cache = this.cache.concat(aliases);
       this.cacheTime = now;
     }
     
