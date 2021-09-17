@@ -75,7 +75,7 @@ module.exports = function (appService, logger) {
         description: 'List of applications.',
         schema: {
           type: 'object',
-          $ref: '#/definitions/Error',
+          $ref: '#/definitions/App',
         },
       },
       500: {

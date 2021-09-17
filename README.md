@@ -250,7 +250,7 @@ For example `npm run pm2 -- ls` is an equivalent of `pm2 ls`.
 Remove application directory located at `[appRepoPath]/[AppId].[AppPort]`. Keep in mind that the NodePad proxy may keep it cached after removal for some time.
 
 ## How to manually create an alias?
-Create an empty alias file `[appRepoPath]/[AppId].[AppPort].alias`. Keep in mind that the NodePad proxy may keep it cached after removal for some time.
+Create an empty alias file `[appRepoPath]/[AppId].[AppPort].alias`. 
 
 ## How to manually remove an alias?
-Delete the alias file located at`[appRepoPath]/[AppId].[AppPort].alias`.
+Delete the alias file located at`[appRepoPath]/[AppId].[AppPort].alias`. Keep in mind that the NodePad proxy may keep it cached after removal for some time.

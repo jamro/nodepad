@@ -11,7 +11,7 @@ function create(config) {
       version: packageInfo.version,
     },
     tags: [
-      { name: 'Application' }
+      { name: 'Application' }, { name: 'Alias' }, { name: 'Auth' }
     ],
     definitions: {
       App: {
@@ -60,8 +60,25 @@ function create(config) {
           },
           lastUpdate: {
             type: 'string'
-          }
+          },
         }
+      },
+      Alias: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            example: 'webapp'
+          },
+          port: {
+            type: 'number',
+            example: 3001
+          },
+          url: {
+            type: 'string',
+            example: 'http://webalias.localhost:3000'
+          },
+        },
       },
       Error: {
         type: 'object',

@@ -23,6 +23,7 @@ class AliasService extends AbstractService {
       .map(row => ({
         id: row[0],
         port: row[1],
+        url: this.getAliasUrl(row[0])
       }));
   }
 
@@ -62,6 +63,11 @@ class AliasService extends AbstractService {
   exist(aliasId) {
     return !!this.getAliasList()
       .find(alias => alias.id === aliasId);
+  }
+
+  getAliasUrl(aliasId) {
+    const port = this.defaultPort !== 80 ? `:${this.defaultPort}` : '';
+    return `${this.defaultScheme}://${aliasId}.${this.rootDomain}${port}`;
   }
 
 
