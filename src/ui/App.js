@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Icon, Message } from 'semantic-ui-react';
 import AppList from './components/AppList.jsx';
+import AppHeader from './components/AppHeader.jsx';
 import CreateButton from './components/CreateButton.jsx';
 
 const App = () => {
@@ -114,9 +115,7 @@ const App = () => {
   }
 
   return <div style={{margin: '1em'}}>
-    <h1>NodePad Dashboard</h1>
-    <p>Welcome to NodePad</p>
-    <p><a href="./api">API  documentation</a></p>
+    <AppHeader />
     {errorMessage ? errorWindow : null}
     <Grid style={{marginBottom: '1em'}}>
       <Grid.Row>
