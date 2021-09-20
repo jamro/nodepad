@@ -18,7 +18,7 @@ const CreateButton = (props) => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button icon labelPosition='left'><Icon name='plus' />Create New Application</Button>}
+      trigger={<Button icon labelPosition='left' primary><Icon name='plus' /> Create New Application</Button>}
     >
       <Modal.Header>Create New Application</Modal.Header>
       <Modal.Content>
@@ -34,7 +34,7 @@ const CreateButton = (props) => {
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => setOpen(false)}>
+        <Button onClick={() => setOpen(false)}>
           Cancel
         </Button>
         <Button
@@ -43,7 +43,7 @@ const CreateButton = (props) => {
           labelPosition='right'
           icon='plus'
           onClick={() => handleCreate()}
-          positive
+          primary
           disabled={!appId || !appPort}
         />
       </Modal.Actions>

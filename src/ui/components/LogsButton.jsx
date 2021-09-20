@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Icon, Modal, Table, TextArea } from 'semantic-ui-react';
+import { Button, Form, Icon, Modal, Popup, Table, TextArea } from 'semantic-ui-react';
 import PropTypes, { oneOf } from 'prop-types';
 import LogsViewer from './LogsViewer.jsx';
 
 const LogsButton = (props) => {
   const { logs, onRefresh } = props;
   const [open, setOpen] = useState(false);
+
+  const triggerButton = <Popup content='Preview application logs' trigger={<Button icon="file text" />} />
 
   return <Modal
       closeIcon
@@ -15,7 +17,7 @@ const LogsButton = (props) => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       style={{top: '3em'}}
-      trigger={<Button icon="file text" />}
+      trigger={triggerButton}
     >
       <Modal.Header>Application Logs</Modal.Header>
       <LogsViewer 

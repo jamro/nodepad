@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon, Modal, Popup } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 const DeployButton = (props) => {
@@ -18,6 +18,8 @@ const DeployButton = (props) => {
     setOpen(false);
 	};
 
+  const triggerButton = <Popup content='Uploads a new app package' trigger={<Button icon='cloud upload'  />} />
+
   return <Modal
       closeIcon
       size="tiny"
@@ -25,7 +27,7 @@ const DeployButton = (props) => {
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
-      trigger={<Button icon='cloud upload'  />}
+      trigger={triggerButton}
     >
       <Modal.Header>Upload Application Content</Modal.Header>
       <Modal.Content>

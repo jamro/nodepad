@@ -1,8 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Icon, Message } from 'semantic-ui-react';
+import { Container, Divider, Grid, Icon, Message } from 'semantic-ui-react';
 import AppHeader from './components/AppHeader.jsx';
 import CreateButton from './components/CreateButton.jsx';
 import AppDeck from './components/AppDeck.jsx';
+import './style/theme.less';
 
 const App = () => {
 
@@ -133,6 +135,11 @@ const App = () => {
         onUpload={upload}
         onLogsRefresh={(appId) => refreshLogs(appId)}
       />
+    </Container>
+    <Divider />
+    <Container textAlign="center" style={{paddingBottom: '1em'}}>
+      Hosted on <a href="https://github.com/jamro/nodepad" target="_blank" rel="noreferrer"><Icon name="github" />GitHub</a>.
+      This project is licensed under the terms of the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noreferrer">MIT license</a>.
     </Container>
   </Container>;
 };
