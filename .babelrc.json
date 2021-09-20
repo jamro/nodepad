@@ -3,12 +3,6 @@
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-    "@babel/transform-runtime",
-    [
-      "babel-plugin-transform-import-ignore",
-      {
-        "patterns": [".less"]
-      }
-    ]
+    "@babel/transform-runtime"
   ]
 }

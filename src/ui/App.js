@@ -4,7 +4,7 @@ import { Container, Divider, Grid, Icon, Message } from 'semantic-ui-react';
 import AppHeader from './components/AppHeader.jsx';
 import CreateButton from './components/CreateButton.jsx';
 import AppDeck from './components/AppDeck.jsx';
-import './style/theme.less';
+import './style/index.less';
 
 const App = () => {
 

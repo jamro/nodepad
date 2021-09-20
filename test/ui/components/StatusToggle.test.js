@@ -1,41 +1,42 @@
 import { expect } from 'chai';
+
 import StatusToggle from '../../../src/ui/components/StatusToggle.jsx';
 
 describe('StatusToggle', function() { // ------------------------------------------------
 
   it('should work without props', async function() {
-    const wrapper = shallow(<StatusToggle />);
+    const wrapper = mount(<StatusToggle />);
 
     expect(wrapper.find('Button')).to.be.lengthOf(1)
     expect(wrapper.find('Button').props()).to.have.property('icon',  'play');
   });
 
   it('should display online', async function() {
-    const wrapper = shallow(<StatusToggle isOnline={true} />);
+    const wrapper = mount(<StatusToggle isOnline={true} />);
     expect(wrapper.find('Button').props()).to.have.property('icon',  'pause');
   });
 
   it('should display offline', async function() {
-    const wrapper = shallow(<StatusToggle isOnline={false} />);
+    const wrapper = mount(<StatusToggle isOnline={false} />);
     expect(wrapper.find('Button').props()).to.have.property('icon',  'play');
   });
 
-  it('should display loadding', async function() {
-    const wrapper = shallow(<StatusToggle isLoading={true} />);
+  it('should display loading', async function() {
+    const wrapper = mount(<StatusToggle isLoading={true} />);
     expect(wrapper.find('Button').props()).to.have.property('loading');
     expect(wrapper.find('Button').props()).to.have.property('disabled',  true);
   });
 
   it('should toggle when offline', async function() {
     const onToggle = sinon.spy()
-    const wrapper = shallow(<StatusToggle isOnline={false} onToggle={onToggle}/>);
+    const wrapper = mount(<StatusToggle isOnline={false} onToggle={onToggle}/>);
     wrapper.find('Button').simulate('click');
     expect(onToggle.callCount).to.be.equal(1)
   });
 
   it('should toggle when online', async function() {
     const onToggle = sinon.spy()
-    const wrapper = shallow(<StatusToggle isOnline={true} onToggle={onToggle}/>);
+    const wrapper = mount(<StatusToggle isOnline={true} onToggle={onToggle}/>);
     wrapper.find('Button').simulate('click');
     expect(onToggle.callCount).to.be.equal(1)
   });
@@ -43,7 +44,7 @@ describe('StatusToggle', function() { // ---------------------------------------
 
   it('should not toggle when loading', async function() {
     const onToggle = sinon.spy()
-    const wrapper = shallow(<StatusToggle isLoading={true} onToggle={onToggle}/>);
+    const wrapper = mount(<StatusToggle isLoading={true} onToggle={onToggle}/>);
     wrapper.find('Button').simulate('click');
     expect(onToggle.callCount).to.be.equal(0)
   });

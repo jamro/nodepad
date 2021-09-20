@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Modal, Ref, TextArea } from 'semantic-ui-react';
 import PropTypes, { element, oneOf } from 'prop-types';
-import '../style/logview.less'
+
 const LogsViewer = (props) => {
   const { logs, onRefresh } = props;
   const element = useRef(null)
