@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Icon, Message } from 'semantic-ui-react';
-import AppList from './components/AppList.jsx';
+import { Container, Grid, Icon, Message } from 'semantic-ui-react';
 import AppHeader from './components/AppHeader.jsx';
 import CreateButton from './components/CreateButton.jsx';
+import AppDeck from './components/AppDeck.jsx';
 
 const App = () => {
 
@@ -114,25 +114,27 @@ const App = () => {
     </div>;
   }
 
-  return <div style={{margin: '1em'}}>
-    <AppHeader />
-    {errorMessage ? errorWindow : null}
-    <Grid style={{marginBottom: '1em'}}>
-      <Grid.Row>
-        <Grid.Column className="right aligned">
-          <CreateButton 
-            onCreate={createApp}
-          />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-    <AppList 
-      apps={apps}
-      onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}
-      onUpload={upload}
-      onLogsRefresh={(appId) => refreshLogs(appId)}
-    />
-  </div>;
+  return <Container fluid>
+    <AppHeader/>
+    <Container style={{minHeight: '40em'}}>
+      {errorMessage ? errorWindow : null}
+      <Grid style={{marginBottom: '1em'}}>
+        <Grid.Row>
+          <Grid.Column className="left aligned">
+            <CreateButton 
+              onCreate={createApp}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      <AppDeck 
+        apps={apps}
+        onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}
+        onUpload={upload}
+        onLogsRefresh={(appId) => refreshLogs(appId)}
+      />
+    </Container>
+  </Container>;
 };
 
 export default App;

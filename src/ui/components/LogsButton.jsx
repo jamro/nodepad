@@ -15,7 +15,7 @@ const LogsButton = (props) => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       style={{top: '3em'}}
-      trigger={<Button circular primary icon="file text" />}
+      trigger={<Button icon="file text" />}
     >
       <Modal.Header>Application Logs</Modal.Header>
       <LogsViewer 

@@ -25,7 +25,7 @@ const DeployButton = (props) => {
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
-      trigger={<Button circular primary icon='cloud upload'  />}
+      trigger={<Button icon='cloud upload'  />}
     >
       <Modal.Header>Upload Application Content</Modal.Header>
       <Modal.Content>
