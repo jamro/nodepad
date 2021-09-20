@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'semantic-ui-react';
+import { Card, CardDescription } from 'semantic-ui-react';
 import AppCard from './AppCard.jsx';
+import AliasCard from './AliasCard.jsx';
 
 
 const AppDeck = (props) => {
   const { 
     apps,
+    aliases,
     onUpload,
     onToggleOnline,
     onLogsRefresh
   } = props;
-  const cards = apps.map(app => <AppCard 
+  
+  const appCards = apps.map(app => <AppCard 
     key={app.id}
     appId={app.id}
     appPort={app.port}
@@ -25,9 +28,16 @@ const AppDeck = (props) => {
     onToggleOnline={(requestedOnline) => onToggleOnline(app.id, requestedOnline)}
     onLogsRefresh={() => onLogsRefresh(app.id)}
   />)
+
+  const aliasCards = aliases.map(alias => <AliasCard 
+    key={alias.id}
+    aliasId={alias.id}
+    appPort={alias.port}
+    url={alias.url}
+  />)
   
   return <Card.Group  >
-    {cards}
+    {[...appCards, ...aliasCards].sort((a,b) => a.key.localeCompare(b.key))}
   </Card.Group>
 };
 
@@ -36,8 +46,14 @@ AppDeck.propTypes = {
     id: PropTypes.string,
     port: PropTypes.number,
     status: PropTypes.string,
+    url: PropTypes.string,
     memory: PropTypes.number,
     cpu: PropTypes.number,
+  })),
+  aliases: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    port: PropTypes.number,
+    url: PropTypes.string,
   })),
   onToggleOnline: PropTypes.func,
   onUpload: PropTypes.func,
@@ -46,6 +62,7 @@ AppDeck.propTypes = {
 
 AppDeck.defaultProps = {
   apps: [],
+  aliases: [],
   onToggleOnline: () => {},
   onUpload: () => {},
   onLogsRefresh: () => {},

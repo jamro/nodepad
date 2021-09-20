@@ -36,10 +36,10 @@ describe('AliasService', function() { // ---------------------------------------
     const aliasList = aliasService.getAliasList();
     expect(aliasList).to.have.length(2);
     expect(aliasList[0]).to.have.property('id', 'testalias-993');
-    expect(aliasList[0]).to.have.property('port', '8999');
+    expect(aliasList[0]).to.have.property('port', 8999);
     expect(aliasList[0]).to.have.property('url', 'http://testalias-993.example.com:87');
     expect(aliasList[1]).to.have.property('id', 'testalias-994');
-    expect(aliasList[1]).to.have.property('port', '8999');
+    expect(aliasList[1]).to.have.property('port', 8999);
     expect(aliasList[1]).to.have.property('url', 'http://testalias-994.example.com:87');
   });
 

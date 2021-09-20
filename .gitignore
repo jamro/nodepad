@@ -1,4 +1,5 @@
 /repo/*/
+/repo/*.alias
 /tmp/*
 !/tmp/README.md
 /node_modules

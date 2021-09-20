@@ -22,7 +22,7 @@ class AliasService extends AbstractService {
       .map(file => file.name.split('.'))
       .map(row => ({
         id: row[0],
-        port: row[1],
+        port: Number(row[1]),
         url: this.getAliasUrl(row[0])
       }));
   }

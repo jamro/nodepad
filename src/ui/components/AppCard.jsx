@@ -27,8 +27,8 @@ const AppCard = (props) => {
     onLogsRefresh
   } = props;
 
-  return <Card style={{overflow: 'hidden', height: '22em'}}>
-    <Card.Content>
+  return <Card>
+    <Card.Content style={{height: '5em', flexGrow: 'unset'}}>
       <Icon 
         circular 
         name={status === 'online' ? 'check' : 'pause'} 
@@ -42,7 +42,7 @@ const AppCard = (props) => {
       <Card.Header>{appId}</Card.Header>
       <Card.Meta>Port: {appPort}</Card.Meta>
     </Card.Content>
-    <Card.Content style={{display: 'table'}}>
+    <Card.Content style={{display: 'table', height: '3em', flexGrow: 'unset'}}>
       <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
         <a href={url} target="_blank" className="app-link">{url}&nbsp;<Icon name="external" /></a>
       </div>
@@ -50,14 +50,14 @@ const AppCard = (props) => {
     <Card.Content>
       <Grid >
         <Grid.Row columns={2}>
-          <Grid.Column style={{textAlign: 'center', verticalAlign: 'middle'}} >
-            <Statistic size='mini' className="cpu-stats">
+          <Grid.Column style={{textAlign: 'center'}} >
+            <Statistic size='tiny' className="cpu-stats">
               <Statistic.Value>{cpu}%</Statistic.Value>
               <Statistic.Label>CPU</Statistic.Label>
             </Statistic>
           </Grid.Column>
           <Grid.Column style={{textAlign: 'center'}}>
-            <Statistic size='mini' className="memory-stats">
+            <Statistic size='tiny' className="memory-stats">
               <Statistic.Value>{bytesToSize(memory)}</Statistic.Value>
               <Statistic.Label>Memory</Statistic.Label>
             </Statistic>
@@ -65,7 +65,7 @@ const AppCard = (props) => {
         </Grid.Row>
       </Grid>
     </Card.Content>
-    <Card.Content style={{display: 'table'}}>
+    <Card.Content style={{display: 'table', height: '5em', flexGrow: 'unset'}}>
       <div style={{display: 'table-cell', verticalAlign: 'bottom'}}>
         <Button.Group fluid >
           <StatusToggle 

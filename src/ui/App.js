@@ -9,6 +9,7 @@ import './style/index.less';
 const App = () => {
 
   const [apps, setApps] = useState([]);
+  const [aliases, setAliases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -100,8 +101,20 @@ const App = () => {
     setLoading(false);
   };
 
+  const loadAliases = async () => {
+    setLoading(true);
+    const response = await fetch('./api/aliases');
+    if(!response.ok) {
+      setErrorMessage('Unable to load alias list');
+      setLoading(false);
+    }
+    setAliases(await response.json());
+    setLoading(false);
+  };
+
   useEffect(async () => {
     await loadApps();
+    await loadAliases();
   }, []);
 
   const errorWindow = <Message negative>
@@ -131,6 +144,7 @@ const App = () => {
       </Grid>
       <AppDeck 
         apps={apps}
+        aliases={aliases}
         onToggleOnline={(appId, requestedOnline) => toggleOnline(appId, requestedOnline)}
         onUpload={upload}
         onLogsRefresh={(appId) => refreshLogs(appId)}
