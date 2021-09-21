@@ -1,6 +1,5 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const AbstractService = require('./common/AbstractService');
-const { GatewayError } = require('./common/errors');
 
 class ProxyService extends AbstractService {
 
@@ -66,7 +65,8 @@ class ProxyService extends AbstractService {
         let appId = this.getTargetAppId(req);
         const targetHost = this.getTargetHost(appId);
         if(!targetHost) {
-          return new GatewayError(`No redirection found for app '${appId}'`);
+          this.logger.info(`No redirection found for app '${appId}'`);
+          return {host: 'invalidd'};
         }
         this.logger.info(`Redirecting '${req.url} to app '${appId}' at '${targetHost}'`);
         return targetHost;
