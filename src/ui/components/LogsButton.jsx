@@ -7,7 +7,7 @@ const LogsButton = (props) => {
   const { logs, onRefresh } = props;
   const [open, setOpen] = useState(false);
 
-  const triggerButton = <Popup content='Preview application logs' trigger={<Button icon="file text" />} />
+  const triggerButton = <Button icon="file text" />
 
   return <Modal
       closeIcon

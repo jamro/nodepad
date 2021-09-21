@@ -18,7 +18,7 @@ const DeployButton = (props) => {
     setOpen(false);
 	};
 
-  const triggerButton = <Popup content='Uploads a new app package' trigger={<Button icon='cloud upload'  />} />
+  const triggerButton = <Button icon='cloud upload'  />
 
   return <Modal
       closeIcon

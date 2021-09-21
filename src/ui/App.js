@@ -90,6 +90,26 @@ const App = () => {
     await loadApps();
   };
 
+  const createAlias = async (id, port) => {
+    const response = await fetch(
+      './api/aliases',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id,
+          port: Number(port)
+        })
+      }
+    );
+    if(!response.ok) {
+      setErrorMessage('Unable to create new alias');
+    }
+    await loadAliases();
+  };
+
   const loadApps = async () => {
     setLoading(true);
     const response = await fetch('./api/apps');
@@ -131,13 +151,20 @@ const App = () => {
 
   return <Container fluid>
     <AppHeader/>
-    <Container style={{minHeight: '40em'}}>
+    <Container style={{minHeight: '20em'}}>
       {errorMessage ? errorWindow : null}
       <Grid style={{marginBottom: '1em'}}>
         <Grid.Row>
           <Grid.Column className="left aligned">
             <CreateButton 
+              label="Create New Application"
+              primary
               onCreate={createApp}
+            />
+            <CreateButton 
+              icon="mail forward"
+              label="Create Alias"
+              onCreate={createAlias}
             />
           </Grid.Column>
         </Grid.Row>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Form, Icon, Modal } from 'semantic-ui-react';
 
 const CreateButton = (props) => {
-  const { onCreate } = props;
+  const { label, primary, icon, onCreate } = props;
   const [open, setOpen] = useState(false);
   const [appId, setAppId] = useState();
   const [appPort, setAppPort] = useState();
@@ -18,9 +18,9 @@ const CreateButton = (props) => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button icon labelPosition='left' primary><Icon name='plus' /> Create New Application</Button>}
+      trigger={<Button icon labelPosition='left' primary={primary}><Icon name={icon} /> {label}</Button>}
     >
-      <Modal.Header>Create New Application</Modal.Header>
+      <Modal.Header>{label}</Modal.Header>
       <Modal.Content>
         <Form>
           <Form.Field>
@@ -52,10 +52,16 @@ const CreateButton = (props) => {
 };
 
 CreateButton.propTypes = {
+  icon: PropTypes.string,
+  label: PropTypes.string,
+  primary: PropTypes.bool,
   onCreate: PropTypes.func
 }
 
 CreateButton.defaultProps = {
+  icon: 'plus',
+  label: 'Create',
+  primary: false,
   onCreate: () => {}
 }
 
