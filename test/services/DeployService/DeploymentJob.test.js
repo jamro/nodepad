@@ -7,7 +7,6 @@ const { expect } = require('chai');
 const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
 const APP_ID = 'app-test-7716001';
 const BIN_SIMPLE_DATA = fs.readFileSync(path.resolve(__dirname, '..', '..', 'content.zip'));
-const BIN_DATA = fs.readFileSync(path.resolve(__dirname, '..', '..', 'content.zip'));
 
 function createWorkspace() {
   const workspaceName = (new Date().getTime() * 1000 + Math.floor(Math.random()*1000)).toString(16);

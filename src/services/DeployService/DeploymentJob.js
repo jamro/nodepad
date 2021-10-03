@@ -151,18 +151,14 @@ class DeploymentJob {
     if(fs.existsSync(this.uploadFilePath)) {
       fs.unlinkSync(this.uploadFilePath);
     }
-  }
-
-  async install() { 
-    this.logger.info('installing...');
-    if(!fs.existsSync(this.tmpPath)) {
-      throw new EntityNotFoundError('nothing to install');
-    }
-    this.status = 'installing';
 
     const hasPackageJson = fs.existsSync(path.resolve(this.tmpPath, 'package.json'));
     const hasIndexHtml = fs.existsSync(path.resolve(this.tmpPath, 'index.html'));
     const hasIndexJs = fs.existsSync(path.resolve(this.tmpPath, 'index.js'));
+
+    this.logger.debug('package.json ' + (hasPackageJson ? 'found' : 'NOT found'));
+    this.logger.debug('index.html ' + (hasIndexHtml ? 'found' : 'NOT found'));
+    this.logger.debug('index.js ' + (hasIndexJs ? 'found' : 'NOT found'));
 
     try {
       if(hasIndexHtml) {
@@ -179,7 +175,22 @@ class DeploymentJob {
       } else {
         throw new Error('Unknown application type');
       }
+      
+    } catch(err) {
+      this.logger.error(err);
+      this.status = 'extract error';
+      return;
+    }
+  }
 
+  async install() { 
+    this.logger.info('installing...');
+    if(!fs.existsSync(this.tmpPath)) {
+      throw new EntityNotFoundError('nothing to install');
+    }
+    this.status = 'installing';
+
+    try {
       await this.copyToBin();
       this.logger.info('installation completed');
       this.status = 'deployed';
