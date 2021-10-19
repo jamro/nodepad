@@ -118,17 +118,19 @@ class DeploymentJob {
   }
 
   async extract() {
-    this.logger.debug('extracting...');
     if(!fs.existsSync(this.uploadFilePath)) {
       this.logger.error('nothing to extract');
       throw new EntityNotFoundError('nothing to extract');
     }
     this.status = 'extracting';
+    this.logger.debug('clear old artifacts');
     if(fs.existsSync(this.tmpPath)) {
       fs.rmdirSync(this.tmpPath, {recursive: true});
     }
+    this.logger.debug('create temporary location');
     fs.mkdirSync(this.tmpPath);
     let zip;
+    this.logger.debug('init AdmZip');
     try {
       zip = new AdmZip(this.uploadFilePath);
     } catch(err) {
@@ -136,7 +138,8 @@ class DeploymentJob {
       throw err;
     }
     await new Promise((resolve, reject) => {
-      zip.extractAllToAsync(this.tmpPath, true, (err) => {
+      this.logger.debug('extracting...');
+      zip.extractAllToAsync(this.tmpPath, true, false, (err) => {
         if(err) {
           this.logger.error(err);
           this.status = 'extract error';
