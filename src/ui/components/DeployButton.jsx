@@ -7,21 +7,32 @@ const DeployButton = (props) => {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
 	const [isSelected, setIsSelected] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
 
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);
 		setIsSelected(true);
 	};
 
-	const handleSubmission = () => {
-    onUpload(selectedFile)
+	const handleSubmission = async () => {
+    setInProgress(true)
+    await onUpload(selectedFile)
+    setInProgress(false)
     setOpen(false);
 	};
 
   const triggerButton = <Button icon='cloud upload'  />
 
+  const fileInput = <input 
+      id="bin-upload-file"
+      type="file" 
+      name="bin" 
+      accept=".zip"
+      onChange={changeHandler} 
+    />
+
   return <Modal
-      closeIcon
+      closeIcon={!inProgress}
       size="tiny"
       centered={false}
       open={open}
@@ -31,19 +42,13 @@ const DeployButton = (props) => {
     >
       <Modal.Header>Upload Application Content</Modal.Header>
       <Modal.Content>
-        <input 
-          id="bin-upload-file"
-          type="file" 
-          name="bin" 
-          accept=".zip"
-          onChange={changeHandler} 
-        />
+        {inProgress ? "Uploading..." : fileInput}
       </Modal.Content>
       <Modal.Actions>
-        <Button id="bin-upload-cancel" onClick={() => setOpen(false)}>
+        <Button id="bin-upload-cancel" onClick={() => setOpen(false)} disabled={inProgress}>
           <Icon name='remove' /> Cancel
         </Button>
-        <Button id="bin-upload-submit" primary onClick={handleSubmission} disabled={!isSelected} >
+        <Button id="bin-upload-submit" primary onClick={handleSubmission} disabled={!isSelected || inProgress} >
           <Icon name='cloud upload' /> Upload
         </Button>
       </Modal.Actions>
