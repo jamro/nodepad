@@ -58,7 +58,7 @@ module.exports = {
         { 
           from: path.resolve(__dirname, 'src', 'ui', 'static'), 
           to: path.resolve(__dirname, 'src', 'public'), 
-        },
+        }
       ],
     })
   ]

@@ -133,7 +133,13 @@ describe('AppService', function() { // -----------------------------------------
   it('should create sample content in new app', async function() {
     const pm2 = new PM2Mock();
     const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    appService.emit = sinon.spy();
     await appService.create('app97832', 8373);
+
+    expect(appService.emit.args).to.have.length(1);
+    const event = appService.emit.args[0][0];
+    expect(event).to.have.property('type', 'app-create');
+    expect(event).to.have.property('appId', 'app97832');
 
     const script = path.join(workspace, 'app97832.8373', 'bin', 'index.js');
     const logfile = path.join(workspace, 'app97832.8373', 'log-app97832.log');
@@ -310,20 +316,32 @@ describe('AppService', function() { // -----------------------------------------
   it('should start app', async function() {
     const pm2 = new PM2Mock();
     const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    appService.emit = sinon.spy();
     appService.create('some-app-293', 5691);
     await appService.start('some-app-293');
     expect(pm2.start.callCount).to.be.equal(1);
     expect(pm2.disconnect.callCount).to.be.equal(2);
+
+    expect(appService.emit.args).to.have.length(2);
+    const event = appService.emit.args[1][0];
+    expect(event).to.have.property('type', 'app-start');
+    expect(event).to.have.property('appId', 'some-app-293');
   });
 
   it('should stop app', async function() {
     const pm2 = new PM2Mock();
     const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    appService.emit = sinon.spy();
     appService.create('some-app-293', 5691);
     await appService.start('some-app-293');
     await appService.stop('some-app-293');
     expect(pm2.delete.callCount).to.be.equal(1);
     expect(pm2.disconnect.callCount).to.be.equal(4);
+
+    expect(appService.emit.args).to.have.length(3);
+    const event = appService.emit.args[2][0];
+    expect(event).to.have.property('type', 'app-stop');
+    expect(event).to.have.property('appId', 'some-app-293');
   });
 
   it('should retreive app logs', async function() {

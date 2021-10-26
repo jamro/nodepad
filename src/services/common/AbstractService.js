@@ -7,6 +7,8 @@ class AbstractService {
         new winston.transports.Console({silent: true})
       ]
     });
+
+    this.emit = () => {};
   }
 
   destroy() {

@@ -228,6 +228,7 @@ class AppService extends AbstractService {
         response.end('Hello from ${appId}!', 'utf-8');
       }).listen(port);`
     );
+    this.emit({type: 'app-create', appId});
   }
 
   async delete(appId) {
@@ -249,6 +250,7 @@ class AppService extends AbstractService {
     this.logger.info(`Deleting app at ${appPath}`);
     await this.stop(appId);
     await fsPromises.rmdir(appPath, { recursive: true });
+    this.emit({type: 'app-delete', appId});
   }
 
   exist(appId) {
@@ -307,6 +309,7 @@ class AppService extends AbstractService {
     }
 
     this.logger.info(`Application ${appId} started`);
+    this.emit({type: 'app-start', appId});
   }
 
   async stop(appId) {
@@ -326,6 +329,7 @@ class AppService extends AbstractService {
     }
 
     this.logger.info(`Application ${appId} stopped`);
+    this.emit({type: 'app-stop', appId});
   }
 
   async reload(appId) {

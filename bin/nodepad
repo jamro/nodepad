@@ -6,6 +6,7 @@
 const yargs = require('yargs');
 const http = require('http');
 const path = require('path');
+const socket = require("socket.io");
 const { createDashboard } = require('../src/dashboard');
 const { createProxy } = require('../src/proxy');
 
@@ -58,6 +59,8 @@ if(dashboardEnabled) {
   dashboard.logger.info('Configuration file: ' + argv.config)
   dashboard.logger.info('Starting dashboard server...')
   var dashboardServer = http.createServer(dashboard);
+  const io = socket(dashboardServer);
+  dashboard.attachWebSocket(io);
 
   /**
    * Listen on provided port, on all network interfaces.

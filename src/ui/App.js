@@ -5,6 +5,8 @@ import AppHeader from './components/AppHeader.jsx';
 import CreateButton from './components/CreateButton.jsx';
 import AppDeck from './components/AppDeck.jsx';
 import './style/index.less';
+import {io} from 'socket.io-client';
+const socket = io();
 
 const App = () => {
 
@@ -12,6 +14,8 @@ const App = () => {
   const [aliases, setAliases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+
 
   const setApp = (appId, props) => {
     const newApps = [...apps].map(app => {
@@ -132,10 +136,32 @@ const App = () => {
     setLoading(false);
   };
 
+  const onAppStart = (appId) => {
+    setApp(appId, {status: 'online'});
+  };
+
+  const onAppStop = (appId) => {
+    setApp(appId, {status: 'offline'});
+  };
+
   useEffect(async () => {
     await loadApps();
     await loadAliases();
   }, []);
+
+  useEffect(() => {
+    const onEvent = (payload) => {
+      console.log('EVENT', payload);
+      switch(payload.type) {
+      case 'app-start': return onAppStart(payload.appId);
+      case 'app-stop': return onAppStop(payload.appId);
+      }
+    };
+    socket.on('event', onEvent);
+    return function cleanup() {
+      socket.off('event', onEvent);
+    };
+  });
 
   const errorWindow = <Message negative>
     <Message.Header>Oops, something went wrong :(</Message.Header>

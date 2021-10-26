@@ -36,6 +36,14 @@ function createAppBase(config) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
 
+  app.emitEvent = () => {};
+  app.attachWebSocket = (io) => {
+    io.on('connection', () => {
+      app.logger.debug('WebSocket connection established');
+    });
+    app.emitEvent = (eventName, eventPayload) => io.emit(eventName, eventPayload);
+  };
+
   return app;
 }
 

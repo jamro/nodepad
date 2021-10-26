@@ -162,6 +162,11 @@ function createDashboard(config) {
   services.authService = new AuthService(appConfig.auth);
   services.authService.logger = app.logger.child({ service: 'authService' });
   services.logger = app.logger.child({ service: 'api' });
+
+  const serviceNames = Object.keys(services);
+  for(let serviceName of serviceNames) {
+    services[serviceName].emit = (payload) => app.emitEvent('event', payload);
+  }
   
   buildApp(app, appConfig, services);
   finalizeApp(app, services);  
