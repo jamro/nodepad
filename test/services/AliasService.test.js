@@ -59,5 +59,14 @@ describe('AliasService', function() { // ---------------------------------------
     expect(url).to.be.equal('http://alias993.site.com:87');
   });
 
-  
+  it('should remove alias', async function() {
+    const aliasService = new AliasService(workspace, 'http', 'site.com', 87);
+    aliasService.create('alias6621', 3122);
+    const list1 = aliasService.getAliasList();
+    expect(list1).to.have.length(1);
+    await aliasService.delete('alias6621');
+    const list2 = aliasService.getAliasList();
+    expect(list2).to.have.length(0);
+  });
+
 });

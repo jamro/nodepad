@@ -1,5 +1,6 @@
 
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 const AbstractService = require('./common/AbstractService');
 const { 
@@ -52,7 +53,7 @@ class AliasService extends AbstractService {
     }
 
     if(this.exist(aliasId)) {
-      throw new ValidationError(`Alias '${aliasId}' already exist`);
+      throw new ValidationError(`Alias '${aliasId}' already exists`);
     }
 
     const aliasPath = path.join(this.basePath, aliasId + '.' + appPort + '.alias');
@@ -63,6 +64,15 @@ class AliasService extends AbstractService {
   exist(aliasId) {
     return !!this.getAliasList()
       .find(alias => alias.id === aliasId);
+  }
+
+  async delete(aliasId) {
+    const alias = this.getAliasList().find(alias => alias.id === aliasId);
+    if(!alias) {
+      throw new ValidationError(`Alias '${aliasId}' does not exist`);
+    }
+    const aliasPath = path.join(this.basePath, alias.id + '.' + alias.port + '.alias');
+    await fsPromises.unlink(aliasPath);
   }
 
   getAliasUrl(aliasId) {
