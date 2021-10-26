@@ -24,8 +24,8 @@ module.exports = function (aliasService, logger) {
       204: {
         description: 'Operation successful',
       },
-      400: {
-        description: 'Incorrect input',
+      404: {
+        description: 'Entity not found',
         schema: {
           type: 'object',
           $ref: '#/definitions/Error',

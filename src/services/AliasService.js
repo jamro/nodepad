@@ -4,7 +4,8 @@ const fsPromises = require('fs').promises;
 const path = require('path');
 const AbstractService = require('./common/AbstractService');
 const { 
-  ValidationError
+  ValidationError,
+  EntityNotFoundError
 } = require('./common/errors');
 
 class AliasService extends AbstractService {
@@ -69,9 +70,10 @@ class AliasService extends AbstractService {
   async delete(aliasId) {
     const alias = this.getAliasList().find(alias => alias.id === aliasId);
     if(!alias) {
-      throw new ValidationError(`Alias '${aliasId}' does not exist`);
+      throw new EntityNotFoundError(`Alias '${aliasId}' does not exist`);
     }
     const aliasPath = path.join(this.basePath, alias.id + '.' + alias.port + '.alias');
+    this.logger.info(`Deleting alias at ${aliasPath}`);
     await fsPromises.unlink(aliasPath);
   }
 

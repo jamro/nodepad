@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
 const AbstractService = require('./common/AbstractService');
@@ -229,6 +230,27 @@ class AppService extends AbstractService {
     );
   }
 
+  async delete(appId) {
+    const app = this.getAppFolders()
+      .map(dir => {
+        let appData = dir.split('.');
+        return {
+          id: appData[0],
+          port: appData[1]
+        };
+      })
+      .find(a => a.id === appId);
+
+    if(!app) {
+      throw new EntityNotFoundError(`Application '${appId}' not found`);
+    }
+    const appPath = path.join(this.basePath, `${app.id}.${app.port}`);
+
+    this.logger.info(`Deleting app at ${appPath}`);
+    await this.stop(appId);
+    await fsPromises.rmdir(appPath, { recursive: true });
+  }
+
   exist(appId) {
     return !!this.getAppFolders()
       .map(dir => {
@@ -304,7 +326,6 @@ class AppService extends AbstractService {
     }
 
     this.logger.info(`Application ${appId} stopped`);
-       
   }
 
   async reload(appId) {

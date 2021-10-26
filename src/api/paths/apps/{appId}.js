@@ -76,7 +76,49 @@ module.exports = function (appService, logger) {
     },
   };
 
+  async function DELETE(req, res) {
+    let appId = req.params.appId;
+    logger.info(`Deleting app: ${appId}`);
+
+    await appService.delete(appId);
+    res.status(204).end();
+  }
+  
+  DELETE.apiDoc = {
+    summary: 'Delete an app',
+    tags: ['Application'],
+    operationId: 'deleteProject',
+    parameters: [
+      {
+        in: 'path',
+        name: 'appId',
+        required: true,
+        type: 'string'
+      },
+    ],
+    responses: {
+      204: {
+        description: 'Operation successful',
+      },
+      404: {
+        description: 'Entity not found',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
+      },
+      401: {
+        description: 'Unauthorized',
+        schema: {
+          type: 'object',
+          $ref: '#/definitions/Error',
+        },
+      },
+    },
+  };
+
   return {
-    PUT
+    PUT,
+    DELETE
   };
 };

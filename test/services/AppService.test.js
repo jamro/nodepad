@@ -386,5 +386,17 @@ describe('AppService', function() { // -----------------------------------------
     expect(info).to.have.property('info')
     expect(info.info).to.have.property('daemon')
   });
+
+  it('should delete an app', async function() {
+    const pm2 = new PM2Mock();
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    appService.create('testapp9388732', 8878);
+    const list1 = await appService.read();
+    await appService.delete('testapp9388732');
+    const list2 = await appService.read();
+    expect(pm2.delete.callCount).to.be.equal(1);
+    expect(list1).to.have.length(1)
+    expect(list2).to.have.length(0)
+  });
   
 });
