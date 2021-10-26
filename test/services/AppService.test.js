@@ -367,5 +367,15 @@ describe('AppService', function() { // -----------------------------------------
     expect(pm2.delete.getCalls()[0].args[0]).to.be.equal('stop-working')
     
   });
+
+  it('should retreive process manager info', async function() {
+    const pm2 = new PM2Mock();
+    const appService = new AppService(workspace, 'http', 'example.com', 80, pm2);
+    const info = await appService.getProcessManagerInfo()
+
+    expect(info).to.have.property('name', 'PM2')
+    expect(info).to.have.property('info')
+    expect(info.info).to.have.property('daemon')
+  });
   
 });

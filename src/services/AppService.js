@@ -1,6 +1,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const AbstractService = require('./common/AbstractService');
 const { 
   ValidationError, 
@@ -326,6 +327,69 @@ class AppService extends AbstractService {
   getAppUrl(appId) {
     const port = this.defaultPort !== 80 ? `:${this.defaultPort}` : '';
     return `${this.defaultScheme}://${appId}.${this.rootDomain}${port}`;
+  }
+
+  async killProcessManager() {
+    await new Promise((resolve) => {
+      const proc = spawn('pm2', ['kill']);
+      
+      proc.on('close', () => {
+        return resolve();
+      });
+    });
+  }
+
+  async getProcessManagerInfo() {
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn('pm2', ['report', '--no-color']);
+      let data = '';
+      proc.stdout.on('data', d => {
+        data += d;
+      });
+      
+      proc.stderr.on('data', err => {
+        return reject(new Error(err));
+      });
+      
+      proc.on('error', (err) => {
+        return reject(err);
+      });
+      
+      proc.on('close', () => {
+        return resolve(data);
+      });
+    });
+
+    const lines = output.split('\n');
+    const headerPattern = /-+ (.*) -+/;
+    const paramPattern = /^([\w ]+)\s*: (.*)$/;
+    let regexMatch;
+    let info = {};
+    let section = '';
+    for(let line of lines) {
+      line = line.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''); //eslint-disable-line no-control-regex
+      regexMatch = headerPattern.exec(line);
+      if(regexMatch) {
+        section = regexMatch[1].toLowerCase().trim();
+        info[section] = {};
+      }
+      regexMatch = paramPattern.exec(line);
+      if(section && regexMatch) {
+        info[section][regexMatch[1].trim()] = regexMatch[2].trim();
+      }
+    }
+
+    const fields = Object.keys(info);
+    for(let field of fields) {
+      if(Object.keys(info[field]).length === 0) {
+        delete info[field];
+      }
+    }
+
+    return {
+      name: 'PM2',
+      info
+    };
   }
 
 }

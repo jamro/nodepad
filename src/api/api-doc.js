@@ -11,7 +11,7 @@ function create(config) {
       version: packageInfo.version,
     },
     tags: [
-      { name: 'Application' }, { name: 'Alias' }, { name: 'Auth' }
+      { name: 'Application' }, { name: 'Alias' }, { name: 'ProcessManager'}, { name: 'Auth' }
     ],
     definitions: {
       App: {
@@ -86,6 +86,18 @@ function create(config) {
           error: {
             type: 'string',
             example: 'An error message'
+          }
+        }
+      },
+      ProcessManagerStatus: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            example: 'PM2'
+          },
+          info: {
+            type: 'object'
           }
         }
       }
