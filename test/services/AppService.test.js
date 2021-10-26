@@ -86,6 +86,8 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[0]).to.have.property('memory');
     expect(list[0]).to.have.property('cpu');
     expect(list[0]).to.have.property('url', 'http://app-name-623.localhost:8888');
+    expect(list[0]).to.have.property('updatedAt');
+    expect(list[0].updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
 
     expect(list[1]).to.have.property('id', 'app-name-773');
     expect(list[1]).to.have.property('port', 2374);
@@ -93,6 +95,8 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[1]).to.have.property('memory');
     expect(list[1]).to.have.property('cpu');
     expect(list[1]).to.have.property('url', 'http://app-name-773.localhost:8888');
+    expect(list[1]).to.have.property('updatedAt');
+    expect(list[1].updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
   });
 
   it('should list apps folders', async function() {
@@ -245,6 +249,11 @@ describe('AppService', function() { // -----------------------------------------
     expect(result2).to.have.property('status', 'online');
     expect(result1).to.have.property('url', 'https://app-12128.sub.example534.com');
     expect(result2).to.have.property('url', 'https://app-99821.sub.example534.com');
+    expect(result1).to.have.property('updatedAt');
+    expect(result1.updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
+    expect(result2).to.have.property('updatedAt');
+    expect(result2.updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
+
   });
 
   it('should throw when starting not existing app', async function() {

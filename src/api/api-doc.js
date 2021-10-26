@@ -41,6 +41,10 @@ function create(config) {
             type: 'string',
             example: 'http://webapp.localhost:3000'
           },
+          updatedAr: {
+            type: 'string',
+            example: '2021-10-26T13:23:59.137Z'
+          },
         },
       },
       AppStatus: {

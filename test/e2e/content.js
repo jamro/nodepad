@@ -152,6 +152,7 @@ describe('E2E: content', function() {
       }
     );
     expect(response).to.have.property('status', 201);
+    const date1 = new Date(response.data.updatedAt);
 
     //upload new content
     const form = new FormData();
@@ -175,5 +176,13 @@ describe('E2E: content', function() {
     expect(response).to.have.property('status', 200);
     expect(response).to.have.property('data');
     expect(response.data).to.match(/Foo Bar/);
+
+    // check app status
+    response = await axios.get(
+      `http://localhost:${NODEPAD_PORT}/api/apps`
+    );
+    const date2 = new Date(response.data[0].updatedAt);
+    const dt = date2.getTime() - date1.getTime();
+    expect(dt).to.be.greaterThan(10)
   });
 });

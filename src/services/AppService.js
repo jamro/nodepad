@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -91,13 +90,32 @@ class AppService extends AbstractService {
 
   async read() {
     this.logger.debug('Reading application files structure');
-    const data = this.getAppFolders()
+    const folders =  this.getAppFolders();
+    const updateDates = await Promise.all(folders.map(dirname => new Promise((resolve, reject) => {
+      const dir = path.resolve(this.basePath, dirname);
+      fs.stat(dir, (err, data) => {
+        if(err) {
+          return reject(err);
+        }
+        resolve({
+          dir: dirname,
+          updatedAt: data.mtime
+        });
+      });
+    })));
+    const updateDatesMap = updateDates.reduce((map, val) => {
+      map[val.dir] = val.updatedAt;
+      return map;
+    }, {});
+
+    const data = folders
       .map(dir => {
         let appData = dir.split('.');
         let app = {
           id: appData[0],
           port: Number(appData[1]),
-          url: this.getAppUrl(appData[0])
+          url: this.getAppUrl(appData[0]),
+          updatedAt: new Date(updateDatesMap[dir]).toISOString()
         };
         return app;
       });

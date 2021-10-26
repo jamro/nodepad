@@ -18,7 +18,8 @@ module.exports = function (appService, logger) {
       status: appStatus || 'offline',
       memory: 0,
       cpu: 0,
-      url: appService.getAppUrl(appId)
+      url: appService.getAppUrl(appId),
+      updatedAt: new Date().toISOString()
     });
   }
   

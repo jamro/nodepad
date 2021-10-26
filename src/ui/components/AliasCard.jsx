@@ -10,9 +10,9 @@ const AliasCard = (props) => {
   } = props;
 
   return <Card>
-    <Card.Content style={{height: '5em', flexGrow: 'unset'}}>
+    <Card.Content style={{height: '6em', flexGrow: 'unset'}}>
       <Card.Header>{aliasId}</Card.Header>
-      <Card.Meta>Port: {appPort}</Card.Meta>
+      <Card.Meta><small>Port: {appPort}</small></Card.Meta>
     </Card.Content>
     <Card.Content style={{display: 'table', height: '3em', flexGrow: 'unset'}}>
       <div style={{display: 'table-cell', verticalAlign: 'middle'}}>

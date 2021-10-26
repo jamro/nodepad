@@ -151,7 +151,7 @@ const App = () => {
 
   return <Container fluid>
     <AppHeader/>
-    <Container style={{minHeight: '20em'}}>
+    <Container style={{minHeight: '20em', padding: '2em'}} fluid={true}>
       {errorMessage ? errorWindow : null}
       <Grid style={{marginBottom: '1em'}}>
         <Grid.Row>

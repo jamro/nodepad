@@ -20,6 +20,7 @@ const AppCard = (props) => {
     memory, 
     cpu,
     status,
+    updatedAt,
     onUpload,
     isLoading,
     onToggleOnline,
@@ -28,7 +29,7 @@ const AppCard = (props) => {
   } = props;
 
   return <Card>
-    <Card.Content style={{height: '5em', flexGrow: 'unset'}}>
+    <Card.Content style={{height: '6em', flexGrow: 'unset'}}>
       <Icon 
         circular 
         name={status === 'online' ? 'check' : 'pause'} 
@@ -40,7 +41,8 @@ const AppCard = (props) => {
         }} 
       />
       <Card.Header>{appId}</Card.Header>
-      <Card.Meta>Port: {appPort}</Card.Meta>
+      <Card.Meta><small>Port: {appPort}</small></Card.Meta>
+      <Card.Meta><small>Updated: {updatedAt ? new Date(updatedAt).toLocaleString() : 'Unknown'}</small></Card.Meta>
     </Card.Content>
     <Card.Content style={{display: 'table', height: '3em', flexGrow: 'unset'}}>
       <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -94,6 +96,7 @@ AppCard.propTypes = {
   memory: PropTypes.number,
   cpu: PropTypes.number,
   status: PropTypes.string,
+  updatedAt: PropTypes.string,
   onUpload: PropTypes.func,
   onToggleOnline: PropTypes.func,
   onLogsRefresh: PropTypes.func,
@@ -108,6 +111,7 @@ AppCard.defaultProps = {
   memory: 0,
   cpu: 0,
   status: 'offline',
+  updatedAt: null,
   onUpload: () => {},
   onToggleOnline: () => {},
   onLogsRefresh: () => {},
