@@ -111,7 +111,7 @@ describe('DeployService', function() { // --------------------------------------
     deployService.install(APP_ID);
     expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
     expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'copying');
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     expect(deployService.getDeployment(APP_ID)).to.be.have.property('job', null);
   });
 
