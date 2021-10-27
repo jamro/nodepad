@@ -67,7 +67,8 @@ describe('DeployService', function() { // --------------------------------------
     req.completeUpload();
     
     await deployService.upload(APP_ID, req);
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'uploaded');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'uploaded');
 
     const contentList = fs
       .readdirSync(path.resolve(deployWorkspace, APP_ID + '.' + APP_PORT))
@@ -86,26 +87,32 @@ describe('DeployService', function() { // --------------------------------------
     const req = createUploadRequest('test-file-234.zip');
     deployService.upload(APP_ID, req);
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'started');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'uploading');
 
     req.progressUpload();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status');
-    expect(deployService.getDeployment(APP_ID).status).to.match(/uploading/);
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('state');
+    expect(deployService.getDeployment(APP_ID).job.description).to.match(/uploading/);
 
     req.completeUpload();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'uploaded');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'uploaded');
 
     deployService.extract(APP_ID);
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extracting');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'extracting');
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extracted');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'installing (NODEJS)');
 
     deployService.install(APP_ID);
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'installing');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'copying');
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'deployed');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job', null);
   });
 
   it('should set upload error status', async function() {
@@ -115,7 +122,9 @@ describe('DeployService', function() { // --------------------------------------
     deployService.upload(APP_ID, req2);
     req2.end();
     await new Promise(resolve => setTimeout(resolve, 50));
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'upload error');
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'upload error');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('errorState', true);
 
   });
 
@@ -127,8 +136,8 @@ describe('DeployService', function() { // --------------------------------------
     req3.completeUpload();
     await deployService.upload(APP_ID, req3);
     await expect(deployService.extract(APP_ID)).to.be.rejected;
-    expect(deployService.getDeployment(APP_ID)).to.be.have.property('status', 'extract error');
-
+    expect(deployService.getDeployment(APP_ID)).to.be.have.property('job');
+    expect(deployService.getDeployment(APP_ID).job).to.be.have.property('description', 'extract error');
   });
 
   it('should stop running deployment when a new one has started', async function() {

@@ -41,10 +41,10 @@ function create(config) {
             type: 'string',
             example: 'http://webapp.localhost:3000'
           },
-          updatedAr: {
-            type: 'string',
-            example: '2021-10-26T13:23:59.137Z'
-          },
+          content: {
+            type: 'object',
+            $ref: '#/definitions/Deployment',
+          }
         },
       },
       AppStatus: {
@@ -59,11 +59,30 @@ function create(config) {
       Deployment: {
         type: 'object',
         properties: {
-          status: {
-            type: 'string'
+          job: {
+            type: 'object',
+            $ref: '#/definitions/DeploymentJob',
           },
           lastUpdate: {
-            type: 'string'
+            type: 'string',
+            example: '2021-10-26T13:23:59.137Z'
+          },
+        }
+      },
+      DeploymentJob: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'string',
+            example: 'upload'
+          },
+          description: {
+            type: 'string',
+            example: 'uploading (2MB)'
+          },
+          errorState: {
+            type: 'boolean',
+            example: false
           },
         }
       },

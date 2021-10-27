@@ -22,7 +22,8 @@ const AppDeck = (props) => {
     memory={app.memory}
     cpu={app.cpu}
     status={app.status}
-    updatedAt={app.updatedAt}
+    updatedAt={app.content.lastUpdate}
+    label={app.content.job ? app.content.job.description : ''}
     isLoading={app.isLoading}
     logs={app.logs}
     onUpload={(file) => onUpload(app.id, file)}

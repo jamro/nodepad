@@ -51,4 +51,17 @@ describe('AppCard', function() { // --------------------------------------------
     expect(wrapper.find('LogsButton')).to.have.length(1)
     expect(wrapper.find('StatusToggle')).to.have.length(1)
   });
+
+  it('should display update date port', async function() {
+    const date = new Date();
+    const wrapper = shallow(<AppCard updatedAt={date.toISOString()}/>);
+    expect(wrapper.html()).to.contain(date.toLocaleString())
+  });
+
+  it('should display label ribbon', async function() {
+    const date = new Date();
+    const wrapper = shallow(<AppCard label="status8723" updatedAt={date.toISOString()}/>);
+    expect(wrapper.html()).not.to.contain(date.toLocaleString())
+    expect(wrapper.html()).to.match(/status8723/i)
+  });
 });

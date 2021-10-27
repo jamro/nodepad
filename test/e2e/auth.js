@@ -28,6 +28,7 @@ function clearWorkspace(path) {
 }
 
 const APP_ID  = 'my-test-app-7673';
+const ALIAS_ID  = 'some-test-alias-5543';
 const NODEPAD_PORT = 39211;
 const PROXY_PORT = 39311;
 
@@ -104,11 +105,15 @@ describe('E2E: Auth', function() {
 
   [
     {method: 'get', uri: 'auth'},
+    {method: 'get', uri: 'processManager'},
+    {method: 'delete', uri: 'processManager'},
     {method: 'get', uri: 'apps'},
     {method: 'post', uri: 'apps'},
     {method: 'get', uri: 'aliases'},
     {method: 'post', uri: 'aliases'},
+    {method: 'delete', uri: `aliases/${ALIAS_ID}`},
     {method: 'put', uri: `apps/${APP_ID}`},
+    {method: 'delete', uri: `apps/${APP_ID}`},
     {method: 'get', uri: `apps/${APP_ID}/logs`},
     {method: 'get', uri: `apps/${APP_ID}/content`},
     {method: 'post', uri: `apps/${APP_ID}/content/zip`},

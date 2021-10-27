@@ -10,6 +10,9 @@ const {
 } = require('./common/errors');
 const AppLogger = require('./common/AppLogger');
 
+const PM2_MODULE_PATH = path.dirname(require.resolve('pm2'));
+const PM2_BIN_PATH = path.resolve(PM2_MODULE_PATH, 'bin', 'pm2');
+
 class AppService extends AbstractService {
   
   constructor(basePath, defaultScheme, rootDomain, defaultPort, pm2) {
@@ -92,22 +95,6 @@ class AppService extends AbstractService {
   async read() {
     this.logger.debug('Reading application files structure');
     const folders =  this.getAppFolders();
-    const updateDates = await Promise.all(folders.map(dirname => new Promise((resolve, reject) => {
-      const dir = path.resolve(this.basePath, dirname);
-      fs.stat(dir, (err, data) => {
-        if(err) {
-          return reject(err);
-        }
-        resolve({
-          dir: dirname,
-          updatedAt: data.mtime
-        });
-      });
-    })));
-    const updateDatesMap = updateDates.reduce((map, val) => {
-      map[val.dir] = val.updatedAt;
-      return map;
-    }, {});
 
     const data = folders
       .map(dir => {
@@ -116,7 +103,6 @@ class AppService extends AbstractService {
           id: appData[0],
           port: Number(appData[1]),
           url: this.getAppUrl(appData[0]),
-          updatedAt: new Date(updateDatesMap[dir]).toISOString()
         };
         return app;
       });
@@ -228,7 +214,7 @@ class AppService extends AbstractService {
         response.end('Hello from ${appId}!', 'utf-8');
       }).listen(port);`
     );
-    this.emit({type: 'app-create', appId});
+    this.emit('event', {type: 'app-create', appId});
   }
 
   async delete(appId) {
@@ -250,7 +236,7 @@ class AppService extends AbstractService {
     this.logger.info(`Deleting app at ${appPath}`);
     await this.stop(appId);
     await fsPromises.rmdir(appPath, { recursive: true });
-    this.emit({type: 'app-delete', appId});
+    this.emit('event', {type: 'app-delete', appId});
   }
 
   exist(appId) {
@@ -309,7 +295,7 @@ class AppService extends AbstractService {
     }
 
     this.logger.info(`Application ${appId} started`);
-    this.emit({type: 'app-start', appId});
+    this.emit('event', {type: 'app-start', appId});
   }
 
   async stop(appId) {
@@ -329,7 +315,7 @@ class AppService extends AbstractService {
     }
 
     this.logger.info(`Application ${appId} stopped`);
-    this.emit({type: 'app-stop', appId});
+    this.emit('event', {type: 'app-stop', appId});
   }
 
   async reload(appId) {
@@ -374,7 +360,7 @@ class AppService extends AbstractService {
 
   async killProcessManager() {
     await new Promise((resolve) => {
-      const proc = spawn('pm2', ['kill']);
+      const proc = spawn(PM2_BIN_PATH, ['kill']);
       
       proc.on('close', () => {
         return resolve();
@@ -384,7 +370,7 @@ class AppService extends AbstractService {
 
   async getProcessManagerInfo() {
     const output = await new Promise((resolve, reject) => {
-      const proc = spawn('pm2', ['report', '--no-color']);
+      const proc = spawn(PM2_BIN_PATH, ['report', '--no-color']);
       let data = '';
       proc.stdout.on('data', d => {
         data += d;

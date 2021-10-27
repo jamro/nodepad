@@ -13,6 +13,7 @@ function createWorkspace() {
   const workspacePath = path.resolve(__dirname, '..', '..', '..', 'tmp', workspaceName);
 
   fs.mkdirSync(workspacePath);
+  fs.mkdirSync(path.resolve(workspacePath, 'bin'));
   return workspacePath;
 }
 
@@ -59,10 +60,16 @@ describe('DeploymentJob', function() { // --------------------------------------
     clearWorkspace(workspace);
   });
 
-  it('should set status on error', async function() {
+  it('should set state on error', async function() {
     const job = new DeploymentJob(workspace)
+    job.emit = sinon.spy();
     job.onUploadError();
-    expect(job.status).to.be.equal('upload error')
+    expect(job.emit.args).to.have.length(1);
+    expect(job.emit.args[0][0]).to.be.equal('status');
+    expect(job.emit.args[0][1]).to.have.property('state', 'upload');
+    expect(job.emit.args[0][1]).to.have.property('errorState', true);
+    expect(job.state).to.be.equal(DeploymentJob.UPLOAD)
+    expect(job.errorState).to.be.equal(true)
   });
 
   it('should upload zip bundle', async function() {
@@ -109,5 +116,21 @@ describe('DeploymentJob', function() { // --------------------------------------
     await job.stop();
     expect(fs.existsSync(job.tmpPath)).to.be.false;
   });
+
+  it('should install zip bundle', async function() {
+    const req = createUploadRequest('testbundle872.zip', BIN_SIMPLE_DATA)
+    req.progressUpload();
+    req.completeUpload();
+
+    const job = new DeploymentJob(workspace);
+    job.emit = sinon.spy();
+    const uploadFilePath = await job.upload(req);
+    await job.extract();
+    await job.install();
+    expect(fs.existsSync(path.resolve(workspace, 'bin', 'index.js'))).to.be.true;
+
+    expect(job.emit.args[job.emit.args.length-1][0]).to.be.equal('completed')
+  });
+
 
 });

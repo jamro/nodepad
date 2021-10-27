@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Grid, Icon, Statistic, Tab } from 'semantic-ui-react';
+import { Button, Card, Grid, Icon, Label, Statistic, Tab } from 'semantic-ui-react';
 import DeployButton from './DeployButton.jsx';
 import StatusToggle from './StatusToggle.jsx';
 import LogsButton from './LogsButton.jsx';
@@ -25,10 +25,22 @@ const AppCard = (props) => {
     isLoading,
     onToggleOnline,
     logs,
-    onLogsRefresh
+    onLogsRefresh,
+    label
   } = props;
 
-  return <Card>
+  const errorLabel = !!label.match(/error/i)
+
+  let metaContent;
+  if(label) {
+    metaContent = <Label color={errorLabel ? 'red' : 'blue'} ribbon>
+         <Icon name={errorLabel ? 'warning sign' : 'spinner'} loading={!errorLabel} /> {label}
+      </Label>;
+  } else {
+    metaContent = <small>Updated: {updatedAt ? new Date(updatedAt).toLocaleString() : 'Unknown'}</small>
+  }
+
+  return <Card >
     <Card.Content style={{height: '6em', flexGrow: 'unset'}}>
       <Icon 
         circular 
@@ -42,7 +54,9 @@ const AppCard = (props) => {
       />
       <Card.Header>{appId}</Card.Header>
       <Card.Meta><small>Port: {appPort}</small></Card.Meta>
-      <Card.Meta><small>Updated: {updatedAt ? new Date(updatedAt).toLocaleString() : 'Unknown'}</small></Card.Meta>
+      <Card.Meta>
+        { metaContent }
+      </Card.Meta>
     </Card.Content>
     <Card.Content style={{display: 'table', height: '3em', flexGrow: 'unset'}}>
       <div style={{display: 'table-cell', verticalAlign: 'middle'}}>
@@ -96,6 +110,7 @@ AppCard.propTypes = {
   memory: PropTypes.number,
   cpu: PropTypes.number,
   status: PropTypes.string,
+  label: PropTypes.string,
   updatedAt: PropTypes.string,
   onUpload: PropTypes.func,
   onToggleOnline: PropTypes.func,
@@ -111,6 +126,7 @@ AppCard.defaultProps = {
   memory: 0,
   cpu: 0,
   status: 'offline',
+  label: '',
   updatedAt: null,
   onUpload: () => {},
   onToggleOnline: () => {},

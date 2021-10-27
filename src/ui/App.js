@@ -15,14 +15,13 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-
-
   const setApp = (appId, props) => {
     const newApps = [...apps].map(app => {
       if(app.id === appId) {
+        const newProps = (typeof(props) === 'function') ? props(app) : props;
         return {
           ...app,
-          ...props
+          ...newProps
         };
       }
       return app;
@@ -144,6 +143,25 @@ const App = () => {
     setApp(appId, {status: 'offline'});
   };
 
+  const onAppJobStatus = (appId, job) => {
+    setApp(appId, (app) => ({
+      content: { 
+        ...app.content,
+        job 
+      }
+    }));
+  };
+
+  const onAppDeploy = (appId, lastUpdate) => {
+    setApp(appId, (app) => ({
+      content: { 
+        ...app.content,
+        job: null,
+        lastUpdate
+      }
+    }));
+  };
+
   useEffect(async () => {
     await loadApps();
     await loadAliases();
@@ -155,6 +173,8 @@ const App = () => {
       switch(payload.type) {
       case 'app-start': return onAppStart(payload.appId);
       case 'app-stop': return onAppStop(payload.appId);
+      case 'app-job': return onAppJobStatus(payload.appId, payload.job);
+      case 'app-deploy': return onAppDeploy(payload.appId, payload.lastUpdate);
       }
     };
     socket.on('event', onEvent);

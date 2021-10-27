@@ -165,7 +165,7 @@ function createDashboard(config) {
 
   const serviceNames = Object.keys(services);
   for(let serviceName of serviceNames) {
-    services[serviceName].emit = (payload) => app.emitEvent('event', payload);
+    services[serviceName].on('event', (payload) => app.emitEvent('event', payload));
   }
   
   buildApp(app, appConfig, services);

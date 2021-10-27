@@ -8,6 +8,7 @@ const { createProxy } = require('../../src/proxy');
 const axios = require('axios');
 const pm2 = require('pm2');
 const FormData = require('form-data');
+const { DONE } = require('../../src/services/DeployService/DeploymentJob');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -173,7 +174,7 @@ describe('E2E: Happy path', function() {
     response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/${APP_ID}/content`);
     expect(response).to.have.property('status', 200);
     expect(response).to.have.property('data');
-    expect(response.data).to.have.property('status', 'deployed');
+    expect(response.data).to.have.property('job', null);
 
     // check whether the app is online
     response = await axios.get(`http://localhost:${NODEPAD_PORT}/api/apps/`);

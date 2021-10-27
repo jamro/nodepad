@@ -1,4 +1,4 @@
-module.exports = function (appService, logger) {
+module.exports = function (appService, deployService, logger) {
 
   async function POST(req, res) {
     logger.info(`creating application: ${JSON.stringify(req.body)}`);
@@ -19,7 +19,9 @@ module.exports = function (appService, logger) {
       memory: 0,
       cpu: 0,
       url: appService.getAppUrl(appId),
-      updatedAt: new Date().toISOString()
+      content: {
+        lastUpdate: new Date().toISOString()
+      }
     });
   }
   
@@ -64,6 +66,10 @@ module.exports = function (appService, logger) {
 
   async function GET(req, res) {
     let data = await appService.read();
+    data = data.map(d => ({
+      ...d,
+      content: deployService.getDeployment(d.id)
+    }));
     res.status(200).json(data);
   }
 

@@ -5,11 +5,16 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 const { spawn } = require('child_process');
 const ncp = require('ncp').ncp;
+const EventEmitter = require('events');
 
 const AdmZip = require('adm-zip');
 const { EntityNotFoundError } = require('../common/errors');
 
-const UPLOAD_ERROR = 'upload error';
+const PENDING = 'pending';
+const UPLOAD = 'upload';
+const EXTRACT = 'extract';
+const INSTALL = 'install';
+const DONE = 'deployed';
 
 function bytesToSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -18,12 +23,15 @@ function bytesToSize(bytes) {
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
-class DeploymentJob {
+class DeploymentJob extends EventEmitter {
 
   constructor(workspace) {
+    super();
     this.workspace = workspace;
     this.busboy = null;
-    this.status = 'started';
+    this.state = PENDING;
+    this.description = '';
+    this.errorState = false;
     this.req = null;
     this.file = null;
     this.uploadFilePath = path.resolve(this.workspace, 'content-' + Math.round(Math.random()*0xffffff).toString(16) + '.zip');
@@ -38,9 +46,20 @@ class DeploymentJob {
     });
   }
 
+  updateStatus(state, description, isError) {
+    this.state = state;
+    this.description = description || state;
+    this.errorState = !!isError;
+    this.emit('status', {
+      state: this.state,
+      description: this.description,
+      errorState: this.errorState
+    });
+  }
+
   onUploadError(err) {
     this.logger.error(err);
-    this.status = UPLOAD_ERROR;
+    this.updateStatus(UPLOAD, 'upload error', true);
     this.stop();
   }
 
@@ -75,6 +94,7 @@ class DeploymentJob {
   upload(req) {
     return new Promise((resolve, reject) => {
       this.logger.debug('uploading new content...');
+      this.updateStatus(UPLOAD, 'uploading');
       this.busboy = new Busboy({ 
         headers: req.headers,
         highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
@@ -85,12 +105,12 @@ class DeploymentJob {
         this.logger.info('Writing uploaded file to ' + this.uploadFilePath);
         this.file = file;
         file.on('data', (data) => {
-          if(this.status === UPLOAD_ERROR) {
+          if(this.errorState) {
             return;
           }
           this.uploadedBytes += data.length;
-          this.status = 'uploading (' + bytesToSize(this.uploadedBytes) + ')';
-          this.logger.debug(this.status);
+          this.updateStatus(UPLOAD, 'uploading (' + bytesToSize(this.uploadedBytes) + ')');
+          this.logger.debug(this.description);
         });
         file.on('error', (err) => {
           this.onUploadError(err);
@@ -101,11 +121,11 @@ class DeploymentJob {
       });
 
       this.busboy.on('finish', () => {
-        if(this.status === UPLOAD_ERROR) {
+        if(this.errorState) {
           return;
         }
         this.logger.info('Upload completed');
-        this.status = 'uploaded';
+        this.updateStatus(UPLOAD, 'uploaded');
         setTimeout(() => resolve(this.uploadFilePath), 100);
       });
 
@@ -122,7 +142,7 @@ class DeploymentJob {
       this.logger.error('nothing to extract');
       throw new EntityNotFoundError('nothing to extract');
     }
-    this.status = 'extracting';
+    this.updateStatus(EXTRACT, 'extracting');
     this.logger.debug('clear old artifacts');
     if(fs.existsSync(this.tmpPath)) {
       fs.rmdirSync(this.tmpPath, {recursive: true});
@@ -134,7 +154,7 @@ class DeploymentJob {
     try {
       zip = new AdmZip(this.uploadFilePath);
     } catch(err) {
-      this.status = 'extract error';
+      this.updateStatus(EXTRACT, 'extract error', true);
       throw err;
     }
     await new Promise((resolve, reject) => {
@@ -142,10 +162,10 @@ class DeploymentJob {
       zip.extractAllToAsync(this.tmpPath, true, false, (err) => {
         if(err) {
           this.logger.error(err);
-          this.status = 'extract error';
+          this.updateStatus(EXTRACT, 'extract error', true);
           return reject(err);
         }
-        this.status = 'extracted';
+        this.updateStatus(EXTRACT, 'extracted');
         this.logger.info('files extracted');
         resolve();
       });
@@ -163,17 +183,21 @@ class DeploymentJob {
     this.logger.debug('index.html ' + (hasIndexHtml ? 'found' : 'NOT found'));
     this.logger.debug('index.js ' + (hasIndexJs ? 'found' : 'NOT found'));
 
+    this.updateStatus(INSTALL, 'installing');
     try {
       if(hasIndexHtml) {
+        this.updateStatus(INSTALL, 'installing (STATIC)');
         this.logger.debug('Application Bundle Type: STATIC');
         this.logger.debug('index.html found. Installing static server');
         await this.hostStatic();
         await this.installPackageJson();
       } else if(hasPackageJson && hasIndexJs) {
+        this.updateStatus(INSTALL, 'installing (NPM)');
         this.logger.debug('Application Bundle Type: NPM');
         this.logger.debug('package.json found. Installing dependencies');
         await this.installPackageJson();
       } else if (hasIndexJs) {
+        this.updateStatus(INSTALL, 'installing (NODEJS)');
         this.logger.debug('Application Bundle Type: NODEJS');
       } else {
         throw new Error('Unknown application type');
@@ -181,26 +205,28 @@ class DeploymentJob {
       
     } catch(err) {
       this.logger.error(err);
-      this.status = 'extract error';
+      this.updateStatus(EXTRACT, 'extract error', true);
       return;
     }
   }
 
   async install() { 
     this.logger.info('installing...');
+    this.updateStatus(INSTALL, 'copying');
     if(!fs.existsSync(this.tmpPath)) {
       throw new EntityNotFoundError('nothing to install');
     }
-    this.status = 'installing';
-
+    
     try {
       await this.copyToBin();
       this.logger.info('installation completed');
-      this.status = 'deployed';
+      this.updateStatus(DONE, 'deployed');
       this.stop();
+      this.emit('completed');
     } catch(err) {
+      console.log(err);
       this.logger.error(err);
-      this.status = 'install error';
+      this.updateStatus(INSTALL, 'install error', true);
       return;
     }
     
@@ -297,5 +323,11 @@ class DeploymentJob {
       }`);
   }
 }
+
+DeploymentJob.UPLOAD = UPLOAD;
+DeploymentJob.EXTRACT = EXTRACT;
+DeploymentJob.INSTALL = INSTALL;
+DeploymentJob.DONE = DONE;
+DeploymentJob.PENDING = PENDING;
 
 module.exports = DeploymentJob;

@@ -17,14 +17,20 @@ describe('AppDeck', function() { // --------------------------------------------
             port: 8821,
             status: 'online',
             memory: 1001892,
-            cpu: 5
+            cpu: 5,
+            content: {
+              lastUpdate: new Date().toISOString()
+            }
           },
           {
             id: 'app-007',
             port: 8822,
             status: 'offline',
             memory: 0,
-            cpu: 0
+            cpu: 0,
+            content: {
+              lastUpdate: new Date().toISOString()
+            }
           }
         ]}
         aliases={[

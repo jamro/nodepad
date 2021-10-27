@@ -152,7 +152,7 @@ describe('E2E: content', function() {
       }
     );
     expect(response).to.have.property('status', 201);
-    const date1 = new Date(response.data.updatedAt);
+    const date1 = new Date(response.data.content.lastUpdate);
 
     //upload new content
     const form = new FormData();
@@ -181,7 +181,7 @@ describe('E2E: content', function() {
     response = await axios.get(
       `http://localhost:${NODEPAD_PORT}/api/apps`
     );
-    const date2 = new Date(response.data[0].updatedAt);
+    const date2 = new Date(response.data[0].content.lastUpdate);
     const dt = date2.getTime() - date1.getTime();
     expect(dt).to.be.greaterThan(10)
   });

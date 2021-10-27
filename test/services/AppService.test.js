@@ -86,8 +86,6 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[0]).to.have.property('memory');
     expect(list[0]).to.have.property('cpu');
     expect(list[0]).to.have.property('url', 'http://app-name-623.localhost:8888');
-    expect(list[0]).to.have.property('updatedAt');
-    expect(list[0].updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
 
     expect(list[1]).to.have.property('id', 'app-name-773');
     expect(list[1]).to.have.property('port', 2374);
@@ -95,8 +93,6 @@ describe('AppService', function() { // -----------------------------------------
     expect(list[1]).to.have.property('memory');
     expect(list[1]).to.have.property('cpu');
     expect(list[1]).to.have.property('url', 'http://app-name-773.localhost:8888');
-    expect(list[1]).to.have.property('updatedAt');
-    expect(list[1].updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
   });
 
   it('should list apps folders', async function() {
@@ -137,7 +133,7 @@ describe('AppService', function() { // -----------------------------------------
     await appService.create('app97832', 8373);
 
     expect(appService.emit.args).to.have.length(1);
-    const event = appService.emit.args[0][0];
+    const event = appService.emit.args[0][1];
     expect(event).to.have.property('type', 'app-create');
     expect(event).to.have.property('appId', 'app97832');
 
@@ -255,11 +251,7 @@ describe('AppService', function() { // -----------------------------------------
     expect(result2).to.have.property('status', 'online');
     expect(result1).to.have.property('url', 'https://app-12128.sub.example534.com');
     expect(result2).to.have.property('url', 'https://app-99821.sub.example534.com');
-    expect(result1).to.have.property('updatedAt');
-    expect(result1.updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
-    expect(result2).to.have.property('updatedAt');
-    expect(result2.updatedAt).to.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z/)
-
+    
   });
 
   it('should throw when starting not existing app', async function() {
@@ -323,7 +315,7 @@ describe('AppService', function() { // -----------------------------------------
     expect(pm2.disconnect.callCount).to.be.equal(2);
 
     expect(appService.emit.args).to.have.length(2);
-    const event = appService.emit.args[1][0];
+    const event = appService.emit.args[1][1];
     expect(event).to.have.property('type', 'app-start');
     expect(event).to.have.property('appId', 'some-app-293');
   });
@@ -339,7 +331,7 @@ describe('AppService', function() { // -----------------------------------------
     expect(pm2.disconnect.callCount).to.be.equal(4);
 
     expect(appService.emit.args).to.have.length(3);
-    const event = appService.emit.args[2][0];
+    const event = appService.emit.args[2][1];
     expect(event).to.have.property('type', 'app-stop');
     expect(event).to.have.property('appId', 'some-app-293');
   });

@@ -1,14 +1,14 @@
 const winston = require('winston');
+const EventEmitter = require('events');
 
-class AbstractService {
+class AbstractService extends EventEmitter {
   constructor() {
+    super();
     this.logger = winston.createLogger({
       transports: [
         new winston.transports.Console({silent: true})
       ]
     });
-
-    this.emit = () => {};
   }
 
   destroy() {

@@ -42,9 +42,18 @@ class DeployService extends AbstractService {
       this.logger.debug(err);
       stats = {};
     }
+
+    let jobInfo = null;
+    if(job) {
+      jobInfo = {
+        state: job.state,
+        errorState: job.errorState,
+        description: job.description,
+      };
+    }
     
     return  {
-      status: job ? job.status : 'deployed',
+      job: jobInfo,
       lastUpdate: stats.mtime ? new Date(stats.mtime).toISOString() : null
     };
   }
@@ -72,6 +81,15 @@ class DeployService extends AbstractService {
       transports: [
         new AppLoggerTransport(appId, this.appLogger)
       ]
+    });
+    this.jobMap[appId].on('status', (job) => this.emit('event', { type: 'app-job', appId, job }));
+    this.jobMap[appId].on('completed', () => {
+      delete this.jobMap[appId];
+      this.emit('event', {
+        type: 'app-deploy',
+        appId,
+        lastUpdate: this.getDeployment(appId).lastUpdate
+      });
     });
     await this.jobMap[appId].upload(req);
     this.logger.info(`Uploading of '${appId}' completed`);
