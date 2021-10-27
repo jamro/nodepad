@@ -1,6 +1,11 @@
 {
   "name": "@jamropl/nodepad",
   "version": "1.4.0",
+  "description": "a simple tool to manage your NodeJs apps through REST API or UI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jamro/nodepad"
+  },
   "scripts": {
     "commit": "cz",
     "start": "node ./bin/nodepad",
