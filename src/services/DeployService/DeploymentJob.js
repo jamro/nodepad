@@ -234,7 +234,7 @@ class DeploymentJob extends EventEmitter {
 
   async installPackageJson() {
     await new Promise((resolve) => {
-      const child = spawn('nice', ['npm', 'install'], {cwd: this.tmpPath});
+      const child = spawn('npm', ['install'], {cwd: this.tmpPath});
       
       child.on('exit', (code, signal) => {
         const msg = `child process exited with code ${code} and signal ${signal}`;
