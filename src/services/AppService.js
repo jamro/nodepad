@@ -235,7 +235,7 @@ class AppService extends AbstractService {
 
     this.logger.info(`Deleting app at ${appPath}`);
     await this.stop(appId);
-    await fsPromises.rmdir(appPath, { recursive: true });
+    await fsPromises.rm(appPath, { recursive: true });
     this.emit('event', {type: 'app-delete', appId});
   }
 

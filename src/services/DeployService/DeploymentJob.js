@@ -1,13 +1,13 @@
 const path = require('path');
 const winston = require('winston');
-const Busboy = require('busboy');
+const busboy = require('busboy');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
 const { spawn } = require('child_process');
 const ncp = require('ncp').ncp;
 const EventEmitter = require('events');
+const extract = require('extract-zip');
 
-const AdmZip = require('adm-zip');
 const { EntityNotFoundError } = require('../common/errors');
 
 const PENDING = 'pending';
@@ -83,7 +83,7 @@ class DeploymentJob extends EventEmitter {
       .filter(f => f.match(/content-[0-9a-z]+\.zip/) ||  f.match(/tmp-[0-9a-z]+/))
       .forEach(f => {
         try {
-          fs.rmdirSync(path.resolve(this.workspace, f), { recursive: true });
+          fs.rmSync(path.resolve(this.workspace, f), { recursive: true });
         } catch (err) { } // eslint-disable-line no-empty
         try {
           fs.unlinkSync(path.resolve(this.workspace, f));
@@ -95,7 +95,7 @@ class DeploymentJob extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.logger.debug('uploading new content...');
       this.updateStatus(UPLOAD, 'uploading');
-      this.busboy = new Busboy({ 
+      this.busboy = busboy({ 
         headers: req.headers,
         highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
       });
@@ -145,31 +145,22 @@ class DeploymentJob extends EventEmitter {
     this.updateStatus(EXTRACT, 'extracting');
     this.logger.debug('clear old artifacts');
     if(fs.existsSync(this.tmpPath)) {
-      fs.rmdirSync(this.tmpPath, {recursive: true});
+      fs.rmSync(this.tmpPath, {recursive: true});
     }
     this.logger.debug('create temporary location');
     fs.mkdirSync(this.tmpPath);
-    let zip;
-    this.logger.debug('init AdmZip');
+
+    // unzip -----------------------------------------------------------
     try {
-      zip = new AdmZip(this.uploadFilePath);
-    } catch(err) {
+      await extract(this.uploadFilePath, { dir: this.tmpPath });
+      this.updateStatus(EXTRACT, 'extracted');
+      this.logger.info('files extracted');
+    } catch (err) {
+      this.logger.error(err);
       this.updateStatus(EXTRACT, 'extract error', true);
       throw err;
     }
-    await new Promise((resolve, reject) => {
-      this.logger.debug('extracting...');
-      zip.extractAllToAsync(this.tmpPath, true, false, (err) => {
-        if(err) {
-          this.logger.error(err);
-          this.updateStatus(EXTRACT, 'extract error', true);
-          return reject(err);
-        }
-        this.updateStatus(EXTRACT, 'extracted');
-        this.logger.info('files extracted');
-        resolve();
-      });
-    });
+    // ------------------------------------------------------------------
     
     if(fs.existsSync(this.uploadFilePath)) {
       fs.unlinkSync(this.uploadFilePath);
@@ -263,7 +254,7 @@ class DeploymentJob extends EventEmitter {
     await fsPromises.rename(binPath, binTmpPath);
     await new Promise(resolve => setTimeout(resolve, 50));
     await fsPromises.rename(this.tmpPath, binPath);
-    await fsPromises.rmdir(binTmpPath, { recursive: true });
+    await fsPromises.rm(binTmpPath, { recursive: true });
   }
 
   async hostStatic(){
@@ -286,7 +277,7 @@ class DeploymentJob extends EventEmitter {
       });
     });
 
-    await fsPromises.rmdir(wwwTmpPath, { recursive: true });
+    await fsPromises.rm(wwwTmpPath, { recursive: true });
 
     this.logger.info('adding static server');
     fs.writeFileSync(

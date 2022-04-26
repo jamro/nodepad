@@ -40,7 +40,7 @@ function createWorkspace() {
 }
 
 function clearWorkspace(path) {
-  fs.rmdirSync(path, { recursive: true });
+  fs.rmSync(path, { recursive: true });
 }
 
 describe('AppService', function() { // ------------------------------------------------

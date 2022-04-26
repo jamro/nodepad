@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const MockReq = require('mock-req');
 const { expect } = require('chai');
+const sinon = require('sinon');
+const busboy = require('busboy');
 
 const BOUNDARY = 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh';
 const APP_ID = 'app-test-7716001';
@@ -18,7 +20,7 @@ function createWorkspace() {
 }
 
 function clearWorkspace(path) {
-  fs.rmdirSync(path, { recursive: true });
+  fs.rmSync(path, { recursive: true });
 }
 
 function createUploadRequest(filename, data) {
@@ -103,6 +105,7 @@ describe('DeploymentJob', function() { // --------------------------------------
     const uploadFilePath = await job.upload(req);
     await job.extract();
     expect(fs.existsSync(path.resolve(job.tmpPath, 'index.js'))).to.be.true;
+    expect(fs.existsSync(uploadFilePath)).to.be.false;
   });
 
   it('should remove tmp location at stop', async function() {
