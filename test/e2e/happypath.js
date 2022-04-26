@@ -48,6 +48,7 @@ describe('E2E: Happy path', function() {
     const appConfig = {
       dashboardPort: NODEPAD_PORT,
       proxyPort: PROXY_PORT,
+      uiProxyPort: PROXY_PORT,
       appRepoPath: e2eWorkspace,
       logLevel: 'silent',
       defaultApp: APP_ID,

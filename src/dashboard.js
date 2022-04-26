@@ -151,9 +151,9 @@ function createDashboard(config) {
   const appRepoPath = appConfig.appRepoPath || path.resolve(__dirname, 'repo');
   const defaultScheme = appConfig.defaultScheme || 'http';
   const rootDomain = appConfig.rootDomain || 'localhost:3000';
-  services.appService = new AppService(appRepoPath, defaultScheme, rootDomain, appConfig.proxyPort, pm2);
+  services.appService = new AppService(appRepoPath, defaultScheme, rootDomain, appConfig.uiProxyPort || appConfig.proxyPort, pm2);
   services.appService.logger = app.logger.child({ service: 'appService' });
-  services.aliasService = new AliasService(appRepoPath, defaultScheme, rootDomain, appConfig.proxyPort);
+  services.aliasService = new AliasService(appRepoPath, defaultScheme, rootDomain, appConfig.uiProxyPort || appConfig.proxyPort);
   services.aliasService.logger = app.logger.child({ service: 'aliasService' });
   services.proxyService = new ProxyService(services.appService, services.aliasService, rootDomain, appConfig.defaultApp);
   services.proxyService.logger = app.logger.child({ service: 'proxyService' });
